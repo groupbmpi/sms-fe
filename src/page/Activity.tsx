@@ -1,5 +1,6 @@
-import { Button, Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import Calendar from "../feature/activity/components/Calendar";
+import { Link } from "react-router-dom";
 
 const Activity = () => {
   return (
@@ -7,9 +8,9 @@ const Activity = () => {
       <Container>
         <div className="d-flex py-2">
           <h3>Timeline dan Status Kegiatan</h3>
-          <Button variant="primary" className="ms-auto">
-            Tambah Kegiatan
-          </Button>
+          <Link to="/activity/new" className="ms-auto">
+            <button className="btn btn-primary ms-auto">Tambah Kegiatan</button>
+          </Link>
         </div>
         <Calendar />
       </Container>
