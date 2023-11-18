@@ -2,14 +2,17 @@ import { useState } from "react";
 import { Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { Input, InputType } from "../core/Form";
+import { NewsForm } from "../feature/news/model/News";
+
+const initialNewsForm: NewsForm = {
+  newsTitle: "",
+  newsDescription: "",
+  newsImage: "",
+  newsLink: "",
+};
 
 const NewsPost = () => {
-  const [formValue, setFormValue] = useState({
-    newsTitle: "",
-    newsDescription: "",
-    newsImage: "",
-    newsLink: "",
-  });
+  const [formValue, setFormValue] = useState<NewsForm>(initialNewsForm);
 
   const handleFormChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;

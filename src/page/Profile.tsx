@@ -1,19 +1,21 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button, Container } from "react-bootstrap";
-import { Input, InputType } from "../core/Form";
+import { Input, Select, InputType } from "../core/Form";
+
+const initialProfileValue = {
+  name: "John Doe",
+  institution: "Majelis Ulama Indonesia",
+  category: "Organisasi Masyarakat",
+  address: "Jl. Raya Cibaduyut No. 1, Bandung, Jawa Barat",
+  email: "johndoe@gmail.com",
+  phoneNumber: "",
+  avatar: "",
+};
 
 const Profile = () => {
   const [isEditMode, setIsEditMode] = useState(false);
 
-  const [formValue, setFormValue] = useState({
-    name: "",
-    institution: "",
-    category: "",
-    address: "",
-    email: "",
-    phoneNumber: "",
-    avatar: "",
-  });
+  const [formValue, setFormValue] = useState(initialProfileValue);
 
   const handleFormChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
@@ -43,15 +45,15 @@ const Profile = () => {
           {isEditMode ? `Batal Ubah` : `Ubah`}
         </Button>
       </div>
-      {/* Center image */}
       <div className="d-flex justify-content-center my-2">
         <img
-          src="https://via.placeholder.com/150"
+          src="https://via.placeholder.com/500"
           alt="profile"
           className="rounded-circle"
+          width={150}
+          height={150}
         />
       </div>
-
       <form className="px-5">
         <div className="mb-3 px-5 pb-5">
           <input
@@ -81,13 +83,19 @@ const Profile = () => {
           disabled={!isEditMode}
           onChange={handleFormChange}
         />
-        <Input
-          type={InputType.text}
-          placeholder="Kategori"
+        <Select
           id="category"
+          label="Kategori"
+          values={
+            new Map([
+              ["advocation", "Advokasi"],
+              ["education", "Edukasi"],
+              ["empowerment", "Pemberdayaan Masyarakat"],
+            ])
+          }
           value={formValue.category}
-          disabled={!isEditMode}
           onChange={handleFormChange}
+          disabled={!isEditMode}
         />
         <Input
           type={InputType.textarea}

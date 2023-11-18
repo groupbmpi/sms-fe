@@ -2,27 +2,26 @@ import { Container } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Input, Select, InputType } from "../core/Form";
+import { ActivityForm } from "../feature/activity/model/Activity";
+
+const initialActivityForm: ActivityForm = {
+  activityName: "",
+  activityGoal: "",
+  activityField: "",
+  location: "",
+  activityDescription: "",
+  activityStatus: "",
+  successIndicator: "",
+  outputTarget: "",
+  startDate: "",
+  endDate: "",
+  logistics: "",
+  activityMethod: "",
+  activityDocument: "",
+};
 
 const ActivityPost = () => {
-  const [formValue, setFormValue] = useState({
-    activityName: "",
-    activityGoal: "",
-    activityField: "",
-    location: "",
-    activityDescription: "",
-    activityStatus: "",
-    successIndicator: "",
-    outputTarget: "",
-    startDate: "",
-    endDate: "",
-    logistics: "",
-    activityMethod: "",
-    activityDocument: "",
-  });
-
-  useEffect(() => {
-    console.log(formValue);
-  }, [formValue]);
+  const [formValue, setFormValue] = useState<ActivityForm>(initialActivityForm);
 
   const handleSubmit = () => {
     console.log(formValue);
@@ -30,8 +29,7 @@ const ActivityPost = () => {
 
   const handleFormChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
-    const id = target.id;
-    const value = target.value;
+    const { id, value } = target;
     setFormValue({ ...formValue, [id]: value });
   };
 
