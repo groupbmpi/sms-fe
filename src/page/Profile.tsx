@@ -1,10 +1,33 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Container } from "react-bootstrap";
+import { Input, InputType } from "../core/Form";
 
 const Profile = () => {
   const [isEditMode, setIsEditMode] = useState(false);
 
+  const [formValue, setFormValue] = useState({
+    name: "",
+    institution: "",
+    category: "",
+    address: "",
+    email: "",
+    phoneNumber: "",
+    avatar: "",
+  });
+
+  const handleFormChange = (e: React.ChangeEvent) => {
+    const target = e.target as HTMLInputElement;
+    const id = target.id;
+    const value = target.value;
+    setFormValue({ ...formValue, [id]: value });
+  };
+
   const changeEditMode = () => {
+    setIsEditMode(!isEditMode);
+  };
+
+  const handleSubmitUpdate = () => {
+    // TODO handle update profile
     setIsEditMode(!isEditMode);
   };
 
@@ -20,67 +43,17 @@ const Profile = () => {
           {isEditMode ? `Batal Ubah` : `Ubah`}
         </Button>
       </div>
+      {/* Center image */}
+      <div className="d-flex justify-content-center my-2">
+        <img
+          src="https://via.placeholder.com/150"
+          alt="profile"
+          className="rounded-circle"
+        />
+      </div>
+
       <form className="px-5">
-        <div className="mb-3 px-5">
-          <input
-            type="text"
-            className="form-control"
-            id="name"
-            aria-describedby="name"
-            placeholder="<Nama>"
-            disabled={!isEditMode}
-          />
-        </div>
-        <div className="mb-3 px-5">
-          <input
-            type="text"
-            className="form-control"
-            id="institution"
-            aria-describedby="institution"
-            placeholder="<Lembaga>"
-            disabled={!isEditMode}
-          />
-        </div>
-        <div className="mb-3 px-5">
-          <input
-            type="text"
-            className="form-control"
-            id="category"
-            aria-describedby="category"
-            placeholder="<Kategori>"
-            disabled={!isEditMode}
-          />
-        </div>
-        <div className="mb-3 px-5">
-          <textarea
-            className="form-control"
-            id="address"
-            rows={3}
-            placeholder="<Alamat Lengkap>"
-            disabled={!isEditMode}
-          ></textarea>
-        </div>
-        <div className="mb-3 px-5">
-          <input
-            type="email"
-            className="form-control"
-            id="email"
-            aria-describedby="email"
-            placeholder="<Email>"
-            disabled={!isEditMode}
-          />
-        </div>
-        <div className="mb-3 px-5">
-          <input
-            type="tel"
-            className="form-control"
-            id="phoneNumber"
-            aria-describedby="phoneNumber"
-            placeholder="<Nomor Telepon>"
-            disabled={!isEditMode}
-          />
-        </div>
-        <div className="mb-3 px-5">
+        <div className="mb-3 px-5 pb-5">
           <input
             type="file"
             accept="image/png, image/jpeg"
@@ -88,11 +61,61 @@ const Profile = () => {
             id="avatar"
             aria-describedby="avatar"
             disabled={!isEditMode}
+            onChange={handleFormChange}
+            value={formValue.avatar}
           />
         </div>
+        <Input
+          type={InputType.text}
+          placeholder="Nama"
+          id="name"
+          value={formValue.name}
+          disabled={!isEditMode}
+          onChange={handleFormChange}
+        />
+        <Input
+          type={InputType.text}
+          placeholder="Lembaga"
+          id="institution"
+          value={formValue.institution}
+          disabled={!isEditMode}
+          onChange={handleFormChange}
+        />
+        <Input
+          type={InputType.text}
+          placeholder="Kategori"
+          id="category"
+          value={formValue.category}
+          disabled={!isEditMode}
+          onChange={handleFormChange}
+        />
+        <Input
+          type={InputType.textarea}
+          placeholder="Alamat Lengkap"
+          id="address"
+          value={formValue.address}
+          disabled={!isEditMode}
+          onChange={handleFormChange}
+        />
+        <Input
+          type={InputType.email}
+          placeholder="Email"
+          id="email"
+          value={formValue.email}
+          disabled={!isEditMode}
+          onChange={handleFormChange}
+        />
+        <Input
+          type={InputType.tel}
+          placeholder="Nomor Telepon"
+          id="phoneNumber"
+          value={formValue.phoneNumber}
+          disabled={!isEditMode}
+          onChange={handleFormChange}
+        />
         {isEditMode ? (
           <div className="d-flex align-items-center justify-content-center">
-            <Button>Simpan</Button>
+            <Button onClick={handleSubmitUpdate}>Simpan</Button>
           </div>
         ) : null}
       </form>

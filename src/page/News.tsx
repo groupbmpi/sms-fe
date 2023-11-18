@@ -6,7 +6,7 @@ const News = () => {
   const [news, setNews] = useState([
     {
       id: 1,
-      title: "Special title treatment",
+      title: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
       body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut natus odit molestias, soluta sit dolor! Ea sapiente est asperiores enim tempore dolores repellendus vel animi, odit, unde, tenetur blanditiis? Modi.",
     },
   ]);
@@ -22,7 +22,7 @@ const News = () => {
         </Link>
       </div>
       {news.map((item) => (
-        <Card className="p-1 my-2">
+        <Card className="p-1 my-2" key={item.id}>
           <Card.Body>
             <Card.Title>{item.title}</Card.Title>
             <Card.Text>{item.body.substring(0, 100)}</Card.Text>
