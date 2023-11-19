@@ -1,5 +1,5 @@
 import { Container } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Input, Select, InputType } from "../core/Form";
 import { ActivityForm } from "../feature/activity/model/Activity";

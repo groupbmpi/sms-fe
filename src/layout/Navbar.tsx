@@ -1,6 +1,7 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { Outlet, NavLink } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import useAuth from "../feature/auth/hooks/Auth";
 
 const NavigationItem = ({ to, text }: { to: string; text: string }) => {
   return (
@@ -14,6 +15,10 @@ const NavigationItem = ({ to, text }: { to: string; text: string }) => {
 };
 
 const NavigationBar = () => {
+  const { user } = useAuth();
+
+  console.log(user);
+
   return (
     <>
       <Navbar bg="light" data-bs-theme="light" expand="lg" sticky="top">
@@ -24,9 +29,10 @@ const NavigationBar = () => {
             <Nav className="me-auto">
               <NavigationItem to="/activity" text="Kegiatan" />
               <NavigationItem to="/news" text="Berita" />
-              <NavigationItem to="/forum" text="Forum Diskusi" />
+              {user && <NavigationItem to="/forum" text="Forum Diskusi" />}
               <NavigationItem to="/problem-report" text="Laporkan Masalah" />
-              <NavigationItem to="/profile" text="Profile" />
+              {user && <NavigationItem to="/profile" text="Profile" />}
+              {!user && <NavigationItem to="/login" text="Login" />}
             </Nav>
           </Navbar.Collapse>
         </Container>

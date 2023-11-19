@@ -12,7 +12,7 @@ const Activity = () => {
             <button className="btn btn-primary ms-auto">Tambah Kegiatan</button>
           </Link>
         </div>
-        <Calendar />
+        <Calendar events={[]} />
       </Container>
     </>
   );
