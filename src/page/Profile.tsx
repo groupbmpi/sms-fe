@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { Button, Container } from "react-bootstrap";
 import { Input, Select, InputType } from "../core/Form";
+import { InstitutionType } from "../feature/auth/model/InstitutionEnum";
+import { ProvinceEnum } from "../feature/auth/model/ProvinceEnum";
 
 const initialProfileValue = {
   name: "John Doe",
   institution: "Majelis Ulama Indonesia",
   category: "Organisasi Masyarakat",
+  province: "Jawa Barat",
   address: "Jl. Raya Cibaduyut No. 1, Bandung, Jawa Barat",
   email: "johndoe@gmail.com",
   phoneNumber: "",
@@ -16,6 +19,11 @@ const Profile = () => {
   const [isEditMode, setIsEditMode] = useState(false);
 
   const [formValue, setFormValue] = useState(initialProfileValue);
+
+  const categoryKeys = Object.keys(InstitutionType);
+  const categoryValues = Object.values(InstitutionType);
+  const provinceKeys = Object.keys(ProvinceEnum);
+  const provinceValues = Object.values(ProvinceEnum);
 
   const handleFormChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
@@ -30,7 +38,7 @@ const Profile = () => {
 
   const handleSubmitUpdate = () => {
     // TODO handle update profile
-    setIsEditMode(!isEditMode);
+    // setIsEditMode(!isEditMode);
   };
 
   return (
@@ -52,6 +60,7 @@ const Profile = () => {
           className="rounded-circle"
           width={150}
           height={150}
+          draggable={false}
         />
       </div>
       <form className="px-5">
@@ -74,6 +83,7 @@ const Profile = () => {
           value={formValue.name}
           disabled={!isEditMode}
           onChange={handleFormChange}
+          required
         />
         <Input
           type={InputType.text}
@@ -82,18 +92,25 @@ const Profile = () => {
           value={formValue.institution}
           disabled={!isEditMode}
           onChange={handleFormChange}
+          required
         />
         <Select
           id="category"
           label="Kategori"
           values={
-            new Map([
-              ["advocation", "Advokasi"],
-              ["education", "Edukasi"],
-              ["empowerment", "Pemberdayaan Masyarakat"],
-            ])
+            new Map(categoryKeys.map((key, idx) => [key, categoryValues[idx]]))
           }
           value={formValue.category}
+          onChange={handleFormChange}
+          disabled={!isEditMode}
+        />
+        <Select
+          id="province"
+          label="Provinsi"
+          values={
+            new Map(provinceKeys.map((key, idx) => [key, provinceValues[idx]]))
+          }
+          value={formValue.province}
           onChange={handleFormChange}
           disabled={!isEditMode}
         />
@@ -104,6 +121,7 @@ const Profile = () => {
           value={formValue.address}
           disabled={!isEditMode}
           onChange={handleFormChange}
+          required
         />
         <Input
           type={InputType.email}
@@ -112,6 +130,7 @@ const Profile = () => {
           value={formValue.email}
           disabled={!isEditMode}
           onChange={handleFormChange}
+          required
         />
         <Input
           type={InputType.tel}
@@ -120,10 +139,13 @@ const Profile = () => {
           value={formValue.phoneNumber}
           disabled={!isEditMode}
           onChange={handleFormChange}
+          required
         />
         {isEditMode ? (
           <div className="d-flex align-items-center justify-content-center">
-            <Button onClick={handleSubmitUpdate}>Simpan</Button>
+            <Button type="submit" onClick={handleSubmitUpdate}>
+              Simpan
+            </Button>
           </div>
         ) : null}
       </form>

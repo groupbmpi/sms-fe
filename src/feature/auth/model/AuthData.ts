@@ -1,7 +1,7 @@
 export enum Role {
-    mitra = "mitra",
-    admin = "admin",
-    superAdmin = "superAdmin"
+    MITRA = "mitra",
+    ADMIN = "admin",
+    SUPERADMIN = "superAdmin"
 }
 
 export interface AuthContextValue {

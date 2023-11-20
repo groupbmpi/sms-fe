@@ -33,6 +33,7 @@ const NavigationBar = () => {
               <NavigationItem to="/problem-report" text="Laporkan Masalah" />
               {user && <NavigationItem to="/profile" text="Profile" />}
               {!user && <NavigationItem to="/login" text="Login" />}
+              {user && <NavigationItem to="/user" text="User" />}
             </Nav>
           </Navbar.Collapse>
         </Container>

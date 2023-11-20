@@ -12,6 +12,8 @@ import AuthProvider from "./feature/auth/hooks/context/AuthContext";
 import ProtectedRoute from "./feature/auth/components/ProtectedRoute";
 import Login from "./page/Login";
 import Register from "./page/Register";
+import User from "./page/User";
+import UserPost from "./page/UserPost";
 
 function App() {
   return (
@@ -61,6 +63,20 @@ function App() {
               />
             }
           />
+          <Route path="/user">
+            <Route
+              index
+              element={
+                <ProtectedRoute redirectPath="/login" children={<User />} />
+              }
+            />
+            <Route
+              path="new"
+              element={
+                <ProtectedRoute redirectPath="/login" children={<UserPost />} />
+              }
+            />
+          </Route>
         </Route>
         <Route path="*" element={<h1>404</h1>} />
       </Routes>

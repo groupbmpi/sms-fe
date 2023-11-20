@@ -1,6 +1,7 @@
 import { Container } from "react-bootstrap";
 import { Input, InputType, Select } from "../core/Form";
 import { useState } from "react";
+import { ProvinceEnum } from "../feature/auth/model/ProvinceEnum";
 
 const initialReportForm = {
   problemDescription: "",
@@ -10,6 +11,9 @@ const initialReportForm = {
 
 const Report = () => {
   const [formValue, setFormValue] = useState(initialReportForm);
+
+  const provinceKeys = Object.keys(ProvinceEnum);
+  const provinceValues = Object.values(ProvinceEnum);
 
   const handleFormChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
@@ -44,7 +48,9 @@ const Report = () => {
         <Select
           id="province"
           label="Provinsi"
-          values={new Map([["jawaBarat", "Jawa Barat"]])}
+          values={
+            new Map(provinceKeys.map((key, idx) => [key, provinceValues[idx]]))
+          }
           value={formValue.province}
           onChange={handleFormChange}
         />

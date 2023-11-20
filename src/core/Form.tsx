@@ -70,7 +70,7 @@ export const Select = ({
   id,
 }: {
   label: string;
-  value: string;
+  value: any;
   values: Map<string, string>;
   id: string;
   onChange: (value: React.ChangeEvent) => void;
@@ -90,7 +90,7 @@ export const Select = ({
         <optgroup label={label}>
           {Array.from(values, ([key, value]) => {
             return (
-              <option value={key} key={key}>
+              <option value={value} key={key}>
                 {value}
               </option>
             );

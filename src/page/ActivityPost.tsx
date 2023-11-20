@@ -4,24 +4,8 @@ import { Link } from "react-router-dom";
 import { Input, Select, InputType } from "../core/Form";
 import { ActivityForm } from "../feature/activity/model/Activity";
 
-const initialActivityForm: ActivityForm = {
-  activityName: "",
-  activityGoal: "",
-  activityField: "",
-  location: "",
-  activityDescription: "",
-  activityStatus: "",
-  successIndicator: "",
-  outputTarget: "",
-  startDate: "",
-  endDate: "",
-  logistics: "",
-  activityMethod: "",
-  activityDocument: "",
-};
-
 const ActivityPost = () => {
-  const [formValue, setFormValue] = useState<ActivityForm>(initialActivityForm);
+  const [formValue, setFormValue] = useState<ActivityForm>(new ActivityForm());
 
   const handleSubmit = () => {
     console.log(formValue);

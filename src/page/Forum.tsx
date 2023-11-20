@@ -1,7 +1,9 @@
 import { Container } from "react-bootstrap";
 
-const ChatItem = ({ isMe }: { isMe: boolean }) => {
-  const conditionalClass = isMe ? "bg-success text-dark" : "bg-dark text-light";
+const ChatItem = ({ isSelf }: { isSelf: boolean }) => {
+  const conditionalClass = isSelf
+    ? "bg-body-secondary text-dark"
+    : "bg-dark text-light";
 
   const chatItem = (
     <div
@@ -14,6 +16,7 @@ const ChatItem = ({ isMe }: { isMe: boolean }) => {
           className="rounded-circle"
           width={50}
           height={50}
+          draggable={false}
         />
       </div>
       <div>
@@ -29,7 +32,7 @@ const ChatItem = ({ isMe }: { isMe: boolean }) => {
     </div>
   );
 
-  return isMe ? (
+  return isSelf ? (
     <div className="d-flex justify-content-end">{chatItem}</div>
   ) : (
     chatItem
@@ -43,8 +46,8 @@ const Forum = () => {
         className="bg-light w-75 mx-auto p-4 rounded-3 overflow-scroll"
         style={{ height: "75vh" }}
       >
-        <ChatItem isMe={false} />
-        <ChatItem isMe={true} />
+        <ChatItem isSelf={false} />
+        <ChatItem isSelf={true} />
         <div className="d-flex gap-2 sticky-bottom">
           <input className="form-control"></input>
           <button className="btn btn-primary">Kirim</button>
