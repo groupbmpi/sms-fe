@@ -90,7 +90,7 @@ const Profile = () => {
           placeholder="Lembaga"
           id="institution"
           value={formValue.institution}
-          disabled={!isEditMode}
+          disabled
           onChange={handleFormChange}
           required
         />
@@ -102,7 +102,7 @@ const Profile = () => {
           }
           value={formValue.category}
           onChange={handleFormChange}
-          disabled={!isEditMode}
+          disabled
         />
         <Select
           id="province"
@@ -128,7 +128,7 @@ const Profile = () => {
           placeholder="Email"
           id="email"
           value={formValue.email}
-          disabled={!isEditMode}
+          disabled
           onChange={handleFormChange}
           required
         />

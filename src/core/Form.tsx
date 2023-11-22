@@ -2,6 +2,7 @@ export enum InputType {
   text = "text",
   textarea = "textarea",
   date = "date",
+  datetime = "datetime-local",
   url = "url",
   email = "email",
   tel = "tel",
@@ -15,6 +16,7 @@ export const Input = ({
   required,
   disabled,
   onChange,
+  textAreaRows = 3,
 }: {
   type: InputType;
   id: string;
@@ -23,6 +25,7 @@ export const Input = ({
   onChange: (value: React.ChangeEvent) => void;
   required?: boolean;
   disabled?: boolean;
+  textAreaRows?: number;
 }) => {
   return (
     <div className="mb-3 px-5">
@@ -31,7 +34,8 @@ export const Input = ({
         type === InputType.date ||
         type === InputType.url ||
         type === InputType.email ||
-        type === InputType.tel) && (
+        type === InputType.tel ||
+        type === InputType.datetime) && (
         <input
           type={type}
           className="form-control"
@@ -48,7 +52,7 @@ export const Input = ({
         <textarea
           className="form-control"
           id={id}
-          rows={3}
+          rows={textAreaRows}
           placeholder={placeholder}
           required={required}
           disabled={disabled}

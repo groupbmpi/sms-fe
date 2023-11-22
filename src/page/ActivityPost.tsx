@@ -3,9 +3,13 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Input, Select, InputType } from "../core/Form";
 import { ActivityForm } from "../feature/activity/model/Activity";
+import { ReportEnum } from "../feature/report/model/ReportEnum";
 
 const ActivityPost = () => {
   const [formValue, setFormValue] = useState<ActivityForm>(new ActivityForm());
+
+  const reportKeys = Object.keys(ReportEnum);
+  const reportValues = Object.values(ReportEnum);
 
   const handleSubmit = () => {
     console.log(formValue);
@@ -23,7 +27,7 @@ const ActivityPost = () => {
       <form className="px-5">
         <Input
           type={InputType.text}
-          placeholder="Masukkan nama kegiatan"
+          placeholder="Nama kegiatan"
           id="activityName"
           value={formValue.activityName}
           onChange={handleFormChange}
@@ -31,7 +35,7 @@ const ActivityPost = () => {
         />
         <Input
           type={InputType.textarea}
-          placeholder="Masukkan tujuan kegiatan"
+          placeholder="Tujuan kegiatan"
           id="activityGoal"
           value={formValue.activityGoal}
           onChange={handleFormChange}
@@ -41,18 +45,14 @@ const ActivityPost = () => {
           id="activityField"
           label="Bidang Program"
           values={
-            new Map([
-              ["advocation", "Advokasi"],
-              ["education", "Edukasi"],
-              ["empowerment", "Pemberdayaan Masyarakat"],
-            ])
+            new Map(reportKeys.map((key, idx) => [key, reportValues[idx]]))
           }
           value={formValue.activityField}
           onChange={handleFormChange}
         />
         <Input
           type={InputType.text}
-          placeholder="Masukkan lokasi"
+          placeholder="Lokasi"
           id="location"
           value={formValue.location}
           onChange={handleFormChange}
@@ -60,7 +60,7 @@ const ActivityPost = () => {
         />
         <Input
           type={InputType.textarea}
-          placeholder="Masukkan deskripsi kegiatan"
+          placeholder="Deskripsi kegiatan"
           id="activityDescription"
           value={formValue.activityDescription}
           onChange={handleFormChange}
@@ -83,7 +83,7 @@ const ActivityPost = () => {
         />
         <Input
           type={InputType.textarea}
-          placeholder="Masukkan indikator keberhasilan"
+          placeholder="Indikator keberhasilan"
           id="successIndicator"
           value={formValue.successIndicator}
           onChange={handleFormChange}
@@ -91,7 +91,7 @@ const ActivityPost = () => {
         />
         <Input
           type={InputType.textarea}
-          placeholder="Masukkan target capaian"
+          placeholder="Target capaian"
           id="outputTarget"
           value={formValue.outputTarget}
           onChange={handleFormChange}
@@ -99,8 +99,8 @@ const ActivityPost = () => {
         />
         <div className="mb-3 px-5 d-flex gap-3 align-items-center justify-content-between">
           <Input
-            type={InputType.date}
-            placeholder="Masukkan tanggal mulai"
+            type={InputType.datetime}
+            placeholder="Tanggal mulai"
             id="startDate"
             value={formValue.startDate}
             onChange={handleFormChange}
@@ -108,8 +108,8 @@ const ActivityPost = () => {
           />
           <p>s/d</p>
           <Input
-            type={InputType.date}
-            placeholder="Masukkan tanggal selesai"
+            type={InputType.datetime}
+            placeholder="Tanggal selesai"
             id="endDate"
             value={formValue.endDate}
             onChange={handleFormChange}
@@ -118,7 +118,7 @@ const ActivityPost = () => {
         </div>
         <Input
           type={InputType.textarea}
-          placeholder="Masukkan kebutuhan logistik"
+          placeholder="Kebutuhan logistik"
           id="logistics"
           value={formValue.logistics}
           onChange={handleFormChange}
@@ -142,7 +142,7 @@ const ActivityPost = () => {
         {/* url */}
         <Input
           type={InputType.url}
-          placeholder="Masukkan link dokumen kegiatan"
+          placeholder="Link dokumen kegiatan"
           id="activityDocument"
           value={formValue.activityDocument}
           onChange={handleFormChange}

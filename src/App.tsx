@@ -13,7 +13,8 @@ import ProtectedRoute from "./feature/auth/components/ProtectedRoute";
 import Login from "./page/Login";
 import Register from "./page/Register";
 import User from "./page/User";
-import UserPost from "./page/UserPost";
+import UserPostAdmin from "./page/UserPostAdmin";
+import UserPostMitra from "./page/UserPostMitra";
 
 function App() {
   return (
@@ -71,9 +72,21 @@ function App() {
               }
             />
             <Route
-              path="new"
+              path="new-admin"
               element={
-                <ProtectedRoute redirectPath="/login" children={<UserPost />} />
+                <ProtectedRoute
+                  redirectPath="/login"
+                  children={<UserPostAdmin />}
+                />
+              }
+            />
+            <Route
+              path="new-mitra"
+              element={
+                <ProtectedRoute
+                  redirectPath="/login"
+                  children={<UserPostMitra />}
+                />
               }
             />
           </Route>

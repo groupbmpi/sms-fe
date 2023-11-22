@@ -1,17 +1,26 @@
 import { Container } from "react-bootstrap";
 import { Input, InputType } from "../core/Form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { isDomainBCF } from "../helper/Parser";
 
-const UserPost = () => {
+const UserPostAdmin = () => {
   const [formValue, setFormValue] = useState<string>("");
+  const [isDomain, setIsDomain] = useState<boolean>(false);
 
   const handleEmailChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
     const { value } = target;
     setFormValue(value);
   };
+
+  useEffect(() => {
+    if (isDomainBCF(formValue)) {
+      setIsDomain(true);
+    } else {
+      setIsDomain(false);
+    }
+  }, [formValue]);
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,6 +44,11 @@ const UserPost = () => {
           value={formValue}
           required
         />
+        {!isDomain && (
+          <p className="px-5 text-danger">
+            Alamat email harus berdomain BCF (@bcf.or.id)
+          </p>
+        )}
         <div className="d-flex align-items-center justify-content-center gap-2">
           <button
             type="submit"
@@ -54,4 +68,4 @@ const UserPost = () => {
   );
 };
 
-export default UserPost;
+export default UserPostAdmin;

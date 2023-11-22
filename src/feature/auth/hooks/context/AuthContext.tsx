@@ -1,5 +1,5 @@
 import { createContext, useState } from "react";
-import { AuthContextValue, AuthUser, Role } from "../../model/AuthData";
+import { AuthContextValue, AuthUser } from "../../model/AuthData";
 
 export const AuthContext = createContext<AuthContextValue>({
   user: null,
@@ -7,11 +7,7 @@ export const AuthContext = createContext<AuthContextValue>({
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<AuthUser | null>({
-    token: "token",
-    email: "johndoe@gmail.com",
-    role: Role.ADMIN,
-  });
+  const [user, setUser] = useState<AuthUser | null>(null);
 
   // TODO: uncomment this code when backend is ready
   // useEffect(() => {

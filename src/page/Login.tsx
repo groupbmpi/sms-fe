@@ -26,7 +26,7 @@ const Login = () => {
         <div className="d-flex justify-content-center align-items-center">
           <Input
             type={InputType.email}
-            placeholder="Masukkan email"
+            placeholder="Email"
             id="email"
             value={formValue.email}
             onChange={handleFormChange}
@@ -41,7 +41,7 @@ const Login = () => {
         <div className="d-flex justify-content-center align-items-center">
           <Input
             type={InputType.text}
-            placeholder="Masukkan OTP"
+            placeholder="OTP"
             id="otp"
             value={formValue.otp}
             onChange={handleFormChange}

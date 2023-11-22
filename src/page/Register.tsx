@@ -1,22 +1,63 @@
 import { Container } from "react-bootstrap";
 import { Input, InputType, Select } from "../core/Form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import PopupModal from "../core/Modal";
 import { RegisterForm } from "../feature/auth/model/LoginRegister";
-import { InstitutionType } from "../feature/auth/model/InstitutionEnum";
+import {
+  InstitutionType,
+  InstitutionTypeMap,
+} from "../feature/auth/model/InstitutionEnum";
 import { ProvinceEnum } from "../feature/auth/model/ProvinceEnum";
 
 const Register = () => {
   const [formValue, setFormValue] = useState<RegisterForm>(new RegisterForm());
   const [showRegConfirmation, setShowRegConfirmation] = useState(false);
+  const [institutionValues, setInstitutionValues] = useState<
+    Map<string, string>
+  >(new Map());
 
   const categoryKeys = Object.keys(InstitutionType);
   const categoryValues = Object.values(InstitutionType);
   const provinceKeys = Object.keys(ProvinceEnum);
   const provinceValues = Object.values(ProvinceEnum);
 
-  console.log(formValue);
+  useEffect(() => {
+    const institutionValue = InstitutionTypeMap[formValue.category];
+
+    // if values type array
+    if (Array.isArray(institutionValue)) {
+      const newInstitution = new Map(
+        institutionValue.map((value) => [value, value])
+      );
+      newInstitution.set("Lainnya", "Lainnya");
+      setInstitutionValues(newInstitution);
+    } else {
+      const provinceValue = formValue.province;
+      const institutionKeys = Object.keys(institutionValue);
+      const institutionValues = Object.values(institutionValue);
+
+      const idx = institutionKeys.findIndex((key) => key === provinceValue);
+
+      let newInstitution = new Map();
+      if (idx !== -1) {
+        newInstitution = new Map(
+          institutionValues[idx].map((value) => [value, value])
+        );
+      }
+      newInstitution.set("Lainnya", "Lainnya");
+      setInstitutionValues(newInstitution);
+
+      if (idx === -1) {
+        // set formValue.institution to "Lainnya"
+        setFormValue({
+          ...formValue,
+          institution: "Lainnya",
+          isValid: formValue.isValid,
+        });
+      }
+    }
+  }, [formValue.category, formValue.province]);
 
   const handleFormChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
@@ -37,19 +78,9 @@ const Register = () => {
         <div className="d-flex justify-content-center align-items-center">
           <Input
             type={InputType.text}
-            placeholder="Masukkan nama lengkap"
+            placeholder="Nama lengkap"
             id="fullName"
             value={formValue.fullName}
-            onChange={handleFormChange}
-            required
-          />
-        </div>
-        <div className="d-flex justify-content-center align-items-center">
-          <Input
-            type={InputType.text}
-            placeholder="Masukkan institusi atau lembaga"
-            id="institution"
-            value={formValue.institution}
             onChange={handleFormChange}
             required
           />
@@ -69,16 +100,6 @@ const Register = () => {
           />
         </div>
         <div className="d-flex justify-content-center align-items-center">
-          <Input
-            type={InputType.textarea}
-            placeholder="Masukkan alamat lengkap"
-            id="address"
-            value={formValue.address}
-            onChange={handleFormChange}
-            required
-          />
-        </div>
-        <div className="d-flex justify-content-center align-items-center">
           <Select
             id="province"
             label="Provinsi"
@@ -93,9 +114,86 @@ const Register = () => {
           />
         </div>
         <div className="d-flex justify-content-center align-items-center">
+          <Select
+            id="institution"
+            label="Institusi"
+            onChange={handleFormChange}
+            value={formValue.institution}
+            values={institutionValues}
+          />
+        </div>
+        {formValue.institution === "Lainnya" && (
+          <div className="d-flex justify-content-center align-items-center">
+            <Input
+              type={InputType.text}
+              placeholder="Nama institusi"
+              id="institutionName"
+              value={formValue.institutionName}
+              onChange={handleFormChange}
+              disabled={formValue.institution !== "Lainnya"}
+              required
+            />
+          </div>
+        )}
+        <div className="d-flex justify-content-center align-items-center">
+          <Input
+            type={InputType.text}
+            placeholder="Kota/kabupaten"
+            id="city"
+            value={formValue.city}
+            onChange={handleFormChange}
+            disabled={formValue.institution !== "Lainnya"}
+            required
+          />
+        </div>
+        <div className="d-flex justify-content-center align-items-center">
+          <Input
+            type={InputType.text}
+            placeholder="Kecamatan"
+            id="subDistrict"
+            value={formValue.subDistrict}
+            onChange={handleFormChange}
+            disabled={formValue.institution !== "Lainnya"}
+            required
+          />
+        </div>
+        <div className="d-flex justify-content-center align-items-center">
+          <Input
+            type={InputType.text}
+            placeholder="Kelurahan/desa"
+            id="village"
+            value={formValue.village}
+            onChange={handleFormChange}
+            disabled={formValue.institution !== "Lainnya"}
+            required
+          />
+        </div>
+        <div className="d-flex justify-content-center align-items-center">
+          <Input
+            type={InputType.textarea}
+            placeholder="Nama jalan"
+            id="street"
+            value={formValue.streetName}
+            onChange={handleFormChange}
+            disabled={formValue.institution !== "Lainnya"}
+            required
+          />
+        </div>
+        <div className="d-flex justify-content-center align-items-center">
+          <Input
+            type={InputType.text}
+            placeholder="Kode pos"
+            id="postalCode"
+            value={formValue.postalCode}
+            onChange={handleFormChange}
+            disabled={formValue.institution !== "Lainnya"}
+            required
+          />
+        </div>
+        <div className="d-flex justify-content-center align-items-center">
           <Input
             type={InputType.email}
-            placeholder="Masukkan email"
+            placeholder="Email"
             id="email"
             value={formValue.email}
             onChange={handleFormChange}
@@ -105,7 +203,7 @@ const Register = () => {
         <div className="d-flex justify-content-center align-items-center">
           <Input
             type={InputType.tel}
-            placeholder="Masukkan nomor telepon"
+            placeholder="Nomor telepon"
             id="phoneNumber"
             value={formValue.phoneNumber}
             onChange={handleFormChange}
@@ -142,7 +240,7 @@ const Register = () => {
             <p>Nama Lengkap: {formValue.fullName}</p>
             <p>Institusi: {formValue.institution}</p>
             <p>Kategori: {formValue.category}</p>
-            <p>Alamat: {formValue.address}</p>
+            <p>Nama jalan: {formValue.streetName}</p>
             <p>Provinsi: {formValue.province}</p>
             <p>Email: {formValue.email}</p>
             <p>Nomor Telepon: {formValue.phoneNumber}</p>

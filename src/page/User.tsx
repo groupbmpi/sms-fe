@@ -46,13 +46,20 @@ const UserTableRow = ({
 const User = () => {
   return (
     <Container className="py-2">
-      <div className="d-flex py-2">
+      <div className="d-flex py-2 justify-content-between">
         <h3>User</h3>
-        <Link to="/user/new" className="ms-auto">
-          <button className="btn btn-primary ms-auto">
-            Tambah Administrator
-          </button>
-        </Link>
+        <div className="d-flex gap-2">
+          <Link to="/user/new-admin">
+            <button className="btn btn-primary ms-auto">
+              Tambah Administrator
+            </button>
+          </Link>
+          <Link to="/user/new-mitra">
+            <button className="btn btn-secondary ms-auto">
+              Tambah Mitra
+            </button>
+          </Link>
+        </div>
       </div>
       <table className="table table-hover">
         <thead>

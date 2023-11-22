@@ -32,28 +32,28 @@ const NewsPost = () => {
         <Input
           type={InputType.text}
           id="newsTitle"
-          placeholder="Masukkan judul berita"
+          placeholder="Judul berita"
           value={formValue.newsTitle}
           onChange={handleFormChange}
         />
         <Input
           type={InputType.textarea}
           id="newsDescription"
-          placeholder="Masukkan deskripsi berita"
+          placeholder="Deskripsi berita"
           value={formValue.newsDescription}
           onChange={handleFormChange}
         />
         <Input
           type={InputType.url}
           id="newsImage"
-          placeholder="Masukkan link gambar berita"
+          placeholder="Link gambar berita"
           value={formValue.newsImage}
           onChange={handleFormChange}
         />
         <Input
           type={InputType.url}
           id="newsLink"
-          placeholder="Masukkan link publikasi"
+          placeholder="Link publikasi"
           value={formValue.newsLink}
           onChange={handleFormChange}
         />

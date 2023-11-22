@@ -1,6 +1,7 @@
 import { Container } from "react-bootstrap";
 import { Input, InputType, Select } from "../core/Form";
 import { useState } from "react";
+import { ReportEnum } from "../feature/report/model/ReportEnum";
 import { ProvinceEnum } from "../feature/auth/model/ProvinceEnum";
 
 const initialReportForm = {
@@ -11,6 +12,9 @@ const initialReportForm = {
 
 const Report = () => {
   const [formValue, setFormValue] = useState(initialReportForm);
+
+  const reportKeys = Object.keys(ReportEnum);
+  const reportValues = Object.values(ReportEnum);
 
   const provinceKeys = Object.keys(ProvinceEnum);
   const provinceValues = Object.values(ProvinceEnum);
@@ -23,24 +27,13 @@ const Report = () => {
 
   return (
     <Container>
-      <h3>Report</h3>
+      <h3>Laporkan Masalah</h3>
       <div className="mb-3 px-5">
-        <Input
-          type={InputType.textarea}
-          placeholder="Masukkan deskripsi masalah"
-          id="problemDescription"
-          value={formValue.problemDescription}
-          onChange={handleFormChange}
-          required
-        />
         <Select
           id="problemCategory"
           label="Kategori Masalah"
           values={
-            new Map([
-              ["masalah1", "Masalah 1"],
-              ["masalah2", "Masalah 2"],
-            ])
+            new Map(reportKeys.map((key, idx) => [key, reportValues[idx]]))
           }
           value={formValue.problemCategory}
           onChange={handleFormChange}
@@ -53,6 +46,14 @@ const Report = () => {
           }
           value={formValue.province}
           onChange={handleFormChange}
+        />
+        <Input
+          type={InputType.textarea}
+          placeholder="Masukkan deskripsi masalah"
+          id="problemDescription"
+          value={formValue.problemDescription}
+          onChange={handleFormChange}
+          required
         />
 
         <div className="d-flex align-items-center justify-content-center gap-2">
