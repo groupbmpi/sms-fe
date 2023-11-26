@@ -1,11 +1,18 @@
+export interface SuccessIndicator {
+    indicator: string;
+    target: number;
+}
+
 export class ActivityForm {
     activityName: string;
     activityGoal: string;
     activityField: string;
-    location: string;
+    province: string;
+    city: string;
     activityDescription: string;
     activityStatus: string;
-    successIndicator: string;
+    successIndicator: Map<string, number>;
+    // successIndicatorList: SuccessIndicator[];
     outputTarget: string;
     startDate: string;
     endDate: string;
@@ -17,10 +24,21 @@ export class ActivityForm {
         this.activityName = "";
         this.activityGoal = "";
         this.activityField = "";
-        this.location = "";
+        this.province = "";
+        this.city = "";
         this.activityDescription = "";
         this.activityStatus = "";
-        this.successIndicator = "";
+        this.successIndicator = new Map<string, number>(
+            [
+                ["", 0],
+            ],
+        );
+        // this.successIndicatorList = [
+        //     {
+        //         indicator: "",
+        //         target: 0,
+        //     }, 
+        // ];
         this.outputTarget = "";
         this.startDate = "";
         this.endDate = "";

@@ -19,8 +19,6 @@ const NavigationItem = ({ to, text }: { to: string; text: string }) => {
 const NavigationBar = () => {
   const { user } = useAuth();
 
-  console.log(user);
-
   return (
     <>
       <Navbar bg="light" data-bs-theme="light" expand="lg" sticky="top">

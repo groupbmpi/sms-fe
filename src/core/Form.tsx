@@ -1,5 +1,6 @@
 export enum InputType {
   text = "text",
+  number = "number",
   textarea = "textarea",
   date = "date",
   datetime = "datetime-local",
@@ -35,7 +36,8 @@ export const Input = ({
         type === InputType.url ||
         type === InputType.email ||
         type === InputType.tel ||
-        type === InputType.datetime) && (
+        type === InputType.datetime ||
+        type === InputType.number) && (
         <input
           type={type}
           className="form-control"
@@ -46,6 +48,7 @@ export const Input = ({
           disabled={disabled}
           value={value}
           onChange={onChange}
+          min={type === InputType.number ? 0 : undefined}
         />
       )}
       {type === InputType.textarea && (

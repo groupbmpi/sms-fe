@@ -1,15 +1,19 @@
 import { Container } from "react-bootstrap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Input, Select, InputType } from "../core/Form";
 import { ActivityForm } from "../feature/activity/model/Activity";
 import { ReportEnum } from "../feature/report/model/ReportEnum";
+import { ProvinceEnum } from "../feature/auth-and-profile/model/ProvinceEnum";
+import { changeKeyAtIndex } from "../helper/Iterable";
 
 const ActivityPost = () => {
   const [formValue, setFormValue] = useState<ActivityForm>(new ActivityForm());
 
   const reportKeys = Object.keys(ReportEnum);
   const reportValues = Object.values(ReportEnum);
+  const provinceKeys = Object.keys(ProvinceEnum);
+  const provinceValues = Object.values(ProvinceEnum);
 
   const handleSubmit = () => {
     console.log(formValue);
@@ -18,8 +22,27 @@ const ActivityPost = () => {
   const handleFormChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
     const { id, value } = target;
-    setFormValue({ ...formValue, [id]: value });
+    if (id.includes("successIndicator") || id.includes("outputTarget")) {
+      const idx = parseInt(id.slice(-1)) - 1;
+      let newSuccessIndicator = new Map(formValue.successIndicator);
+      if (id.includes("successIndicator")) {
+        newSuccessIndicator = changeKeyAtIndex(newSuccessIndicator, idx, value);
+      } else {
+        const key = Array.from(newSuccessIndicator.keys())[idx];
+        newSuccessIndicator.set(key, parseInt(value));
+      }
+      setFormValue({
+        ...formValue,
+        successIndicator: newSuccessIndicator,
+      });
+    } else {
+      setFormValue({ ...formValue, [id]: value });
+    }
   };
+
+  useEffect(() => {
+    console.log(formValue);
+  }, [formValue]);
 
   return (
     <Container className="my-2">
@@ -50,11 +73,21 @@ const ActivityPost = () => {
           value={formValue.activityField}
           onChange={handleFormChange}
         />
+        <Select
+          id="province"
+          label="Provinsi"
+          values={
+            new Map(provinceKeys.map((key, idx) => [key, provinceValues[idx]]))
+          }
+          value={formValue.province}
+          onChange={handleFormChange}
+          required
+        />
         <Input
           type={InputType.text}
-          placeholder="Lokasi"
-          id="location"
-          value={formValue.location}
+          placeholder="Kota"
+          id="city"
+          value={formValue.city}
           onChange={handleFormChange}
           required
         />
@@ -81,22 +114,33 @@ const ActivityPost = () => {
           value={formValue.activityStatus}
           onChange={handleFormChange}
         />
-        <Input
-          type={InputType.textarea}
-          placeholder="Indikator keberhasilan"
-          id="successIndicator"
-          value={formValue.successIndicator}
-          onChange={handleFormChange}
-          required
-        />
-        <Input
-          type={InputType.textarea}
-          placeholder="Target capaian"
-          id="outputTarget"
-          value={formValue.outputTarget}
-          onChange={handleFormChange}
-          required
-        />
+        <div className="d-flex justify-content-center">
+          {Array.from(formValue.successIndicator, ([key, value], index) => {
+            return (
+              <div
+                className="d-flex gap-3 align-items-center justify-content-between"
+                key={key}
+              >
+                <Input
+                  type={InputType.text}
+                  placeholder={`Indikator keberhasilan ke-${index + 1}`}
+                  id={`successIndicator${index + 1}`}
+                  value={key}
+                  onChange={handleFormChange}
+                  required
+                />
+                <Input
+                  type={InputType.number}
+                  placeholder={""}
+                  id={`outputTarget${index + 1}`}
+                  value={value.toString()}
+                  onChange={handleFormChange}
+                  required
+                />
+              </div>
+            );
+          })}
+        </div>
         <div className="mb-3 px-5 d-flex gap-3 align-items-center justify-content-between">
           <Input
             type={InputType.datetime}

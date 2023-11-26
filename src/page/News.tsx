@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Container } from "react-bootstrap";
 import { Link, useSearchParams } from "react-router-dom";
-import { generateArray } from "../helper/Array";
+import { generateArray } from "../helper/Iterable";
 import ProtectedRoleComponent from "../feature/auth-and-profile/components/ProtectedComponent";
 import { Role } from "../feature/auth-and-profile/model/AuthData";
 
@@ -26,7 +26,6 @@ const News = () => {
   );
 
   useEffect(() => {
-    console.log(currentPageNum);
     // TODO fetch news based on currentPageNum and setNews
   }, [searchParams]);
 
