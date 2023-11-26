@@ -1,7 +1,9 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { Outlet, NavLink } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import useAuth from "../feature/auth/hooks/Auth";
+import useAuth from "../feature/auth-and-profile/hooks/Auth";
+import ProtectedRoleComponent from "../feature/auth-and-profile/components/ProtectedComponent";
+import { Role } from "../feature/auth-and-profile/model/AuthData";
 
 const NavigationItem = ({ to, text }: { to: string; text: string }) => {
   return (
@@ -33,7 +35,12 @@ const NavigationBar = () => {
               <NavigationItem to="/problem-report" text="Laporkan Masalah" />
               {user && <NavigationItem to="/profile" text="Profile" />}
               {!user && <NavigationItem to="/login" text="Login" />}
-              {user && <NavigationItem to="/user" text="User" />}
+              {user && (
+                <ProtectedRoleComponent
+                  roleAllowed={[Role.ADMIN, Role.SUPERADMIN]}
+                  component={<NavigationItem to="/user" text="User" />}
+                />
+              )}
             </Nav>
           </Navbar.Collapse>
         </Container>

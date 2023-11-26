@@ -2,7 +2,7 @@ import { Container } from "react-bootstrap";
 import { Input, InputType, Select } from "../core/Form";
 import { useState } from "react";
 import { ReportEnum } from "../feature/report/model/ReportEnum";
-import { ProvinceEnum } from "../feature/auth/model/ProvinceEnum";
+import { ProvinceEnum } from "../feature/auth-and-profile/model/ProvinceEnum";
 
 const initialReportForm = {
   problemDescription: "",

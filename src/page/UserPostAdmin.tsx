@@ -24,7 +24,6 @@ const UserPostAdmin = () => {
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO add post request
     if (isDomainBCF(formValue)) {
       // TODO add post request
     } else {
@@ -45,7 +44,7 @@ const UserPostAdmin = () => {
           required
         />
         {!isDomain && (
-          <p className="px-5 text-danger">
+          <p className="px-5 mx-2 text-danger">
             Alamat email harus berdomain BCF (@bcf.or.id)
           </p>
         )}
@@ -54,6 +53,7 @@ const UserPostAdmin = () => {
             type="submit"
             className="btn btn-primary"
             onClick={handleFormSubmit}
+            disabled={!isDomain}
           >
             Submit
           </button>

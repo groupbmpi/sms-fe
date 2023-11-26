@@ -1,5 +1,7 @@
 import { Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import ProtectedRoleComponent from "../feature/auth-and-profile/components/ProtectedComponent";
+import { Role } from "../feature/auth-and-profile/model/AuthData";
 
 const UserTableRow = ({
   idx,
@@ -49,15 +51,18 @@ const User = () => {
       <div className="d-flex py-2 justify-content-between">
         <h3>User</h3>
         <div className="d-flex gap-2">
-          <Link to="/user/new-admin">
-            <button className="btn btn-primary ms-auto">
-              Tambah Administrator
-            </button>
-          </Link>
+          <ProtectedRoleComponent
+            roleAllowed={[Role.SUPERADMIN]}
+            component={
+              <Link to="/user/new-admin">
+                <button className="btn btn-primary ms-auto">
+                  Tambah Administrator
+                </button>
+              </Link>
+            }
+          />
           <Link to="/user/new-mitra">
-            <button className="btn btn-secondary ms-auto">
-              Tambah Mitra
-            </button>
+            <button className="btn btn-secondary ms-auto">Tambah Mitra</button>
           </Link>
         </div>
       </div>

@@ -8,13 +8,18 @@ import Profile from "./page/Profile";
 import NewsDetail from "./page/NewsDetail";
 import NewsPost from "./page/NewsPost";
 import ActivityPost from "./page/ActivityPost";
-import AuthProvider from "./feature/auth/hooks/context/AuthContext";
-import ProtectedRoute from "./feature/auth/components/ProtectedRoute";
+import AuthProvider from "./feature/auth-and-profile/hooks/context/AuthContext";
+import {
+  RequiredLoggedInRoute,
+  RequiredNotLoggedInRoute,
+  RoleBasedProtectedRoute,
+} from "./feature/auth-and-profile/components/ProtectedRoute";
 import Login from "./page/Login";
 import Register from "./page/Register";
 import User from "./page/User";
 import UserPostAdmin from "./page/UserPostAdmin";
 import UserPostMitra from "./page/UserPostMitra";
+import { Role } from "./feature/auth-and-profile/model/AuthData";
 
 function App() {
   return (
@@ -34,32 +39,33 @@ function App() {
           <Route
             path="/forum"
             element={
-              <ProtectedRoute redirectPath="/login" children={<Forum />} />
+              <RequiredLoggedInRoute
+                redirectPath="/login"
+                children={<Forum />}
+              />
             }
           />
           <Route path="/problem-report" element={<Report />} />
           <Route
             path="/profile"
             element={
-              <ProtectedRoute redirectPath="/login" children={<Profile />} />
+              <RequiredLoggedInRoute
+                redirectPath="/login"
+                children={<Profile />}
+              />
             }
           />
           <Route
             path="/login"
             element={
-              <ProtectedRoute
-                redirectPath="/"
-                requiredLoggedIn={false}
-                children={<Login />}
-              />
+              <RequiredNotLoggedInRoute redirectPath="/" children={<Login />} />
             }
           />
           <Route
             path="/register"
             element={
-              <ProtectedRoute
+              <RequiredNotLoggedInRoute
                 redirectPath="/"
-                requiredLoggedIn={false}
                 children={<Register />}
               />
             }
@@ -68,24 +74,45 @@ function App() {
             <Route
               index
               element={
-                <ProtectedRoute redirectPath="/login" children={<User />} />
+                <RequiredLoggedInRoute
+                  redirectPath="/login"
+                  children={
+                    <RoleBasedProtectedRoute
+                      rolesAllowed={[Role.ADMIN, Role.SUPERADMIN]}
+                      redirectPath="/"
+                      children={<User />}
+                    />
+                  }
+                />
               }
             />
             <Route
               path="new-admin"
               element={
-                <ProtectedRoute
+                <RequiredLoggedInRoute
                   redirectPath="/login"
-                  children={<UserPostAdmin />}
+                  children={
+                    <RoleBasedProtectedRoute
+                      rolesAllowed={[Role.SUPERADMIN]}
+                      redirectPath="/user"
+                      children={<UserPostAdmin />}
+                    />
+                  }
                 />
               }
             />
             <Route
               path="new-mitra"
               element={
-                <ProtectedRoute
+                <RequiredLoggedInRoute
                   redirectPath="/login"
-                  children={<UserPostMitra />}
+                  children={
+                    <RoleBasedProtectedRoute
+                      rolesAllowed={[Role.ADMIN, Role.SUPERADMIN]}
+                      redirectPath="/user"
+                      children={<UserPostMitra />}
+                    />
+                  }
                 />
               }
             />

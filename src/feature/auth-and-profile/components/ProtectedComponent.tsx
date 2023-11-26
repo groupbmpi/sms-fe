@@ -1,7 +1,9 @@
 import useAuth from "../hooks/Auth";
 import { Role } from "../model/AuthData";
 
-export const ProtectedRoleComponent = ({
+/// [Protected Component]
+/// This function is used to protect a component
+const ProtectedRoleComponent = ({
   roleAllowed,
   component,
 }: {
@@ -14,8 +16,10 @@ export const ProtectedRoleComponent = ({
     return null;
   }
 
-  if (roleAllowed.includes(user.role)) {
+  if (roleAllowed.includes(user!.role)) {
     return component;
+  } else {
+    return null;
   }
 };
 
