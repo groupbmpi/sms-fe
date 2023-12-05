@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
+
 import Navbar from "./layout/Navbar";
 import Activity from "./page/Activity";
 import News from "./page/News";
@@ -8,18 +9,23 @@ import Profile from "./page/Profile";
 import NewsDetail from "./page/NewsDetail";
 import NewsPost from "./page/NewsPost";
 import ActivityPost from "./page/ActivityPost";
-import AuthProvider from "./feature/auth-and-profile/hooks/context/AuthContext";
-import {
-  RequiredLoggedInRoute,
-  RequiredNotLoggedInRoute,
-  RoleBasedProtectedRoute,
-} from "./feature/auth-and-profile/components/ProtectedRoute";
 import Login from "./page/Login";
 import Register from "./page/Register";
 import User from "./page/User";
 import UserPostAdmin from "./page/UserPostAdmin";
 import UserPostMitra from "./page/UserPostMitra";
-import { Role } from "./feature/auth-and-profile/model/AuthData";
+import AccountActivation from "./page/Activation";
+import ReportList from "./page/ReportList";
+import UserEdit from "./page/UserEdit";
+import NewsEdit from "./page/NewsEdit";
+
+import {
+  AuthProvider,
+  RequiredLoggedInRoute,
+  RequiredNotLoggedInRoute,
+  Role,
+  RoleBasedProtectedRoute,
+} from "./feature/auth-and-profile/auth-and-profile";
 
 function App() {
   return (
@@ -33,7 +39,10 @@ function App() {
           </Route>
           <Route path="/news">
             <Route index element={<News />} />
-            <Route path=":id" element={<NewsDetail />} />
+            <Route path=":id">
+              <Route index element={<NewsDetail />} />
+              <Route path="edit" element={<NewsEdit />} />
+            </Route>
             <Route path="new" element={<NewsPost />} />
           </Route>
           <Route
@@ -45,7 +54,10 @@ function App() {
               />
             }
           />
-          <Route path="/problem-report" element={<Report />} />
+          <Route path="/problem-report">
+            <Route index element={<Report />} />
+            <Route path="list" element={<ReportList />} />
+          </Route>
           <Route
             path="/profile"
             element={
@@ -59,6 +71,15 @@ function App() {
             path="/login"
             element={
               <RequiredNotLoggedInRoute redirectPath="/" children={<Login />} />
+            }
+          />
+          <Route
+            path="/activation"
+            element={
+              <RequiredNotLoggedInRoute
+                redirectPath="/"
+                children={<AccountActivation />}
+              />
             }
           />
           <Route
@@ -111,6 +132,21 @@ function App() {
                       rolesAllowed={[Role.ADMIN, Role.SUPERADMIN]}
                       redirectPath="/user"
                       children={<UserPostMitra />}
+                    />
+                  }
+                />
+              }
+            />
+            <Route
+              path=":id/edit"
+              element={
+                <RequiredLoggedInRoute
+                  redirectPath="/login"
+                  children={
+                    <RoleBasedProtectedRoute
+                      rolesAllowed={[Role.ADMIN, Role.SUPERADMIN]}
+                      redirectPath="/user"
+                      children={<UserEdit />}
                     />
                   }
                 />

@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<AuthUser | null>({
     token: "token",
     email: "johndoe@gmail.com",
-    role: Role.ADMIN,
+    role: Role.SUPERADMIN,
   });
 
   // TODO: uncomment this code when backend is ready
@@ -33,5 +33,3 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     </AuthContext.Provider>
   );
 };
-
-export default AuthProvider;

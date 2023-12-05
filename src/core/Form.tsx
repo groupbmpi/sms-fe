@@ -7,6 +7,7 @@ export enum InputType {
   url = "url",
   email = "email",
   tel = "tel",
+  password = "password",
 }
 
 export const Input = ({
@@ -37,7 +38,8 @@ export const Input = ({
         type === InputType.email ||
         type === InputType.tel ||
         type === InputType.datetime ||
-        type === InputType.number) && (
+        type === InputType.number ||
+        type === InputType.password) && (
         <input
           type={type}
           className="form-control"

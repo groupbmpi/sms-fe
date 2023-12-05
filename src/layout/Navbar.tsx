@@ -1,9 +1,12 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { Outlet, NavLink } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import useAuth from "../feature/auth-and-profile/hooks/Auth";
-import ProtectedRoleComponent from "../feature/auth-and-profile/components/ProtectedComponent";
-import { Role } from "../feature/auth-and-profile/model/AuthData";
+
+import {
+  ProtectedRoleComponent,
+  Role,
+  useAuth,
+} from "../feature/auth-and-profile/auth-and-profile";
 
 const NavigationItem = ({ to, text }: { to: string; text: string }) => {
   return (

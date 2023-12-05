@@ -1,6 +1,6 @@
 import { Button, Modal } from "react-bootstrap";
 
-const PopupModal = ({
+export const PopupModal = ({
   show,
   title,
   body,
@@ -32,5 +32,3 @@ const PopupModal = ({
     </Modal>
   );
 };
-
-export default PopupModal;

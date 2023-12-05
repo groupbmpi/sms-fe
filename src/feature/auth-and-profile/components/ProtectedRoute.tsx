@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
-import useAuth from "../hooks/Auth";
 import { Role } from "../model/AuthData";
+import { useAuth } from "../auth-and-profile";
 
 /// [Protected Route]
 /// This function is used to protect a route from unauthorized user

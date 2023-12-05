@@ -1,9 +1,9 @@
-import useAuth from "../hooks/Auth";
+import { useAuth } from "../auth-and-profile";
 import { Role } from "../model/AuthData";
 
 /// [Protected Component]
 /// This function is used to protect a component
-const ProtectedRoleComponent = ({
+export const ProtectedRoleComponent = ({
   roleAllowed,
   component,
 }: {
@@ -22,5 +22,3 @@ const ProtectedRoleComponent = ({
     return null;
   }
 };
-
-export default ProtectedRoleComponent;

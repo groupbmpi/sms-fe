@@ -1,7 +1,8 @@
 import { Container } from "react-bootstrap";
-import { Input, InputType } from "../core/Form";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+
+import { Input, InputType } from "../core/core";
 import { isDomainBCF } from "../helper/Parser";
 
 const UserPostAdmin = () => {

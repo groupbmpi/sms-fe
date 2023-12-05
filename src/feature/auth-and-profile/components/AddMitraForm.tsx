@@ -4,7 +4,7 @@ import { InstitutionType } from "../model/InstitutionEnum";
 import { RegisterForm } from "../model/LoginRegister";
 import { ProvinceEnum } from "../model/ProvinceEnum";
 
-const AddMitraForm = ({
+export const AddMitraForm = ({
   formValue,
   institutionValues,
   handleFormChange,
@@ -77,7 +77,6 @@ const AddMitraForm = ({
             id="institutionName"
             value={formValue.institutionName}
             onChange={handleFormChange}
-            disabled={formValue.institution !== "Lainnya"}
             required
           />
         </div>
@@ -89,7 +88,6 @@ const AddMitraForm = ({
           id="city"
           value={formValue.city}
           onChange={handleFormChange}
-          disabled={formValue.institution !== "Lainnya"}
           required
         />
       </div>
@@ -100,7 +98,6 @@ const AddMitraForm = ({
           id="subDistrict"
           value={formValue.subDistrict}
           onChange={handleFormChange}
-          disabled={formValue.institution !== "Lainnya"}
           required
         />
       </div>
@@ -111,7 +108,6 @@ const AddMitraForm = ({
           id="village"
           value={formValue.village}
           onChange={handleFormChange}
-          disabled={formValue.institution !== "Lainnya"}
           required
         />
       </div>
@@ -122,7 +118,6 @@ const AddMitraForm = ({
           id="street"
           value={formValue.streetName}
           onChange={handleFormChange}
-          disabled={formValue.institution !== "Lainnya"}
           required
         />
       </div>
@@ -133,7 +128,6 @@ const AddMitraForm = ({
           id="postalCode"
           value={formValue.postalCode}
           onChange={handleFormChange}
-          disabled={formValue.institution !== "Lainnya"}
           required
         />
       </div>
@@ -177,5 +171,3 @@ const AddMitraForm = ({
     </form>
   );
 };
-
-export default AddMitraForm;

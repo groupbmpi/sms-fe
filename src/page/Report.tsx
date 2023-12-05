@@ -1,8 +1,14 @@
 import { Container } from "react-bootstrap";
-import { Input, InputType, Select } from "../core/Form";
 import { useState } from "react";
-import { ReportEnum } from "../feature/report/model/ReportEnum";
-import { ProvinceEnum } from "../feature/auth-and-profile/model/ProvinceEnum";
+import { Link } from "react-router-dom";
+
+import { ReportEnum } from "../feature/report/report";
+import {
+  ProtectedRoleComponent,
+  ProvinceEnum,
+  Role,
+} from "../feature/auth-and-profile/auth-and-profile";
+import { Input, InputType, Select } from "../core/core";
 
 const initialReportForm = {
   problemDescription: "",
@@ -27,7 +33,20 @@ const Report = () => {
 
   return (
     <Container>
-      <h3>Laporkan Masalah</h3>
+      <div className="d-flex py-2 justify-content-between">
+        <h3>Laporkan Masalah</h3>
+
+        <ProtectedRoleComponent
+          roleAllowed={[Role.ADMIN, Role.SUPERADMIN]}
+          component={
+            <Link to="/problem-report/list" className="ms-auto">
+              <button className="btn btn-primary ms-auto">
+                Lihat Daftar Laporan
+              </button>
+            </Link>
+          }
+        />
+      </div>
       <div className="mb-3 px-5">
         <Select
           id="problemCategory"

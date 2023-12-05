@@ -11,14 +11,15 @@ export class ActivityForm {
     city: string;
     activityDescription: string;
     activityStatus: string;
-    successIndicator: Map<string, number>;
-    // successIndicatorList: SuccessIndicator[];
+    successIndicator: SuccessIndicator[];
     outputTarget: string;
     startDate: string;
     endDate: string;
-    logistics: string;
+    logisticsFulfilled: string;
+    logisticsNeeded: string;
     activityMethod: string;
     activityDocument: string;
+    additionalInfo: string;
 
     constructor() {
         this.activityName = "";
@@ -28,22 +29,19 @@ export class ActivityForm {
         this.city = "";
         this.activityDescription = "";
         this.activityStatus = "";
-        this.successIndicator = new Map<string, number>(
-            [
-                ["", 0],
-            ],
-        );
-        // this.successIndicatorList = [
-        //     {
-        //         indicator: "",
-        //         target: 0,
-        //     }, 
-        // ];
+        this.successIndicator = [
+            {
+                indicator: "",
+                target: 0,
+            }, 
+        ];
         this.outputTarget = "";
         this.startDate = "";
         this.endDate = "";
-        this.logistics = "";
+        this.logisticsFulfilled = "";
+        this.logisticsNeeded = "";
         this.activityMethod = "";
         this.activityDocument = "";
+        this.additionalInfo = "";
     }
 }

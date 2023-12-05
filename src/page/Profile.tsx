@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { Button, Container } from "react-bootstrap";
-import { Input, Select, InputType } from "../core/Form";
-import { InstitutionType } from "../feature/auth-and-profile/model/InstitutionEnum";
-import { ProvinceEnum } from "../feature/auth-and-profile/model/ProvinceEnum";
+
+import { Input, Select, InputType } from "../core/core";
+import {
+  InstitutionType,
+  ProvinceEnum,
+} from "../feature/auth-and-profile/auth-and-profile";
 
 const initialProfileValue = {
   name: "John Doe",

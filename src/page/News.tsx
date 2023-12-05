@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { Button, Container } from "react-bootstrap";
 import { Link, useSearchParams } from "react-router-dom";
+
 import { generateArray } from "../helper/Iterable";
-import ProtectedRoleComponent from "../feature/auth-and-profile/components/ProtectedComponent";
-import { Role } from "../feature/auth-and-profile/model/AuthData";
+import {
+  ProtectedRoleComponent,
+  Role,
+} from "../feature/auth-and-profile/auth-and-profile";
 
 const News = () => {
   const [searchParams] = useSearchParams();
@@ -25,14 +28,51 @@ const News = () => {
     Math.min(currentPageNum + 2, maxPage)
   );
 
+  const handleDelete = () => {
+    // TODO delete news
+  };
+
   useEffect(() => {
     // TODO fetch news based on currentPageNum and setNews
   }, [searchParams]);
 
   return (
     <Container>
-      <div className="d-flex py-2">
-        <h3>Berita</h3>
+      <div className="d-flex py-2 justify-content-between">
+        <div className="d-flex gap-2 justify-content-start">
+          <h3>Berita</h3>
+          <select className="form-control" aria-label="year-news-filter">
+            <option selected className="fw-bo">
+              Semua Tahun
+            </option>
+            <option value="1">2021</option>
+            <option value="2">2020</option>
+            <option value="3">2019</option>
+          </select>
+          <select className="form-control" aria-label="month-news-filter">
+            <option selected>Semua Bulan</option>
+            <option value="1">Januari</option>
+            <option value="2">Februari</option>
+            <option value="3">Maret</option>
+            <option value="4">April</option>
+            <option value="5">Mei</option>
+            <option value="6">Juni</option>
+            <option value="7">Juli</option>
+            <option value="8">Agustus</option>
+            <option value="9">September</option>
+            <option value="10">Oktober</option>
+            <option value="11">November</option>
+            <option value="12">Desember</option>
+          </select>
+          <select className="form-control" aria-label="institution-news-filter">
+            <option selected>Semua Institusi</option>
+            <option value="1">Pemerintah</option>
+            <option value="2">Swasta</option>
+            <option value="3">Pendidikan</option>
+            <option value="4">Lainnya</option>
+          </select>
+        </div>
+
         <ProtectedRoleComponent
           roleAllowed={[Role.ADMIN, Role.SUPERADMIN, Role.MITRA]}
           component={
@@ -57,9 +97,24 @@ const News = () => {
                 16 November 2023 - John Doe
               </div>
               <p className="card-text">{item.body.substring(0, 100)}</p>
-              <Link to={`/news/${item.id}`}>
-                <Button variant="primary">Read More</Button>
-              </Link>
+              <div className="d-flex flex-justify-start gap-1">
+                <Link to={`/news/${item.id}`}>
+                  <Button variant="primary">Read More</Button>
+                </Link>
+                <ProtectedRoleComponent
+                  roleAllowed={[Role.ADMIN, Role.SUPERADMIN]}
+                  component={
+                    <div className="d-flex gap-1">
+                      <Link to={`/news/${item.id}/edit`}>
+                        <Button variant="secondary">Edit</Button>
+                      </Link>
+                      <Button variant="danger" onClick={handleDelete}>
+                        Delete
+                      </Button>
+                    </div>
+                  }
+                />
+              </div>
             </div>
           </div>
         </div>

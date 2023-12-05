@@ -1,4 +1,4 @@
-const Loading = () => {
+export const Loading = () => {
   return (
     <div className="d-flex justify-content-center">
       <div className="spinner-border my-5" role="status">
@@ -7,5 +7,3 @@ const Loading = () => {
     </div>
   );
 };
-
-export default Loading;

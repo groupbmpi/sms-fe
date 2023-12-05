@@ -1,9 +1,12 @@
 import { Container } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import PopupModal from "../core/Modal";
-import { RegisterForm } from "../feature/auth-and-profile/model/LoginRegister";
-import { InstitutionTypeMap } from "../feature/auth-and-profile/model/InstitutionEnum";
-import AddMitraForm from "../feature/auth-and-profile/components/AddMitraForm";
+
+import {
+  AddMitraForm,
+  InstitutionTypeMap,
+  RegisterForm,
+} from "../feature/auth-and-profile/auth-and-profile";
+import { PopupModal } from "../core/Modal";
 
 const Register = () => {
   const [formValue, setFormValue] = useState<RegisterForm>(new RegisterForm());

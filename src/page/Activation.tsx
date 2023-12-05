@@ -1,16 +1,16 @@
 import { Container } from "react-bootstrap";
-import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 import { Input, InputType } from "../core/core";
 
-const initialLoginForm = {
+const initialActivationForm = {
   email: "",
-  password: "",
+  otp: "",
 };
 
-const Login = () => {
-  const [formValue, setFormValue] = useState(initialLoginForm);
+const AccountActivation = () => {
+  const [formValue, setFormValue] = useState(initialActivationForm);
 
   const handleFormChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
@@ -18,14 +18,14 @@ const Login = () => {
     setFormValue({ ...formValue, [id]: value });
   };
 
-  const handleLogin = () => {
-    // TODO: handle login
+  const handleActivation = () => {
+    // TODO: handle activation
   };
 
   return (
     <Container>
       <div className="d-flex justify-content-center align-items-center">
-        <h3>Masuk</h3>
+        <h3>Aktivasi</h3>
       </div>
       <form className="">
         <div className="d-flex justify-content-center align-items-center">
@@ -40,10 +40,10 @@ const Login = () => {
         </div>
         <div className="d-flex justify-content-center align-items-center">
           <Input
-            type={InputType.password}
-            placeholder="Password"
-            id="password"
-            value={formValue.password}
+            type={InputType.number}
+            placeholder="OTP"
+            id="otp"
+            value={formValue.otp}
             onChange={handleFormChange}
             required
           />
@@ -52,20 +52,15 @@ const Login = () => {
           <button
             type="submit"
             className="btn btn-primary"
-            onSubmit={handleLogin}
+            onSubmit={handleActivation}
           >
-            Masuk
+            Aktivasi
           </button>
-          <Link to="/activation">
-            <button type="button" className="btn btn-secondary">
-              Aktivasi
-            </button>
-          </Link>
         </div>
         <div className="d-flex justify-content-center align-items-center mb-2">
-          <Link to="/register">
+          <Link to="/login">
             <button type="button" className="btn btn-light">
-              Belum punya akun? Daftar
+              Sudah aktivasi? Masuk
             </button>
           </Link>
         </div>
@@ -74,4 +69,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default AccountActivation;

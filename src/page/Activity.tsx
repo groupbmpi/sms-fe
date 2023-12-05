@@ -1,8 +1,11 @@
 import { Container } from "react-bootstrap";
-import Calendar from "../feature/activity/components/Calendar";
 import { Link } from "react-router-dom";
-import ProtectedRoleComponent from "../feature/auth-and-profile/components/ProtectedComponent";
-import { Role } from "../feature/auth-and-profile/model/AuthData";
+
+import {
+  ProtectedRoleComponent,
+  Role,
+} from "../feature/auth-and-profile/auth-and-profile";
+import { Calendar } from "../feature/activity/activity";
 
 const Activity = () => {
   return (

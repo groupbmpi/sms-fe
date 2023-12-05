@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
-
 import { NewsForm } from "../feature/news/news";
 import { Input, InputType } from "../core/core";
 
@@ -12,7 +11,7 @@ const initialNewsForm: NewsForm = {
   newsLink: "",
 };
 
-const NewsPost = () => {
+const NewsEdit = () => {
   const [formValue, setFormValue] = useState<NewsForm>(initialNewsForm);
 
   const handleFormChange = (e: React.ChangeEvent) => {
@@ -22,13 +21,13 @@ const NewsPost = () => {
     setFormValue({ ...formValue, [id]: value });
   };
 
-  const handleSubmit = () => {
+  const handleUpdate = () => {
     console.log(formValue);
   };
 
   return (
     <Container className="my-2">
-      <h4>Tambah Berita Baru</h4>
+      <h4>Ubah Berita</h4>
       <form className="px-5">
         <Input
           type={InputType.text}
@@ -62,7 +61,7 @@ const NewsPost = () => {
           <button
             type="submit"
             className="btn btn-primary"
-            onClick={handleSubmit}
+            onClick={handleUpdate}
           >
             Submit
           </button>
@@ -77,4 +76,4 @@ const NewsPost = () => {
   );
 };
 
-export default NewsPost;
+export default NewsEdit;

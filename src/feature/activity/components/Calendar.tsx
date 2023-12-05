@@ -4,7 +4,7 @@ import listPlugin from "@fullcalendar/list";
 import { EventSourceInput } from "@fullcalendar/core/index.js";
 import { useState } from "react";
 
-const Calendar = ({ events }: { events: EventSourceInput }) => {
+export const Calendar = ({ events }: { events: EventSourceInput }) => {
   const [eventList, setEventList] = useState<EventSourceInput>([
     {
       title: "Kegiatan 1",
@@ -31,5 +31,3 @@ const Calendar = ({ events }: { events: EventSourceInput }) => {
     </>
   );
 };
-
-export default Calendar;

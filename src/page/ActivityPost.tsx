@@ -1,11 +1,11 @@
 import { Container } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+
 import { Input, Select, InputType } from "../core/Form";
-import { ActivityForm } from "../feature/activity/model/Activity";
-import { ReportEnum } from "../feature/report/model/ReportEnum";
-import { ProvinceEnum } from "../feature/auth-and-profile/model/ProvinceEnum";
-import { changeKeyAtIndex } from "../helper/Iterable";
+import { ReportEnum } from "../feature/report/report";
+import { ProvinceEnum } from "../feature/auth-and-profile/auth-and-profile";
+import { ActivityForm } from "../feature/activity/activity";
 
 const ActivityPost = () => {
   const [formValue, setFormValue] = useState<ActivityForm>(new ActivityForm());
@@ -23,17 +23,18 @@ const ActivityPost = () => {
     const target = e.target as HTMLInputElement;
     const { id, value } = target;
     if (id.includes("successIndicator") || id.includes("outputTarget")) {
-      const idx = parseInt(id.slice(-1)) - 1;
-      let newSuccessIndicator = new Map(formValue.successIndicator);
       if (id.includes("successIndicator")) {
-        newSuccessIndicator = changeKeyAtIndex(newSuccessIndicator, idx, value);
+        const idx = parseInt(id[id.length - 1]) - 1;
+        const newSuccessIndicator = formValue.successIndicator;
+        newSuccessIndicator[idx].indicator = value;
       } else {
-        const key = Array.from(newSuccessIndicator.keys())[idx];
-        newSuccessIndicator.set(key, parseInt(value));
+        const idx = parseInt(id[id.length - 1]) - 1;
+        const newSuccessIndicator = formValue.successIndicator;
+        newSuccessIndicator[idx].target = parseInt(value);
       }
       setFormValue({
         ...formValue,
-        successIndicator: newSuccessIndicator,
+        successIndicator: formValue.successIndicator,
       });
     } else {
       setFormValue({ ...formValue, [id]: value });
@@ -114,33 +115,68 @@ const ActivityPost = () => {
           value={formValue.activityStatus}
           onChange={handleFormChange}
         />
-        <div className="d-flex justify-content-center">
-          {Array.from(formValue.successIndicator, ([key, value], index) => {
-            return (
-              <div
-                className="d-flex gap-3 align-items-center justify-content-between"
-                key={key}
-              >
-                <Input
-                  type={InputType.text}
-                  placeholder={`Indikator keberhasilan ke-${index + 1}`}
-                  id={`successIndicator${index + 1}`}
-                  value={key}
-                  onChange={handleFormChange}
-                  required
-                />
-                <Input
-                  type={InputType.number}
-                  placeholder={""}
-                  id={`outputTarget${index + 1}`}
-                  value={value.toString()}
-                  onChange={handleFormChange}
-                  required
-                />
-              </div>
-            );
-          })}
-        </div>
+        {Array.from(formValue.successIndicator.entries()).map(
+          ([key, value], index) => (
+            <div
+              className="d-flex gap-3 align-items-center justify-content-center"
+              key={key}
+            >
+              <Input
+                type={InputType.text}
+                placeholder={`Indikator keberhasilan ke-${index + 1}`}
+                id={`successIndicator${index + 1}`}
+                value={value.indicator}
+                onChange={handleFormChange}
+                required
+              />
+              <Input
+                type={InputType.number}
+                placeholder={""}
+                id={`outputTarget${index + 1}`}
+                value={value.target.toString()}
+                onChange={handleFormChange}
+                required
+              />
+              {index === formValue.successIndicator.length - 1 && (
+                <div className="d-flex gap-2 mb-3">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => {
+                      const newSuccessIndicator = formValue.successIndicator;
+                      newSuccessIndicator.push({
+                        indicator: "",
+                        target: 0,
+                      });
+                      setFormValue({
+                        ...formValue,
+                        successIndicator: newSuccessIndicator,
+                      });
+                    }}
+                  >
+                    Tambah
+                  </button>
+                  {formValue.successIndicator.length > 1 && (
+                    <button
+                      type="button"
+                      className="btn btn-danger"
+                      onClick={() => {
+                        const newSuccessIndicator = formValue.successIndicator;
+                        newSuccessIndicator.pop();
+                        setFormValue({
+                          ...formValue,
+                          successIndicator: newSuccessIndicator,
+                        });
+                      }}
+                    >
+                      Hapus
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+          )
+        )}
         <div className="mb-3 px-5 d-flex gap-3 align-items-center justify-content-between">
           <Input
             type={InputType.datetime}
@@ -162,9 +198,17 @@ const ActivityPost = () => {
         </div>
         <Input
           type={InputType.textarea}
-          placeholder="Kebutuhan logistik"
-          id="logistics"
-          value={formValue.logistics}
+          placeholder="Kebutuhan logistik terpenuhi"
+          id="logistics-fulfilled"
+          value={formValue.logisticsFulfilled}
+          onChange={handleFormChange}
+          required
+        />
+        <Input
+          type={InputType.textarea}
+          placeholder="Kebutuhan logistik yang dibutuhkan"
+          id="logistics-needed"
+          value={formValue.logisticsNeeded}
           onChange={handleFormChange}
           required
         />
@@ -183,12 +227,19 @@ const ActivityPost = () => {
           value={formValue.activityMethod}
           onChange={handleFormChange}
         />
-        {/* url */}
         <Input
           type={InputType.url}
           placeholder="Link dokumen kegiatan"
           id="activityDocument"
           value={formValue.activityDocument}
+          onChange={handleFormChange}
+          required
+        />
+        <Input
+          type={InputType.text}
+          placeholder="Keterangan tambahan"
+          id="additionalInfo"
+          value={formValue.additionalInfo}
           onChange={handleFormChange}
           required
         />

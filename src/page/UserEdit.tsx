@@ -7,7 +7,7 @@ import {
   RegisterForm,
 } from "../feature/auth-and-profile/auth-and-profile";
 
-const UserPostMitra = () => {
+const UserEdit = () => {
   const [formValue, setFormValue] = useState<RegisterForm>(new RegisterForm());
   const [institutionValues, setInstitutionValues] = useState<
     Map<string, string>
@@ -60,7 +60,7 @@ const UserPostMitra = () => {
 
   return (
     <Container className="my-2">
-      <h4>Tambah Mitra</h4>
+      <h4>Ubah User</h4>
       <AddMitraForm
         formValue={formValue}
         institutionValues={institutionValues}
@@ -73,4 +73,4 @@ const UserPostMitra = () => {
   );
 };
 
-export default UserPostMitra;
+export default UserEdit;
