@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
-import { Input, InputType, Select } from "../../../core/Form";
-import { InstitutionType } from "../model/InstitutionEnum";
-import { RegisterForm } from "../model/LoginRegister";
-import { ProvinceEnum } from "../model/ProvinceEnum";
+import { Input, InputType, Select } from "../../../core/core";
+import {
+  InstitutionType,
+  ProvinceEnum,
+  RegisterForm,
+} from "../auth-and-profile";
 
 export const AddMitraForm = ({
   formValue,

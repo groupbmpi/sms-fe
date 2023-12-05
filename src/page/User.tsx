@@ -1,13 +1,13 @@
 import { Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   InstitutionType,
   ProtectedRoleComponent,
   Role,
 } from "../feature/auth-and-profile/auth-and-profile";
-import { Select } from "../core/Form";
+import { Select } from "../core/core";
 import { UserTableRow } from "../feature/user/user";
 
 const initialFilterValue = {
@@ -17,9 +17,39 @@ const initialFilterValue = {
 
 const User = () => {
   const [filter, setFilter] = useState(initialFilterValue);
+  const [users, setUsers] = useState([
+    {
+      id: 1,
+      name: "John Doe",
+      category: "Administrator",
+      isVerified: true,
+    },
+    {
+      id: 2,
+      name: "Fulan",
+      category: "Pemerintah",
+      isVerified: true,
+    },
+    {
+      id: 3,
+      name: "Fulan",
+      category: "Pemerintah",
+      isVerified: false,
+    },
+  ]); // TODO: remove this after handle fetch users from API
+
+  useEffect(() => {
+    // TODO fetch users and do setUsers
+  }, []);
+
+  useEffect(() => {
+    // TODO fetch users with filter and do setUsers
+  }, [filter]);
 
   const categoryKeys = Object.keys(InstitutionType);
+  categoryKeys.unshift("all");
   const categoryValues = Object.values(InstitutionType);
+  const categoryValuesWithAll = ["Semua kategori", ...categoryValues];
 
   const handleFormChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
@@ -50,7 +80,10 @@ const User = () => {
             label="Semua Kategori"
             values={
               new Map(
-                categoryKeys.map((key, idx) => [key, categoryValues[idx]])
+                categoryKeys.map((key, idx) => [
+                  key,
+                  categoryValuesWithAll[idx],
+                ])
               )
             }
             value={filter.category}
@@ -88,9 +121,15 @@ const User = () => {
           </tr>
         </thead>
         <tbody>
-          <UserTableRow idx={1} name="John Doe" category="Administrator" />
-          <UserTableRow idx={2} name="Fulan" category="Pemerintah" isVerified />
-          <UserTableRow idx={3} name="Fulan" category="Pemerintah" />
+          {users.map((user, idx) => (
+            <UserTableRow
+              key={user.id}
+              idx={idx + 1}
+              name={user.name}
+              category={user.category}
+              isVerified={user.isVerified}
+            />
+          ))}
         </tbody>
       </table>
     </Container>

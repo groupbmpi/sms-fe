@@ -14,6 +14,10 @@ const UserEdit = () => {
   >(new Map());
 
   useEffect(() => {
+    // TODO fetch useer data and setFormValue with the data
+  }, []);
+
+  useEffect(() => {
     const institutionValue = InstitutionTypeMap[formValue.category];
 
     if (Array.isArray(institutionValue)) {

@@ -18,6 +18,12 @@ const News = () => {
     },
   ]);
 
+  const [filter, setFilter] = useState({
+    "year-news-filter": "all",
+    "month-news-filter": "all",
+    "institution-news-filter": "all",
+  });
+
   const maxPage = 5; // TODO remove this hardcoded maxPage
 
   const currentPage = searchParams.get("page");
@@ -27,6 +33,16 @@ const News = () => {
     Math.max(1, currentPageNum - 2),
     Math.min(currentPageNum + 2, maxPage)
   );
+
+  const handleFormChange = (e: React.ChangeEvent) => {
+    const target = e.target as HTMLInputElement;
+    const { id, value } = target;
+    setFilter({ ...filter, [id]: value });
+  };
+
+  useEffect(() => {
+    console.log(filter);
+  }, [filter]);
 
   const handleDelete = () => {
     // TODO delete news
@@ -41,16 +57,26 @@ const News = () => {
       <div className="d-flex py-2 justify-content-between">
         <div className="d-flex gap-2 justify-content-start">
           <h3>Berita</h3>
-          <select className="form-control" aria-label="year-news-filter">
-            <option selected className="fw-bo">
-              Semua Tahun
-            </option>
-            <option value="1">2021</option>
-            <option value="2">2020</option>
-            <option value="3">2019</option>
+          <select
+            className="form-control"
+            id="year-news-filter"
+            aria-label="year-news-filter"
+            onChange={handleFormChange}
+          >
+            <option value="all">Semua Tahun</option>
+            {generateArray(0, 5).map((item) => (
+              <option value={item} key={item}>
+                {new Date().getFullYear() - item}
+              </option>
+            ))}
           </select>
-          <select className="form-control" aria-label="month-news-filter">
-            <option selected>Semua Bulan</option>
+          <select
+            className="form-control"
+            id="month-news-filter"
+            aria-label="month-news-filter"
+            onChange={handleFormChange}
+          >
+            <option value="all">Semua Bulan</option>
             <option value="1">Januari</option>
             <option value="2">Februari</option>
             <option value="3">Maret</option>
@@ -64,8 +90,13 @@ const News = () => {
             <option value="11">November</option>
             <option value="12">Desember</option>
           </select>
-          <select className="form-control" aria-label="institution-news-filter">
-            <option selected>Semua Institusi</option>
+          <select
+            className="form-control"
+            id="institution-news-filter"
+            aria-label="institution-news-filter"
+            onChange={handleFormChange}
+          >
+            <option value="all">Semua Institusi</option>
             <option value="1">Pemerintah</option>
             <option value="2">Swasta</option>
             <option value="3">Pendidikan</option>

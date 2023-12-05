@@ -2,7 +2,7 @@ import { Container } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { Input, Select, InputType } from "../core/Form";
+import { Input, Select, InputType } from "../core/core";
 import { ReportEnum } from "../feature/report/report";
 import { ProvinceEnum } from "../feature/auth-and-profile/auth-and-profile";
 import { ActivityForm } from "../feature/activity/activity";
@@ -17,6 +17,7 @@ const ActivityPost = () => {
 
   const handleSubmit = () => {
     console.log(formValue);
+    // TODO: handle submit
   };
 
   const handleFormChange = (e: React.ChangeEvent) => {

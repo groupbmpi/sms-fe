@@ -21,9 +21,9 @@ import NewsEdit from "./page/NewsEdit";
 
 import {
   AuthProvider,
+  Role,
   RequiredLoggedInRoute,
   RequiredNotLoggedInRoute,
-  Role,
   RoleBasedProtectedRoute,
 } from "./feature/auth-and-profile/auth-and-profile";
 
