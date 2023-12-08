@@ -3,3 +3,8 @@ export enum ReportEnum {
     education = 'Edukasi',
     empowerment = 'Pemberdayaan Masyarakat',
 }
+
+export interface IFormReportResponseData {
+    kategoriMasalah : string[],
+    provinsi : string[],
+}

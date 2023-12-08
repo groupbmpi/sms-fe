@@ -1,1 +1,2 @@
-export { ReportEnum } from "./model/ReportEnum";
+export { ReportRepository } from "./repository/ReportRepo";
+export { ReportEnum } from "./model/ReportModel";

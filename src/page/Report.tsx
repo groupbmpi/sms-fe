@@ -1,5 +1,5 @@
 import { Container } from "react-bootstrap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import {
@@ -7,6 +7,7 @@ import {
   Role,
 } from "../feature/auth-and-profile/auth-and-profile";
 import { AddReportForm } from "../feature/report/components/AddReportForm";
+import { ReportRepository } from "../feature/report/report";
 
 const initialReportForm = {
   problemDescription: "",
@@ -15,7 +16,10 @@ const initialReportForm = {
 };
 
 const Report = () => {
+  const reportRepo : ReportRepository = ReportRepository.getInstance();
   const [formValue, setFormValue] = useState(initialReportForm);
+
+
 
   const handleFormChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
@@ -23,9 +27,23 @@ const Report = () => {
     setFormValue({ ...formValue, [id]: value });
   };
 
+  useEffect(() => {
+
+    const fetchData =async () => {
+      const data = await reportRepo.getFormData();
+      return data
+    }
+
+    fetchData().then((data) => { 
+      console.log(data.data)
+    })
+  }, [reportRepo])
+
+  
   const handleSubmit = () => {
     // TODO handle submit
   };
+
 
   return (
     <Container>
