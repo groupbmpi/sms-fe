@@ -1,6 +1,7 @@
-import { Container, Nav, Navbar } from "react-bootstrap";
+import { Button, Container, Nav, NavDropdown, Navbar } from "react-bootstrap";
 import { Outlet, NavLink } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { MdAccountCircle } from "react-icons/md";
 
 import {
   ProtectedRoleComponent,
@@ -19,8 +20,22 @@ const NavigationItem = ({ to, text }: { to: string; text: string }) => {
   );
 };
 
+const NavigationDropdownItem = ({ to, text }: { to: string; text: string }) => {
+  return (
+    <NavDropdown.Item>
+      <NavLink to={to} className="dropdown-item">
+        {text}
+      </NavLink>
+    </NavDropdown.Item>
+  );
+};
+
 const NavigationBar = () => {
   const { user } = useAuth();
+
+  const handleLogout = () => {
+    // TODO: handle logout
+  };
 
   return (
     <>
@@ -28,19 +43,36 @@ const NavigationBar = () => {
         <Container>
           <Navbar.Brand>Dashboard</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
+          <Navbar.Collapse
+            id="basic-navbar-nav"
+            className="d-flex justify-content-between"
+          >
+            <Nav>
               <NavigationItem to="/activity" text="Kegiatan" />
               <NavigationItem to="/news" text="Berita" />
               {user && <NavigationItem to="/forum" text="Forum Diskusi" />}
               <NavigationItem to="/problem-report" text="Laporkan Masalah" />
-              {user && <NavigationItem to="/profile" text="Profile" />}
               {!user && <NavigationItem to="/login" text="Login" />}
               {user && (
                 <ProtectedRoleComponent
                   roleAllowed={[Role.ADMIN, Role.SUPERADMIN]}
                   component={<NavigationItem to="/user" text="User" />}
                 />
+              )}
+            </Nav>
+            <Nav className="d-flex align-items-center">
+              <MdAccountCircle size={20} />
+
+              {user && (
+                <NavDropdown title="Profile" id="basic-nav-dropdown">
+                  <NavigationDropdownItem to="/profile" text="Profile" />
+                  <NavDropdown.Divider />
+                  <div className="d-flex justify-content-center">
+                    <Button variant="outline-danger" onClick={handleLogout}>
+                      Logout
+                    </Button>
+                  </div>
+                </NavDropdown>
               )}
             </Nav>
           </Navbar.Collapse>

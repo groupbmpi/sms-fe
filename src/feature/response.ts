@@ -4,7 +4,6 @@ export type ResponseMeta = {
     message: string,
 } 
 
-
 export type Response<T> = {
     meta : ResponseMeta
     data : T | null

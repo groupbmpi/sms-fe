@@ -36,7 +36,7 @@ const User = () => {
       category: "Pemerintah",
       isVerified: false,
     },
-  ]); // TODO: remove this after handle fetch users from API
+  ]); // TODO: remove this dummy initializer after handle fetch users from API
 
   useEffect(() => {
     // TODO fetch users and do setUsers
@@ -62,7 +62,7 @@ const User = () => {
       <div className="d-flex py-2 justify-content-between">
         <div className="d-flex justify-content-start">
           <h3>User</h3>
-          <Select
+          {/* <Select
             id="status"
             label="Status"
             values={
@@ -74,7 +74,7 @@ const User = () => {
             }
             value={filter.status}
             onChange={handleFormChange}
-          />
+          /> */}
           <Select
             id="category"
             label="Semua Kategori"
@@ -116,7 +116,6 @@ const User = () => {
             <th scope="col">#</th>
             <th scope="col">Nama Lengkap</th>
             <th scope="col">Kategori</th>
-            <th scope="col">Verifikasi</th>
             <th scope="col">Aksi</th>
           </tr>
         </thead>
@@ -127,7 +126,6 @@ const User = () => {
               idx={idx + 1}
               name={user.name}
               category={user.category}
-              isVerified={user.isVerified}
             />
           ))}
         </tbody>

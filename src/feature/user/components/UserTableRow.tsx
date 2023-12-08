@@ -8,18 +8,11 @@ export const UserTableRow = ({
   idx,
   name,
   category,
-  isVerified,
 }: {
   idx: number;
   name: string;
   category: string;
-  isVerified?: boolean;
 }) => {
-  const isAdmin = category === "Administrator";
-  if (isAdmin) {
-    isVerified = true;
-  }
-
   return (
     <tr>
       <th scope="row">{idx}</th>
@@ -29,32 +22,15 @@ export const UserTableRow = ({
         </div>
       </td>
       <td>
-        <span
-          className={`badge rounded-pill ${
-            isAdmin ? "text-bg-info" : "text-bg-warning"
-          }`}
-        >
-          {category}
-        </span>
-      </td>
-      <td>
-        <button className="btn btn-success" disabled={isVerified}>
-          {isVerified || isAdmin ? "Sudah Terverifikasi" : "Verifikasi"}
-        </button>
+        <span className={`badge rounded-pill text-bg-warning`}>{category}</span>
       </td>
       <td>
         <div className="d-flex gap-2">
           <Link to={`/user/${idx}/edit`}>
             <button className="btn btn-primary">Edit</button>
           </Link>
-          <ProtectedRoleComponent
-            roleAllowed={[Role.SUPERADMIN]}
-            component={
-              <button type="button" className="btn btn-danger">
-                Hapus
-              </button>
-            }
-          />
+          <button className="btn btn-success">Terima</button>
+          <button className="btn btn-danger">Tolak</button>
         </div>
       </td>
     </tr>

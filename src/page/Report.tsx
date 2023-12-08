@@ -16,10 +16,8 @@ const initialReportForm = {
 };
 
 const Report = () => {
-  const reportRepo : ReportRepository = ReportRepository.getInstance();
+  const reportRepo: ReportRepository = ReportRepository.getInstance();
   const [formValue, setFormValue] = useState(initialReportForm);
-
-
 
   const handleFormChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
@@ -28,22 +26,19 @@ const Report = () => {
   };
 
   useEffect(() => {
-
-    const fetchData =async () => {
+    const fetchData = async () => {
       const data = await reportRepo.getFormData();
-      return data
-    }
+      return data;
+    };
 
-    fetchData().then((data) => { 
-      console.log(data.data)
-    })
-  }, [reportRepo])
+    fetchData().then((data) => {
+      console.log(data.data);
+    });
+  }, [reportRepo]);
 
-  
   const handleSubmit = () => {
     // TODO handle submit
   };
-
 
   return (
     <Container>

@@ -26,6 +26,7 @@ import {
   RequiredNotLoggedInRoute,
   RoleBasedProtectedRoute,
 } from "./feature/auth-and-profile/auth-and-profile";
+import ActivityDetail from "./page/ActivityDetail";
 
 function App() {
   return (
@@ -35,6 +36,9 @@ function App() {
           <Route path="/" element={<Navigate to={"/activity"} />} />
           <Route path="/activity">
             <Route index element={<Activity />} />
+            <Route path=":id">
+              <Route index element={<ActivityDetail />} />
+            </Route>
             <Route path="new" element={<ActivityPost />} />
           </Route>
           <Route path="/news">
