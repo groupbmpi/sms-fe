@@ -29,6 +29,7 @@ export const AddMitraForm = ({
       .getAllCategories()
       .then((response) => {
         const newCategories = response.data;
+        newCategories.lembaga.push("Lainnya");
         setCategories(newCategories);
         console.log(newCategories);
         setCity(newCategories.daerah[0].kabupatenKota);
@@ -86,15 +87,15 @@ export const AddMitraForm = ({
           required
         />
       </div>
-      {/* <div className="d-flex justify-content-center align-items-center">
+      <div className="d-flex justify-content-center align-items-center">
         <Select
           id="institution"
           label="Institusi"
           onChange={handleFormChange}
           value={formValue.institution}
-          values={institutionValues}
+          values={new Map(categories.lembaga?.map((lembaga) => [lembaga, lembaga]) || [])}
         />
-      </div> */}
+      </div>
       {formValue.institution === "Lainnya" && (
         <div className="d-flex justify-content-center align-items-center">
           <Input
