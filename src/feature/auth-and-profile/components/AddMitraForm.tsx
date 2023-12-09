@@ -2,7 +2,8 @@ import { Link } from "react-router-dom";
 import { Input, InputType, Select } from "../../../core/core";
 import { RegisterForm } from "../auth-and-profile";
 import { useEffect, useState } from "react";
-import { IFormUserResponseData, UserRepository } from "../../user/user";
+import {  UserRepository } from "../../user/user";
+import { ICategoriesResponseData } from "../../user/model/User";
 
 export const AddMitraForm = ({
   formValue,
@@ -17,15 +18,15 @@ export const AddMitraForm = ({
   redirectLinkOnDismiss: string;
   dismissText: string;
 }) => {
-  const [categories, setCategories] = useState<IFormUserResponseData>(
-    {} as IFormUserResponseData
+  const [categories, setCategories] = useState<ICategoriesResponseData>(
+    {} as ICategoriesResponseData
   );
 
   const [city, setCity] = useState<string[]>([]);
 
   useEffect(() => {
     UserRepository.getInstance()
-      .getUserFormCategories()
+      .getAllCategories()
       .then((response) => {
         const newCategories = response.data;
         setCategories(newCategories);

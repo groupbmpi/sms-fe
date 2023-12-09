@@ -26,14 +26,13 @@ const Register = () => {
       <div className="d-flex justify-content-center align-items-center">
         <h3>Register</h3>
       </div>
-      {/* <AddMitraForm
+      <AddMitraForm
         formValue={formValue}
-        institutionValues={institutionValues}
         handleFormChange={handleFormChange}
         onSubmit={() => setShowRegConfirmation(true)}
         redirectLinkOnDismiss="/login"
         dismissText="Sudah punya akun? Masuk"
-      /> */}
+      />
       <PopupModal
         show={showRegConfirmation}
         title="Konfirmasi Pendaftaran"
