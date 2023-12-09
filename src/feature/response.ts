@@ -6,5 +6,5 @@ export type ResponseMeta = {
 
 export type Response<T> = {
     meta : ResponseMeta
-    data : T | null
+    data : T
 }
