@@ -1,5 +1,5 @@
 import { HttpClient } from "../../httpClient";
-import { ICategoriesResponseData,IUnverifiedUserResponseData } from "../model/User";
+import { ICategoriesResponseData,IFormUserRegister,IUnverifiedUserResponseData } from "../model/User";
 // import {Response} from "../../response";
 
 export class UserRepository extends HttpClient {
@@ -33,6 +33,11 @@ export class UserRepository extends HttpClient {
             statusAcc: statusAcc
         });
         return data;
+    }
+
+    public registerUser = async (data : IFormUserRegister) => {
+        const res = await this.instance.post('user/register',data);
+        return res;
     }
 
 }

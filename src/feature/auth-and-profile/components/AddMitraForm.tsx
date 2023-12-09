@@ -85,7 +85,7 @@ export const AddMitraForm = ({
           value={formValue.province}
           onChange={handleFormChange}
           required
-        />
+      />
       </div>
       <div className="d-flex justify-content-center align-items-center">
         <Select
@@ -139,7 +139,7 @@ export const AddMitraForm = ({
         <Input
           type={InputType.textarea}
           placeholder="Nama jalan"
-          id="street"
+          id="streetName"
           value={formValue.streetName}
           onChange={handleFormChange}
           required
