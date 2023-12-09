@@ -19,7 +19,7 @@ export const AddActivityForm = ({
   handleFormChange: (e: React.ChangeEvent) => void;
   handleAddSuccessIndicator: () => void;
   handleDeleteSuccessIndicator: () => void;
-  handleSubmit: () => void;
+  handleSubmit: (event: React.MouseEvent<HTMLElement>) => void;
   onEditMode?: boolean;
 }) => {
   const [categories, setCategories] = useState<IFormActResponseData>(

@@ -1,13 +1,20 @@
 import { Container } from "react-bootstrap";
 import { useState } from "react";
-import { ActivityForm, AddActivityForm } from "../feature/activity/activity";
+import { ActivityForm, ActivityRepository, AddActivityForm, IActivityReportDTO } from "../feature/activity/activity";
 // import { Response } from "../feature/response";
 const ActivityPost = () => {
   const [formValue, setFormValue] = useState<ActivityForm>(new ActivityForm());
+  const activityRepository = ActivityRepository.getInstance();
 
-  const handleSubmit = () => {
+  const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
     console.log(formValue);
-    // TODO: handle submit
+    
+    const body : IActivityReportDTO = formValue.toDto();
+    
+    console.log(body)
+
+    await activityRepository.createActivityReport(body);
   };
 
   const handleAddSuccessIndicator = () => {
@@ -20,6 +27,7 @@ const ActivityPost = () => {
       ...formValue,
       successIndicator: newSuccessIndicator,
     });
+    formValue.setActivityForm(formValue);
   };
 
   const handleDeleteSuccessIndicator = () => {
@@ -33,6 +41,8 @@ const ActivityPost = () => {
         ...formValue,
         successIndicator: newSuccessIndicator,
       });
+
+      formValue.setActivityForm(formValue);
   };
 
   const handleFormChange = (e: React.ChangeEvent) => {
@@ -52,8 +62,10 @@ const ActivityPost = () => {
         ...formValue,
         successIndicator: formValue.successIndicator,
       });
+      formValue.setActivityForm(formValue);
     } else {
       setFormValue({ ...formValue, [id]: value });
+      formValue.setActivityForm(formValue);
     }
   };
 
