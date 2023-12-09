@@ -1,9 +1,7 @@
 export interface ICategoriesResponseData {
     kategori: string[],
-    kategoriMasalah: string[],
-    metodePelaksanaan: string[],
-    statusKegiatan: string[],
-    daerah: Daerah[]
+    daerah: Daerah[],
+    lembaga: string[]
 }
 
 interface Daerah {

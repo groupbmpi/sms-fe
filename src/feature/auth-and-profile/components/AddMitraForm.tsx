@@ -30,6 +30,7 @@ export const AddMitraForm = ({
       .then((response) => {
         const newCategories = response.data;
         setCategories(newCategories);
+        console.log(newCategories);
         setCity(newCategories.daerah[0].kabupatenKota);
       });
   }, []);
@@ -56,18 +57,18 @@ export const AddMitraForm = ({
           required
         />
       </div>
-      {/* <div className="d-flex justify-content-center align-items-center">
+      <div className="d-flex justify-content-center align-items-center">
         <Select
           id="category"
           label="Kategori"
           values={
-            new Map(categoryKeys.map((key, idx) => [key, categoryValues[idx]]))
+            new Map(categories.kategori?.map((category) => [category, category]))
           }
           value={formValue.category}
           onChange={handleFormChange}
           required
         />
-      </div> */}
+      </div>
       <div className="d-flex justify-content-center align-items-center">
         <Select
           id="province"
