@@ -2,10 +2,6 @@ import { useState } from "react";
 import { Button, Container } from "react-bootstrap";
 
 import { Input, Select, InputType } from "../core/core";
-import {
-  InstitutionType,
-  ProvinceEnum,
-} from "../feature/auth-and-profile/auth-and-profile";
 
 const initialProfileValue = {
   name: "John Doe",
@@ -22,11 +18,6 @@ const Profile = () => {
   const [isEditMode, setIsEditMode] = useState(false);
 
   const [formValue, setFormValue] = useState(initialProfileValue);
-
-  const categoryKeys = Object.keys(InstitutionType);
-  const categoryValues = Object.values(InstitutionType);
-  const provinceKeys = Object.keys(ProvinceEnum);
-  const provinceValues = Object.values(ProvinceEnum);
 
   const handleFormChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
@@ -97,7 +88,7 @@ const Profile = () => {
           onChange={handleFormChange}
           required
         />
-        <Select
+        {/* <Select
           id="category"
           label="Kategori"
           values={
@@ -116,7 +107,7 @@ const Profile = () => {
           value={formValue.province}
           onChange={handleFormChange}
           disabled={!isEditMode}
-        />
+        /> */}
         <Input
           type={InputType.textarea}
           placeholder="Alamat Lengkap"

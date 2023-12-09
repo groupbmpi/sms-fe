@@ -45,3 +45,16 @@ export class ActivityForm {
         this.additionalInfo = "";
     }
 }
+
+export interface IFormActResponseData {
+    kategori: string[],
+    kategoriMasalah: string[],
+    metodePelaksanaan: string[],
+    statusKegiatan: string[],
+    daerah: Daerah[]
+}
+
+interface Daerah {
+    provinsi: string,
+    kabupatenKota: string[]
+}

@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 
 import {
   AddMitraForm,
-  InstitutionTypeMap,
   RegisterForm,
 } from "../feature/auth-and-profile/auth-and-profile";
 import { PopupModal } from "../core/Modal";
@@ -11,45 +10,6 @@ import { PopupModal } from "../core/Modal";
 const Register = () => {
   const [formValue, setFormValue] = useState<RegisterForm>(new RegisterForm());
   const [showRegConfirmation, setShowRegConfirmation] = useState(false);
-  const [institutionValues, setInstitutionValues] = useState<
-    Map<string, string>
-  >(new Map());
-
-  useEffect(() => {
-    const institutionValue = InstitutionTypeMap[formValue.category];
-
-    if (Array.isArray(institutionValue)) {
-      const newInstitution = new Map(
-        institutionValue.map((value) => [value, value])
-      );
-      newInstitution.set("Lainnya", "Lainnya");
-      setInstitutionValues(newInstitution);
-    } else {
-      const provinceValue = formValue.province;
-      const institutionKeys = Object.keys(institutionValue);
-      const institutionValues = Object.values(institutionValue);
-
-      const idx = institutionKeys.findIndex((key) => key === provinceValue);
-
-      let newInstitution = new Map();
-      if (idx !== -1) {
-        newInstitution = new Map(
-          institutionValues[idx].map((value) => [value, value])
-        );
-      }
-      newInstitution.set("Lainnya", "Lainnya");
-      setInstitutionValues(newInstitution);
-
-      if (idx === -1) {
-        // set formValue.institution to "Lainnya"
-        setFormValue({
-          ...formValue,
-          institution: "Lainnya",
-          isValid: formValue.isValid,
-        });
-      }
-    }
-  }, [formValue.category, formValue.province]);
 
   const handleFormChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
@@ -66,14 +26,14 @@ const Register = () => {
       <div className="d-flex justify-content-center align-items-center">
         <h3>Register</h3>
       </div>
-      <AddMitraForm
+      {/* <AddMitraForm
         formValue={formValue}
         institutionValues={institutionValues}
         handleFormChange={handleFormChange}
         onSubmit={() => setShowRegConfirmation(true)}
         redirectLinkOnDismiss="/login"
         dismissText="Sudah punya akun? Masuk"
-      />
+      /> */}
       <PopupModal
         show={showRegConfirmation}
         title="Konfirmasi Pendaftaran"

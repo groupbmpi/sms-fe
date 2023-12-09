@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import {
-  InstitutionType,
   ProtectedRoleComponent,
   Role,
 } from "../feature/auth-and-profile/auth-and-profile";
@@ -46,11 +45,6 @@ const User = () => {
     // TODO fetch users with filter and do setUsers
   }, [filter]);
 
-  const categoryKeys = Object.keys(InstitutionType);
-  categoryKeys.unshift("all");
-  const categoryValues = Object.values(InstitutionType);
-  const categoryValuesWithAll = ["Semua kategori", ...categoryValues];
-
   const handleFormChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
     const { id, value } = target;
@@ -75,7 +69,7 @@ const User = () => {
             value={filter.status}
             onChange={handleFormChange}
           /> */}
-          <Select
+          {/* <Select
             id="category"
             label="Semua Kategori"
             values={
@@ -88,7 +82,7 @@ const User = () => {
             }
             value={filter.category}
             onChange={handleFormChange}
-          />
+          /> */}
         </div>
         <div className="d-flex justify-content-end">
           <div className="d-flex gap-2">

@@ -1,5 +1,5 @@
 import { Container } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ActivityForm, AddActivityForm } from "../feature/activity/activity";
 
 const ActivityPost = () => {
@@ -54,10 +54,6 @@ const ActivityPost = () => {
       setFormValue({ ...formValue, [id]: value });
     }
   };
-
-  useEffect(() => {
-    console.log(formValue);
-  }, [formValue]);
 
   return (
     <Container className="my-2">

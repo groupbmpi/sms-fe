@@ -27,7 +27,7 @@ const Report = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await reportRepo.getFormData();
+      const data = await reportRepo.getProbReportCategories();
       return data;
     };
 

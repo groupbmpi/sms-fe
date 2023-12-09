@@ -1,10 +1,8 @@
 import { Link } from "react-router-dom";
 import { Input, InputType, Select } from "../../../core/core";
-import {
-  InstitutionType,
-  ProvinceEnum,
-  RegisterForm,
-} from "../auth-and-profile";
+import { RegisterForm } from "../auth-and-profile";
+import { useEffect, useState } from "react";
+import { IFormReportResponseData, ReportRepository } from "../../report/report";
 
 export const AddMitraForm = ({
   formValue,
@@ -21,10 +19,18 @@ export const AddMitraForm = ({
   redirectLinkOnDismiss: string;
   dismissText: string;
 }) => {
-  const categoryKeys = Object.keys(InstitutionType);
-  const categoryValues = Object.values(InstitutionType);
-  const provinceKeys = Object.keys(ProvinceEnum);
-  const provinceValues = Object.values(ProvinceEnum);
+  const [categories, setCategories] = useState<IFormReportResponseData>(
+    {} as IFormReportResponseData
+  );
+
+  useEffect(() => {
+    ReportRepository.getInstance()
+      .getProbReportCategories()
+      .then((response) => {
+        const kategoriMasalah = response.data;
+        setCategories(kategoriMasalah);
+      });
+  }, []);
 
   return (
     <form className="">
@@ -38,7 +44,7 @@ export const AddMitraForm = ({
           required
         />
       </div>
-      <div className="d-flex justify-content-center align-items-center">
+      {/* <div className="d-flex justify-content-center align-items-center">
         <Select
           id="category"
           label="Kategori"
@@ -49,13 +55,15 @@ export const AddMitraForm = ({
           onChange={handleFormChange}
           required
         />
-      </div>
+      </div> */}
       <div className="d-flex justify-content-center align-items-center">
         <Select
           id="province"
           label="Provinsi"
           values={
-            new Map(provinceKeys.map((key, idx) => [key, provinceValues[idx]]))
+            new Map(
+              categories.provinsi?.map((category) => [category, category]) || []
+            )
           }
           value={formValue.province}
           onChange={handleFormChange}

@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom";
 import { Input, InputType, Select } from "../../../core/Form";
-import { ProvinceEnum } from "../../auth-and-profile/auth-and-profile";
-import { ReportEnum } from "../../report/report";
-import { ActivityForm } from "../activity";
+import {
+  ActivityForm,
+  IFormActResponseData,
+  ActivityRepository,
+} from "../activity";
+import { useEffect, useState } from "react";
 
 export const AddActivityForm = ({
   formValue,
@@ -19,10 +22,29 @@ export const AddActivityForm = ({
   handleSubmit: () => void;
   onEditMode?: boolean;
 }) => {
-  const reportKeys = Object.keys(ReportEnum);
-  const reportValues = Object.values(ReportEnum);
-  const provinceKeys = Object.keys(ProvinceEnum);
-  const provinceValues = Object.values(ProvinceEnum);
+  const [categories, setCategories] = useState<IFormActResponseData>(
+    {} as IFormActResponseData
+  );
+  const [city, setCity] = useState<string[]>([]);
+
+  useEffect(() => {
+    ActivityRepository.getInstance()
+      .getActReportCategories()
+      .then((response) => {
+        const newCategories = response.data;
+        setCategories(newCategories);
+      });
+  }, []);
+
+  useEffect(() => {
+    const newCity = categories.daerah?.filter(
+      (category) => category.provinsi === formValue.province
+    );
+
+    if (newCity !== undefined) {
+      setCity(newCity[0].kabupatenKota);
+    }
+  }, [formValue.province]);
 
   return (
     <form className="px-5">
@@ -47,7 +69,14 @@ export const AddActivityForm = ({
       <Select
         id="activityField"
         label="Bidang Program"
-        values={new Map(reportKeys.map((key, idx) => [key, reportValues[idx]]))}
+        values={
+          new Map(
+            categories.kategoriMasalah?.map((category) => [
+              category,
+              category,
+            ]) || []
+          )
+        }
         value={formValue.activityField}
         onChange={handleFormChange}
         disabled={!onEditMode}
@@ -56,18 +85,23 @@ export const AddActivityForm = ({
         id="province"
         label="Provinsi"
         values={
-          new Map(provinceKeys.map((key, idx) => [key, provinceValues[idx]]))
+          new Map(
+            categories.daerah?.map((category) => [
+              category.provinsi,
+              category.provinsi,
+            ]) || []
+          )
         }
         value={formValue.province}
         onChange={handleFormChange}
         disabled={!onEditMode}
         required
       />
-      <Input
-        type={InputType.text}
-        placeholder="Kota"
+      <Select
         id="city"
-        value={formValue.city}
+        label="Kota"
+        values={new Map(city.map((kota) => [kota, kota]) || [])}
+        value={formValue.province}
         onChange={handleFormChange}
         disabled={!onEditMode}
         required
@@ -85,13 +119,12 @@ export const AddActivityForm = ({
         id="activityStatus"
         label="Status Program"
         values={
-          new Map([
-            ["upcoming", "Belum terlaksana"],
-            ["ongoing", "Sedang berjalan"],
-            ["coordination", "Tahap koordinasi"],
-            ["blocked", "Sedang terkendala"],
-            ["done", "Sudah terlaksana"],
-          ])
+          new Map(
+            categories.statusKegiatan?.map((category) => [
+              category,
+              category,
+            ]) || []
+          )
         }
         value={formValue.activityStatus}
         onChange={handleFormChange}

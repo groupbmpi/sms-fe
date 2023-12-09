@@ -1,6 +1,6 @@
+import { useEffect, useState } from "react";
 import { Input, InputType, Select } from "../../../core/core";
-import { ProvinceEnum } from "../../auth-and-profile/auth-and-profile";
-import { ReportEnum } from "../report";
+import { IFormReportResponseData, ReportRepository } from "../report";
 
 export const AddReportForm = ({
   formValue,
@@ -15,18 +15,36 @@ export const AddReportForm = ({
   handleFormChange: (e: React.ChangeEvent) => void;
   handleSubmit: () => void;
 }) => {
-  const reportKeys = Object.keys(ReportEnum);
-  const reportValues = Object.values(ReportEnum);
+  const [categories, setCategories] = useState<IFormReportResponseData>(
+    {} as IFormReportResponseData
+  );
 
-  const provinceKeys = Object.keys(ProvinceEnum);
-  const provinceValues = Object.values(ProvinceEnum);
+  useEffect(() => {
+    ReportRepository.getInstance()
+      .getProbReportCategories()
+      .then((response) => {
+        const newCategories = response.data;
+        setCategories(newCategories);
+      });
+  }, []);
+
+  useEffect(() => {
+    console.log(categories);
+  }, [categories]);
 
   return (
     <form className="mb-3 px-5">
       <Select
         id="problemCategory"
         label="Kategori Masalah"
-        values={new Map(reportKeys.map((key, idx) => [key, reportValues[idx]]))}
+        values={
+          new Map(
+            categories.kategoriMasalah?.map((category) => [
+              category,
+              category,
+            ]) || []
+          )
+        }
         value={formValue.problemCategory}
         onChange={handleFormChange}
       />
@@ -34,7 +52,9 @@ export const AddReportForm = ({
         id="province"
         label="Provinsi"
         values={
-          new Map(provinceKeys.map((key, idx) => [key, provinceValues[idx]]))
+          new Map(
+            categories.provinsi?.map((category) => [category, category]) || []
+          )
         }
         value={formValue.province}
         onChange={handleFormChange}

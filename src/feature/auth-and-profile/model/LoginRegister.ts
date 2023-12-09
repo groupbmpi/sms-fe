@@ -1,12 +1,10 @@
-import { InstitutionType, InstitutionTypeMap } from "./InstitutionEnum";
-import { ProvinceEnum } from "./ProvinceEnum";
 
 export class RegisterForm {
     fullName: string;
     institution: string;
-    category: InstitutionType;
+    category: string;
     institutionName: string;
-    province: ProvinceEnum;
+    province: string;
     city: string;
     subDistrict: string;
     village: string;
@@ -16,18 +14,18 @@ export class RegisterForm {
     phoneNumber: string;
 
     constructor() {
-        this.fullName = "";
-        this.institution = InstitutionTypeMap[InstitutionType.MINISTRY][0];
-        this.category = InstitutionType.MINISTRY;
-        this.province = ProvinceEnum.nad;
-        this.institutionName = "";
-        this.city = "";
-        this.subDistrict = "";
-        this.village = "";
-        this.streetName = "";
-        this.postalCode = "";
-        this.email = "";
-        this.phoneNumber = "";
+        this.fullName = ""
+        this.institution = ""
+        this.category = ""
+        this.province = ""
+        this.institutionName = ""
+        this.city = ""
+        this.subDistrict = ""
+        this.village = ""
+        this.streetName = ""
+        this.postalCode = ""
+        this.email = ""
+        this.phoneNumber = ""
     }
 
     isValid(): boolean {
@@ -40,7 +38,7 @@ export class RegisterForm {
         && this.subDistrict !== ""
         && this.village !== ""
         && this.postalCode !== ""
-        && this.category !== null
-        && this.province !== null;
+        && this.category !== ""
+        && this.province !== "";
     }
 }
