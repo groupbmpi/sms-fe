@@ -30,7 +30,7 @@ const Login = () => {
         setUser({
           email: "",
           token: res.data.token,
-          role: Role.MITRA,
+          role: Role.SUPERADMIN,
         });
       });
   };

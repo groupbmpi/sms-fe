@@ -48,4 +48,13 @@ export class UserRepository extends HttpClient {
         return res;
     }
 
+    public activateUser = async (email:string, password:string, token : string) => {
+        const res = await this.instance.put('user/activate',{
+            email:email,
+            password:password,
+            otp:token
+        });
+        return res;
+    }
+
 }

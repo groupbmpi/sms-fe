@@ -3,9 +3,11 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 import { Input, InputType } from "../core/core";
+import { UserRepository } from "../feature/user/user";
 
 const initialActivationForm = {
   email: "",
+  password:"",
   otp: "",
 };
 
@@ -19,7 +21,12 @@ const AccountActivation = () => {
   };
 
   const handleActivation = () => {
-    // TODO: handle activation
+    console.log(formValue)
+    UserRepository.getInstance()
+      .activateUser(formValue.email, formValue.password, formValue.otp)
+      .then((res) => {
+        console.log(res);
+      });
   };
 
   return (
@@ -34,6 +41,16 @@ const AccountActivation = () => {
             placeholder="Email"
             id="email"
             value={formValue.email}
+            onChange={handleFormChange}
+            required
+          />
+        </div>
+        <div className="d-flex justify-content-center align-items-center">
+          <Input
+            type={InputType.password}
+            placeholder="Password"
+            id="password"
+            value={formValue.password}
             onChange={handleFormChange}
             required
           />
