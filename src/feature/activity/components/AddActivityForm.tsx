@@ -30,9 +30,10 @@ export const AddActivityForm = ({
   useEffect(() => {
     ActivityRepository.getInstance()
       .getActReportCategories()
-      .then((response) => {
-        const newCategories = response.data;
+      .then((data) => {
+        const newCategories : IFormActResponseData = data;
         setCategories(newCategories);
+
         setCity(newCategories.daerah[0].kabupatenKota);
       });
   }, []);
@@ -42,10 +43,11 @@ export const AddActivityForm = ({
       (category) => category.provinsi === formValue.province
     );
 
-    if (newCity !== undefined) {
+
+    if (typeof newCity !== "undefined" && newCity.length > 0) {
       setCity(newCity[0].kabupatenKota);
     }
-  }, [formValue.province]);
+  }, [formValue.province, categories.daerah]);
 
   return (
     <form className="px-5">

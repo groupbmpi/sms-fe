@@ -23,7 +23,7 @@ export const AddReportForm = ({
     ReportRepository.getInstance()
       .getProbReportCategories()
       .then((response) => {
-        const newCategories = response.data;
+        const newCategories = response;
         setCategories(newCategories);
       });
   }, []);

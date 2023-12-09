@@ -32,7 +32,7 @@ const Report = () => {
     };
 
     fetchData().then((data) => {
-      console.log(data.data);
+      console.log(data);
     });
   }, [reportRepo]);
 
