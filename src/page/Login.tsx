@@ -1,8 +1,10 @@
 import { Container } from "react-bootstrap";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 import { Input, InputType } from "../core/core";
+import { UserRepository } from "../feature/user/user";
+import { Role, useAuth } from "../feature/auth-and-profile/auth-and-profile";
 
 const initialLoginForm = {
   email: "",
@@ -12,6 +14,8 @@ const initialLoginForm = {
 const Login = () => {
   const [formValue, setFormValue] = useState(initialLoginForm);
 
+  const {setUser} = useAuth();
+
   const handleFormChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
     const { id, value } = target;
@@ -19,7 +23,16 @@ const Login = () => {
   };
 
   const handleLogin = () => {
-    // TODO: handle login
+    console.log(formValue);
+    UserRepository.getInstance()
+      .loginUser(formValue.email, formValue.password)
+      .then((res) => {
+        setUser({
+          email: "",
+          token: res.data.token,
+          role: Role.MITRA,
+        });
+      });
   };
 
   return (
@@ -50,9 +63,9 @@ const Login = () => {
         </div>
         <div className="d-flex justify-content-center align-items-center mb-2 gap-1">
           <button
-            type="submit"
+            type="button"
             className="btn btn-primary"
-            onSubmit={handleLogin}
+            onClick={handleLogin}
           >
             Masuk
           </button>
