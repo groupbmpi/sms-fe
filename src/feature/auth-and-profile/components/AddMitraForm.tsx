@@ -2,35 +2,46 @@ import { Link } from "react-router-dom";
 import { Input, InputType, Select } from "../../../core/core";
 import { RegisterForm } from "../auth-and-profile";
 import { useEffect, useState } from "react";
-import { IFormReportResponseData, ReportRepository } from "../../report/report";
+import { IFormUserResponseData, UserRepository } from "../../user/user";
 
 export const AddMitraForm = ({
   formValue,
-  institutionValues,
   handleFormChange,
   onSubmit,
   redirectLinkOnDismiss,
   dismissText,
 }: {
   formValue: RegisterForm;
-  institutionValues: Map<string, string>;
   handleFormChange: (e: React.ChangeEvent) => void;
   onSubmit: () => void;
   redirectLinkOnDismiss: string;
   dismissText: string;
 }) => {
-  const [categories, setCategories] = useState<IFormReportResponseData>(
-    {} as IFormReportResponseData
+  const [categories, setCategories] = useState<IFormUserResponseData>(
+    {} as IFormUserResponseData
   );
 
+  const [city, setCity] = useState<string[]>([]);
+
   useEffect(() => {
-    ReportRepository.getInstance()
-      .getProbReportCategories()
+    UserRepository.getInstance()
+      .getUserFormCategories()
       .then((response) => {
-        const kategoriMasalah = response.data;
-        setCategories(kategoriMasalah);
+        const newCategories = response.data;
+        setCategories(newCategories);
+        setCity(newCategories.daerah[0].kabupatenKota);
       });
   }, []);
+
+  useEffect(() => {
+    const newCity = categories.daerah?.filter(
+      (category) => category.provinsi === formValue.province
+    );
+
+    if (newCity !== undefined) {
+      setCity(newCity[0].kabupatenKota);
+    }
+  }, [formValue.province]);
 
   return (
     <form className="">
@@ -62,7 +73,10 @@ export const AddMitraForm = ({
           label="Provinsi"
           values={
             new Map(
-              categories.provinsi?.map((category) => [category, category]) || []
+              categories.daerah?.map((category) => [
+                category.provinsi,
+                category.provinsi,
+              ]) || []
             )
           }
           value={formValue.province}
@@ -70,7 +84,7 @@ export const AddMitraForm = ({
           required
         />
       </div>
-      <div className="d-flex justify-content-center align-items-center">
+      {/* <div className="d-flex justify-content-center align-items-center">
         <Select
           id="institution"
           label="Institusi"
@@ -78,7 +92,7 @@ export const AddMitraForm = ({
           value={formValue.institution}
           values={institutionValues}
         />
-      </div>
+      </div> */}
       {formValue.institution === "Lainnya" && (
         <div className="d-flex justify-content-center align-items-center">
           <Input
@@ -91,16 +105,13 @@ export const AddMitraForm = ({
           />
         </div>
       )}
-      <div className="d-flex justify-content-center align-items-center">
-        <Input
-          type={InputType.text}
-          placeholder="Kota/kabupaten"
-          id="city"
-          value={formValue.city}
-          onChange={handleFormChange}
-          required
-        />
-      </div>
+      <Select
+        id="city"
+        label="Kota"
+        onChange={handleFormChange}
+        value={formValue.city}
+        values={new Map(city.map((kota) => [kota, kota]) || [])}
+      />
       <div className="d-flex justify-content-center align-items-center">
         <Input
           type={InputType.text}
