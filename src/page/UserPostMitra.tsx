@@ -22,14 +22,13 @@ const UserPostMitra = () => {
   return (
     <Container className="my-2">
       <h4>Tambah Mitra</h4>
-      {/* <AddMitraForm
+      <AddMitraForm
         formValue={formValue}
-        institutionValues={institutionValues}
         handleFormChange={handleFormChange}
         onSubmit={() => {}}
         redirectLinkOnDismiss="/user"
         dismissText="Batal"
-      /> */}
+      />
     </Container>
   );
 };

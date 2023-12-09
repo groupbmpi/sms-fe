@@ -1,6 +1,7 @@
 export { AddMitraForm } from "./components/AddMitraForm";
 export { ProtectedRoleComponent } from "./components/ProtectedComponent";
 export { RequiredLoggedInRoute, RequiredNotLoggedInRoute, RoleBasedProtectedRoute } from "./components/ProtectedRoute";
+export { ProfileForm } from "./components/ProfileForm";
 
 export { useAuth } from "./hooks/Auth";
 export { AuthContext, AuthProvider } from "./hooks/context/AuthContext";

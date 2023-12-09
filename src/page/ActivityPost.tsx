@@ -35,6 +35,7 @@ const ActivityPost = () => {
 
   const handleFormChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
+    console.log(target);
     const { id, value } = target;
     if (id.includes("successIndicator") || id.includes("outputTarget")) {
       if (id.includes("successIndicator")) {
@@ -51,6 +52,7 @@ const ActivityPost = () => {
         successIndicator: formValue.successIndicator,
       });
     } else {
+      console.log(id, value);
       setFormValue({ ...formValue, [id]: value });
     }
   };

@@ -33,6 +33,7 @@ export const AddActivityForm = ({
       .then((response) => {
         const newCategories = response.data;
         setCategories(newCategories);
+        setCity(newCategories.daerah[0].kabupatenKota);
       });
   }, []);
 
@@ -101,7 +102,7 @@ export const AddActivityForm = ({
         id="city"
         label="Kota"
         values={new Map(city.map((kota) => [kota, kota]) || [])}
-        value={formValue.province}
+        value={formValue.city}
         onChange={handleFormChange}
         disabled={!onEditMode}
         required
@@ -222,13 +223,12 @@ export const AddActivityForm = ({
         id="activityMethod"
         label="Metode Pelaksanaan"
         values={
-          new Map([
-            ["daring", "Daring"],
-            ["luring", "Luring"],
-            ["hybrid", "Hybrid"],
-            ["fgd", "Forum Group Discussion"],
-            ["talkshow", "Talkshow"],
-          ])
+          new Map(
+            categories.metodePelaksanaan?.map((category) => [
+              category,
+              category,
+            ]) || []
+          )
         }
         value={formValue.activityMethod}
         disabled={!onEditMode}
