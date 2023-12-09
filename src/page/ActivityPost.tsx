@@ -23,14 +23,16 @@ const ActivityPost = () => {
   };
 
   const handleDeleteSuccessIndicator = () => {
-    () => {
       const newSuccessIndicator = formValue.successIndicator;
+      
       newSuccessIndicator.pop();
+
+      console.log(newSuccessIndicator)
+
       setFormValue({
         ...formValue,
         successIndicator: newSuccessIndicator,
       });
-    };
   };
 
   const handleFormChange = (e: React.ChangeEvent) => {

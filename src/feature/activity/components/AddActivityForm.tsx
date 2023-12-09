@@ -206,7 +206,7 @@ export const AddActivityForm = ({
       <Input
         type={InputType.textarea}
         placeholder="Kebutuhan logistik terpenuhi"
-        id="logistics-fulfilled"
+        id="logisticsFulfilled"
         value={formValue.logisticsFulfilled}
         onChange={handleFormChange}
         disabled={!onEditMode}
@@ -215,7 +215,7 @@ export const AddActivityForm = ({
       <Input
         type={InputType.textarea}
         placeholder="Kebutuhan logistik yang dibutuhkan"
-        id="logistics-needed"
+        id="logisticsNeeded"
         value={formValue.logisticsNeeded}
         onChange={handleFormChange}
         disabled={!onEditMode}
