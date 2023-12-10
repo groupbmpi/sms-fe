@@ -7,12 +7,14 @@ import { ICategoriesResponseData } from "../../user/model/User";
 
 export const AddMitraForm = ({
   formValue,
+  setFormValue,
   handleFormChange,
   onSubmit,
   redirectLinkOnDismiss,
   dismissText,
 }: {
   formValue: RegisterForm;
+  setFormValue: (formValue: RegisterForm) => void;
   handleFormChange: (e: React.ChangeEvent) => void;
   onSubmit: () => void;
   redirectLinkOnDismiss: string;
@@ -30,9 +32,18 @@ export const AddMitraForm = ({
       .then((response) => {
         const newCategories = response.data;
         newCategories.lembaga.push("Lainnya");
+        newCategories.lembaga.push("Lainnya");
         setCategories(newCategories);
         console.log(newCategories);
         setCity(newCategories.daerah[0].kabupatenKota);
+        setFormValue({
+          ...formValue,
+          institution: newCategories.lembaga[0],
+          category: newCategories.kategori[0],
+          province: newCategories.daerah[0].provinsi,
+          city: newCategories.daerah[0].kabupatenKota[0],
+          isValid: formValue.isValid,
+        });
       });
   }, []);
 
@@ -63,7 +74,9 @@ export const AddMitraForm = ({
           id="category"
           label="Kategori"
           values={
-            new Map(categories.kategori?.map((category) => [category, category]))
+            new Map(
+              categories.kategori?.map((category) => [category, category])
+            )
           }
           value={formValue.category}
           onChange={handleFormChange}
@@ -93,7 +106,11 @@ export const AddMitraForm = ({
           label="Institusi"
           onChange={handleFormChange}
           value={formValue.institution}
-          values={new Map(categories.lembaga?.map((lembaga) => [lembaga, lembaga]) || [])}
+          values={
+            new Map(
+              categories.lembaga?.map((lembaga) => [lembaga, lembaga]) || []
+            )
+          }
         />
       </div>
       {formValue.institution === "Lainnya" && (
