@@ -7,7 +7,11 @@ export const AuthContext = createContext<AuthContextValue>({
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<AuthUser | null>(null);
+  const [user, setUser] = useState<AuthUser | null>({
+    email: "email@gmail.com",
+    token: "token",
+    role: Role.ADMIN,
+  });
 
   // TODO: uncomment this code when backend is ready
   // useEffect(() => {

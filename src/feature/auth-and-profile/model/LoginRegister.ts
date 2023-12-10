@@ -1,32 +1,19 @@
 
 export class RegisterForm {
-    fullName: string;
-    institution: string;
-    category: string;
-    institutionName: string;
-    province: string;
-    city: string;
-    subDistrict: string;
-    village: string;
-    streetName: string;
-    postalCode: string;
-    email: string;
-    phoneNumber: string;
-
-    constructor() {
-        this.fullName = ""
-        this.institution = ""
-        this.category = ""
-        this.province = ""
-        this.institutionName = ""
-        this.city = ""
-        this.subDistrict = ""
-        this.village = ""
-        this.streetName = ""
-        this.postalCode = ""
-        this.email = ""
-        this.phoneNumber = ""
-    }
+    constructor(
+        public fullName: string = "",
+        public institution: string = "",
+        public category: string = "",
+        public institutionName?: string,
+        public province: string = "",
+        public city: string = "",
+        public subDistrict: string = "",
+        public village: string = "",
+        public streetName: string = "",
+        public postalCode: string = "",
+        public email: string = "",
+        public phoneNumber: string = "",
+    ) {}
 
     isValid(): boolean {
         return this.fullName !== ""
