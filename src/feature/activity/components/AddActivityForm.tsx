@@ -33,7 +33,7 @@ export const AddActivityForm = ({
     ActivityRepository.getInstance()
       .getActReportCategories()
       .then((response) => {
-        const newCategories = response.data;
+        const newCategories = response;
         setCategories(newCategories);
         setCity(newCategories.daerah[0].kabupatenKota);
         setFormValue({
