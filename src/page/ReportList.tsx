@@ -16,6 +16,11 @@ const ReportList = () => {
       });
   }, []);
 
+  useEffect(() => {
+    // TODO Fetch reports based on page num
+    console.log(searchParams.get("page"));
+  }, [searchParams]);
+
   const maxPage = 5; // TODO remove this hardcoded maxPage
 
   const currentPage = searchParams.get("page");
