@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { Input, InputType, Select } from "../../../core/core";
-import { IFormReportResponseData, IReportForm, ReportRepository } from "../report";
+import {
+  IFormReportResponseData,
+  IReportForm,
+  ReportRepository,
+} from "../report";
 
 export const AddReportForm = ({
   formValue,
@@ -8,16 +12,8 @@ export const AddReportForm = ({
   handleFormChange,
   handleSubmit,
 }: {
-  formValue: {
-    problemCategory: string;
-    province: string;
-    problemDescription: string;
-  };
-  setFormValue: (formValue: {
-    problemCategory: string;
-    province: string;
-    problemDescription: string;
-  }) => void;
+  formValue: IReportForm;
+  setFormValue: (formValue: IReportForm) => void;
   handleFormChange: (e: React.ChangeEvent) => void;
   handleSubmit: () => void;
 }) => {
@@ -33,8 +29,8 @@ export const AddReportForm = ({
         setCategories(newCategories);
         setFormValue({
           ...formValue,
-          problemCategory: newCategories.kategoriMasalah[0],
-          province: newCategories.provinsi[0],
+          kategoriMasalah: newCategories.kategoriMasalah[0],
+          provinsi: newCategories.provinsi[0],
         });
       });
   }, []);
@@ -74,7 +70,7 @@ export const AddReportForm = ({
         type={InputType.textarea}
         placeholder="Masukkan deskripsi masalah"
         id="masalah"
-        value={formValue.masalah}
+        value={formValue.kategoriMasalah}
         onChange={handleFormChange}
         required
       />
