@@ -122,28 +122,34 @@ const User = () => {
           </div>
         </div>
       </div>
-      <table className="table table-hover">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Nama Lengkap</th>
-            <th scope="col">Kategori</th>
-            <th scope="col">Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user, idx) => (
-            <UserTableRow
-              key={user.id}
-              idx={idx + 1}
-              name={user.namaLengkap}
-              category="Unverified"
-              handleAccept={() => handleAccept(user.id)}
-              handleReject={() => handleReject(user.id)}
-            />
-          ))}
-        </tbody>
-      </table>
+      {users.length === 0 ? (
+        <div className="d-flex justify-content-center">
+          <h5>Tidak ada permintaan verifikasi lagi</h5>
+        </div>
+      ) : (
+        <table className="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Nama Lengkap</th>
+              <th scope="col">Kategori</th>
+              <th scope="col">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user, idx) => (
+              <UserTableRow
+                key={user.id}
+                idx={idx + 1}
+                name={user.namaLengkap}
+                category="Unverified"
+                handleAccept={() => handleAccept(user.id)}
+                handleReject={() => handleReject(user.id)}
+              />
+            ))}
+          </tbody>
+        </table>
+      )}
     </Container>
   );
 };
