@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Container } from "react-bootstrap";
 
 import { ProfileForm } from "../feature/auth-and-profile/auth-and-profile";
+import { UserRepository } from "../feature/user/user";
 
 const initialProfileValue = {
   name: "John Doe",
@@ -15,9 +16,31 @@ const initialProfileValue = {
 };
 
 const Profile = () => {
+  const userRepo: UserRepository = UserRepository.getInstance();
   const [isEditMode, setIsEditMode] = useState(false);
 
   const [formValue, setFormValue] = useState(initialProfileValue);
+
+  useEffect(() => {
+    const fetchData = async () =>  {
+        const data = await userRepo.getProfile();
+        return data;
+    };
+
+    fetchData().then((data) => {
+      setFormValue((prev) => ({
+        ...prev,
+        name: data.namaLengkap,
+        institution: data.lembaga,
+        category: data.kategori,
+        province: data.provinsi,
+        address: data.alamat,
+        email: data.email,
+        phoneNumber: data.noHandphone,
+        avatar: data.linkFoto,
+      }));
+    });
+  });
 
   const handleFormChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
@@ -50,7 +73,7 @@ const Profile = () => {
       </div>
       <div className="d-flex justify-content-center my-2">
         <img
-          src="https://via.placeholder.com/500"
+          src={formValue.avatar}
           alt="profile"
           className="rounded-circle"
           width={150}

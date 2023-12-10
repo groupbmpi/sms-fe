@@ -1,5 +1,5 @@
 import { HttpClient } from "../../httpClient";
-import { ICategoriesResponseData,IFormUserRegister,IUnverifiedUserResponseData } from "../model/User";
+import { ICategoriesResponseData,IFormUserRegister,IUnverifiedUserResponseData, IUserData } from "../model/User";
 import {ResponseType} from "../../response";
 
 export class UserRepository extends HttpClient {
@@ -60,6 +60,11 @@ export class UserRepository extends HttpClient {
     public getAuthProfile = async () => {
         const res = await this.instance.get('user/auth/profile');
         return res;
+    }
+
+    public getProfile = async () => {
+        const data: ResponseType<IUserData> = await this.instance.get<ResponseType<IUserData>>('user')
+        return data.data
     }
 
 }
