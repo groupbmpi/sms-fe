@@ -57,4 +57,9 @@ export class UserRepository extends HttpClient {
         return res;
     }
 
+    public getAuthProfile = async () => {
+        const res = await this.instance.get('user/auth/profile');
+        return res;
+    }
+
 }
