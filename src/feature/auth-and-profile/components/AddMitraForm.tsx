@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Input, InputType, Select } from "../../../core/core";
 import { RegisterForm } from "../auth-and-profile";
 import { useEffect, useState } from "react";
-import { UserRepository } from "../../user/user";
+import {  UserRepository } from "../../user/user";
 import { ICategoriesResponseData } from "../../user/model/User";
 
 export const AddMitraForm = ({
@@ -32,7 +32,9 @@ export const AddMitraForm = ({
       .then((response) => {
         const newCategories = response.data;
         newCategories.lembaga.push("Lainnya");
+        newCategories.lembaga.push("Lainnya");
         setCategories(newCategories);
+        console.log(newCategories);
         setCity(newCategories.daerah[0].kabupatenKota);
         setFormValue({
           ...formValue,
@@ -96,7 +98,7 @@ export const AddMitraForm = ({
           value={formValue.province}
           onChange={handleFormChange}
           required
-        />
+      />
       </div>
       <div className="d-flex justify-content-center align-items-center">
         <Select
