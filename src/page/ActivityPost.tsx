@@ -8,12 +8,9 @@ const ActivityPost = () => {
 
   const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
-    console.log(formValue);
     
     const body : IActivityReportDTO = formValue.toDto();
     
-    console.log(body)
-
     await activityRepository.createActivityReport(body);
   };
 
@@ -35,7 +32,6 @@ const ActivityPost = () => {
       
       newSuccessIndicator.pop();
 
-      console.log(newSuccessIndicator)
 
       setFormValue({
         ...formValue,

@@ -17,7 +17,7 @@ export const AddActivityForm = ({
   onEditMode = true,
 }: {
   formValue: ActivityForm;
-  setFormValue: (formValue: ActivityForm) => void;
+  setFormValue: React.Dispatch<React.SetStateAction<ActivityForm>>,
   handleFormChange: (e: React.ChangeEvent) => void;
   handleAddSuccessIndicator: () => void;
   handleDeleteSuccessIndicator: () => void;
@@ -37,16 +37,17 @@ export const AddActivityForm = ({
         setCategories(newCategories);
 
         setCity(newCategories.daerah[0].kabupatenKota);
-        setFormValue({
-          ...formValue,
+
+        setFormValue((prev : ActivityForm) => ({
+          ...prev,
           activityField: newCategories.kategoriMasalah[0],
           province: newCategories.daerah[0].provinsi,
           city: newCategories.daerah[0].kabupatenKota[0],
           activityStatus: newCategories.statusKegiatan[0],
           activityMethod: newCategories.metodePelaksanaan[0],
-        });
-      });
-  }, []);
+        }))
+    });
+  }, [setFormValue]);
 
   useEffect(() => {
     const newCity = categories.daerah?.filter(

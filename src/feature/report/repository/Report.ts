@@ -7,7 +7,7 @@ export class ReportRepository extends HttpClient {
     private static repoInstance? : ReportRepository;
 
     private constructor(){
-        super(import.meta.env.VITE_SERVER_URL + "/api/v1/");
+        super(import.meta.env.VITE_SERVER_URL);
     }
 
     public static getInstance() {

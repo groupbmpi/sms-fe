@@ -1,12 +1,12 @@
 import { HttpClient } from "../../httpClient";
 import { ICategoriesResponseData,IFormUserRegister,IUnverifiedUserResponseData } from "../model/User";
-// import {Response} from "../../response";
+import {ResponseType} from "../../response";
 
 export class UserRepository extends HttpClient {
     private static repoInstance? : UserRepository;
 
     private constructor(){
-        super(import.meta.env.VITE_SERVER_URL + "/api/v1/");
+        super(import.meta.env.VITE_SERVER_URL);
     }
 
     public static getInstance() {
@@ -23,7 +23,7 @@ export class UserRepository extends HttpClient {
     }
 
     public getAllUnverifiedUsers = async () => {
-        const data = await this.instance.get<IUnverifiedUserResponseData>('user/verify');
+        const data = await this.instance.get<ResponseType<IUnverifiedUserResponseData>>('user/verify');
         return data;
     }
 
