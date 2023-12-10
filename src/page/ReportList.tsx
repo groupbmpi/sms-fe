@@ -1,28 +1,17 @@
 import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
+import { IReportData, ReportRepository } from "../feature/report/report";
 
 const ReportList = () => {
-  const [reports, setReports] = useState([
-    {
-      id: 1,
-      name: "John Doe",
-      category: "Infrastruktur",
-      province: "Jawa Barat",
-      description:
-        "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Earum, dignissimos?",
-    },
-    {
-      id: 2,
-      name: "Fulan",
-      category: "Pemerintah",
-      province: "Papua Pegunungan",
-      description:
-        "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Earum, dignissimos?",
-    },
-  ]);
+  const [reports, setReports] = useState<IReportData[]>([]);
 
   useEffect(() => {
-    // TODO fetch reports and do setReports
+    ReportRepository
+      .getInstance()
+      .getAllReport()
+      .then((res) => {
+        setReports(res.data);
+      })
   }, []);
 
   return (
@@ -42,10 +31,10 @@ const ReportList = () => {
           {reports.map((report, idx) => (
             <tr key={report.id}>
               <th scope="row">{idx + 1}</th>
-              <td>{report.name}</td>
-              <td>{report.category}</td>
-              <td>{report.province}</td>
-              <td>{report.description}</td>
+              <td>{report.namaUser}</td>
+              <td>{report.kategoriMasalah}</td>
+              <td>{report.provinsi}</td>
+              <td>{report.masalah}</td>
             </tr>
           ))}
         </tbody>

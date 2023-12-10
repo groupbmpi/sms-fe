@@ -4,7 +4,7 @@ export type ResponseMeta = {
     message: string,
 } 
 
-export type Response<T> = {
+export type ResponseType<T> = {
     meta : ResponseMeta
-    data : T | null
+    data : T 
 }
