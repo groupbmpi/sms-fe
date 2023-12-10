@@ -4,6 +4,7 @@ import { IFormReportResponseData, ReportRepository } from "../report";
 
 export const AddReportForm = ({
   formValue,
+  setFormValue,
   handleFormChange,
   handleSubmit,
 }: {
@@ -12,6 +13,11 @@ export const AddReportForm = ({
     province: string;
     problemDescription: string;
   };
+  setFormValue: (formValue: {
+    problemCategory: string;
+    province: string;
+    problemDescription: string;
+  }) => void;
   handleFormChange: (e: React.ChangeEvent) => void;
   handleSubmit: () => void;
 }) => {
@@ -25,6 +31,11 @@ export const AddReportForm = ({
       .then((response) => {
         const newCategories = response.data;
         setCategories(newCategories);
+        setFormValue({
+          ...formValue,
+          problemCategory: newCategories.kategoriMasalah[0],
+          province: newCategories.provinsi[0],
+        });
       });
   }, []);
 
