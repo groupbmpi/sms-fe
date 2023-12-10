@@ -33,3 +33,9 @@ export interface IUnverifiedUserResponseData {
 }
 type PropsFormUserRegisterOmitted = "id" | "linkFoto"
 export interface IFormUserRegister extends Omit<IUserData, PropsFormUserRegisterOmitted>{}
+
+export interface IUserForm {
+    namaLengkap : string,
+    noHandphone : string,
+    avatar : string
+}

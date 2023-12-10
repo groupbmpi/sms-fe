@@ -3,6 +3,7 @@ import { Button, Container } from "react-bootstrap";
 
 import { ProfileForm } from "../feature/auth-and-profile/auth-and-profile";
 import { UserRepository } from "../feature/user/user";
+import { IUserData } from "../feature/user/model/User";
 
 const initialProfileValue = {
   name: "John Doe",
@@ -13,6 +14,7 @@ const initialProfileValue = {
   email: "johndoe@gmail.com",
   phoneNumber: "",
   avatar: "",
+  linkFoto: ""
 };
 
 const Profile = () => {
@@ -37,14 +39,32 @@ const Profile = () => {
         address: data.alamat,
         email: data.email,
         phoneNumber: data.noHandphone,
-        avatar: data.linkFoto,
+        linkFoto: data.linkFoto,
       }));
     });
-  });
+  }, [userRepo]);
+
+  function getBase64(file: File, value: string) : Promise<{value: string, base64: string}> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve({
+        value: value,
+        base64: reader.result as string
+      });
+      reader.onerror = error => reject(error);
+    });
+  }
 
   const handleFormChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
     const id = target.id;
+    if(id === "avatar") {
+      getBase64(target.files![0], target.value).then((data) => {
+        setFormValue({ ...formValue, avatar: data.value, linkFoto: data.base64});
+      });
+      return;
+    } 
     const value = target.value;
     setFormValue({ ...formValue, [id]: value });
   };
@@ -53,9 +73,18 @@ const Profile = () => {
     setIsEditMode(!isEditMode);
   };
 
-  const handleSubmitUpdate = () => {
-    // TODO handle update profile
-
+  const handleSubmitUpdate = async () => {
+    const newProfile: IUserData = await userRepo.updateProfile({
+      namaLengkap: formValue.name,
+      noHandphone: formValue.phoneNumber,
+      avatar: formValue.avatar ? formValue.linkFoto : "",
+    });
+    setFormValue((prev) => ({
+      ...prev,
+      name: newProfile.namaLengkap,
+      phoneNumber: newProfile.noHandphone,
+      linkFoto: newProfile.linkFoto
+    }));
     setIsEditMode(!isEditMode);
   };
 
@@ -73,9 +102,9 @@ const Profile = () => {
       </div>
       <div className="d-flex justify-content-center my-2">
         <img
-          src={formValue.avatar}
+          src={formValue.linkFoto}
           alt="profile"
-          className="rounded-circle"
+          className="rounded-circle object-fit-cover"
           width={150}
           height={150}
           draggable={false}

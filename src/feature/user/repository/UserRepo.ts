@@ -1,5 +1,5 @@
 import { HttpClient } from "../../httpClient";
-import { ICategoriesResponseData,IFormUserRegister,IUnverifiedUserResponseData, IUserData } from "../model/User";
+import { ICategoriesResponseData,IFormUserRegister,IUnverifiedUserResponseData, IUserData, IUserForm } from "../model/User";
 import {ResponseType} from "../../response";
 
 export class UserRepository extends HttpClient {
@@ -67,4 +67,8 @@ export class UserRepository extends HttpClient {
         return data.data
     }
 
+    public updateProfile = async (body : IUserForm) => {
+        const data: ResponseType<IUserData> = await this.instance.put<ResponseType<IUserData>>('user', body);
+        return data.data;
+    }
 }
