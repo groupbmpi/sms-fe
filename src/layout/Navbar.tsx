@@ -61,7 +61,7 @@ const NavigationBar = () => {
               )}
             </Nav>
             <Nav className="d-flex align-items-center">
-              <MdAccountCircle size={20} />
+              {user && <MdAccountCircle size={20} />}
 
               {user && (
                 <NavDropdown title="Profile" id="basic-nav-dropdown">

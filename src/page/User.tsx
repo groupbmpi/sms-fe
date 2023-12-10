@@ -8,7 +8,10 @@ import {
 } from "../feature/auth-and-profile/auth-and-profile";
 import { Select } from "../core/core";
 import { UserTableRow } from "../feature/user/user";
-import { IUnverifiedUserResponseData,UnverifiedUser } from "../feature/user/model/User";
+import {
+  IUnverifiedUserResponseData,
+  UnverifiedUser,
+} from "../feature/user/model/User";
 import { UserRepository } from "../feature/user/repository/UserRepo";
 
 const initialFilterValue = {
@@ -18,17 +21,16 @@ const initialFilterValue = {
 
 const User = () => {
   const [filter, setFilter] = useState(initialFilterValue);
-  const [users, setUsers] = useState<UnverifiedUser[]>([
-  ]); // TODO: remove this dummy initializer after handle fetch users from API
+  const [users, setUsers] = useState<UnverifiedUser[]>([]); // TODO: remove this dummy initializer after handle fetch users from API
 
   useEffect(() => {
     // TODO fetch users and do setUsers
     UserRepository.getInstance()
-    .getAllUnverifiedUsers()
-    .then((res) => {
-      setUsers(res.user);
-      console.log(res.user);
-    });
+      .getAllUnverifiedUsers()
+      .then((res) => {
+        setUsers(res.data.user);
+        console.log(res.data.user);
+      });
   }, []);
 
   useEffect(() => {
@@ -43,29 +45,29 @@ const User = () => {
 
   const handleAccept = (id: number) => {
     UserRepository.getInstance()
-    .verifyUser(id,true)
-    .then(() => {
-      UserRepository.getInstance()
-      .getAllUnverifiedUsers()
-      .then((res) => {
-        setUsers(res.user);
-        console.log(res.user);
+      .verifyUser(id, true)
+      .then(() => {
+        UserRepository.getInstance()
+          .getAllUnverifiedUsers()
+          .then((res) => {
+            setUsers(res.data.user);
+            console.log(res.data.user);
+          });
       });
-    });
-  }
+  };
 
   const handleReject = (id: number) => {
     UserRepository.getInstance()
-    .verifyUser(id,false)
-    .then(() => {
-      UserRepository.getInstance()
-      .getAllUnverifiedUsers()
-      .then((res) => {
-        setUsers(res.user);
-        console.log(res.user);
+      .verifyUser(id, false)
+      .then(() => {
+        UserRepository.getInstance()
+          .getAllUnverifiedUsers()
+          .then((res) => {
+            setUsers(res.data.user);
+            console.log(res.data.user);
+          });
       });
-    });
-  }
+  };
 
   return (
     <Container className="py-2">

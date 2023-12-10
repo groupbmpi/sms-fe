@@ -60,7 +60,16 @@ function App() {
           />
           <Route path="/problem-report">
             <Route index element={<Report />} />
-            <Route path="list" element={<ReportList />} />
+            <Route
+              path="list"
+              element={
+                <RoleBasedProtectedRoute
+                  rolesAllowed={[Role.ADMIN, Role.SUPERADMIN]}
+                  children={<ReportList />}
+                  redirectPath="/"
+                />
+              }
+            />
           </Route>
           <Route
             path="/profile"
