@@ -6,6 +6,9 @@ import {
   RegisterForm,
 } from "../feature/auth-and-profile/auth-and-profile";
 import { PopupModal } from "../core/Modal";
+import { IFormUserRegister } from "../feature/user/model/User";
+import { UserRepository } from "../feature/user/repository/UserRepo";
+import { Navigate } from "react-router-dom";
 
 const Register = () => {
   const [formValue, setFormValue] = useState<RegisterForm>(new RegisterForm());
@@ -21,19 +24,42 @@ const Register = () => {
     });
   };
 
+  const handleSubmit = () => {
+    const registerFormValue : IFormUserRegister = {
+      alamat : formValue.streetName,
+      email : formValue.email,
+      kategori : formValue.category,
+      kabupatenKota : formValue.city,
+      kecamatan : formValue.subDistrict,
+      kelurahan : formValue.village,
+      namaLengkap : formValue.fullName,
+      kodePos : formValue.postalCode,
+      lembaga : formValue.institution,
+      lembagaOthers : formValue.institutionName,
+      noHandphone : formValue.phoneNumber,
+      provinsi : formValue.province,
+    }
+
+    UserRepository
+    .getInstance()
+    .registerUser(registerFormValue)
+    .then(() => {
+      // TODO : Redirect to login page
+    })
+  }
+
   return (
     <Container>
       <div className="d-flex justify-content-center align-items-center">
         <h3>Register</h3>
       </div>
-      {/* <AddMitraForm
+      <AddMitraForm
         formValue={formValue}
-        institutionValues={institutionValues}
         handleFormChange={handleFormChange}
         onSubmit={() => setShowRegConfirmation(true)}
         redirectLinkOnDismiss="/login"
         dismissText="Sudah punya akun? Masuk"
-      /> */}
+      />
       <PopupModal
         show={showRegConfirmation}
         title="Konfirmasi Pendaftaran"
@@ -51,6 +77,7 @@ const Register = () => {
         handleClose={() => setShowRegConfirmation(false)}
         handleAffirmative={() => {
           setShowRegConfirmation(false);
+          handleSubmit();
         }}
         handleDismiss={() => setShowRegConfirmation(false)}
       />

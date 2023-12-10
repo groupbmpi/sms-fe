@@ -19,13 +19,16 @@ const UserPostMitra = () => {
     });
   };
 
+  const handleSubmit = () => {};
+
   return (
     <Container className="my-2">
       <h4>Tambah Mitra</h4>
       <AddMitraForm
         formValue={formValue}
+        setFormValue={setFormValue}
         handleFormChange={handleFormChange}
-        onSubmit={() => {}}
+        onSubmit={handleSubmit}
         redirectLinkOnDismiss="/user"
         dismissText="Batal"
       />

@@ -1,7 +1,11 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from "axios";
+
 declare module 'axios' {
     interface AxiosResponse<T> extends Promise<T> {}
 }
+import { useAuth } from "./auth-and-profile/auth-and-profile";
+import Cookies from "universal-cookie";
+
 
 export abstract class HttpClient{
     protected readonly instance: AxiosInstance;
@@ -46,11 +50,11 @@ export abstract class HttpClient{
     }
 
     private _handleRequestOnSuccess = (config: InternalAxiosRequestConfig) => {
-        //TODO: Get Token from cache
-        const token = "";
+        const cookies = new Cookies();
+        const token = cookies.get("token");
 
         if(token){
-            config.headers.set("Authorization", `Bearer ${token}`);
+            config.headers.set("Authorization", token);
         }
 
         return config;

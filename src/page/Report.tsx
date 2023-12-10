@@ -74,6 +74,7 @@ const Report = () => {
       </div>
       <AddReportForm
         formValue={formValue}
+        setFormValue={setFormValue}
         handleFormChange={handleFormChange}
         handleSubmit={handleSubmit}
       />

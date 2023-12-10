@@ -4,10 +4,20 @@ import { IFormReportResponseData, IReportForm, ReportRepository } from "../repor
 
 export const AddReportForm = ({
   formValue,
+  setFormValue,
   handleFormChange,
   handleSubmit,
 }: {
-  formValue: IReportForm,
+  formValue: {
+    problemCategory: string;
+    province: string;
+    problemDescription: string;
+  };
+  setFormValue: (formValue: {
+    problemCategory: string;
+    province: string;
+    problemDescription: string;
+  }) => void;
   handleFormChange: (e: React.ChangeEvent) => void;
   handleSubmit: () => void;
 }) => {
@@ -18,8 +28,14 @@ export const AddReportForm = ({
   useEffect(() => {
     ReportRepository.getInstance()
       .getProbReportCategories()
-      .then((categories) => {
-        setCategories(categories);
+      .then((response) => {
+        const newCategories = response.data;
+        setCategories(newCategories);
+        setFormValue({
+          ...formValue,
+          problemCategory: newCategories.kategoriMasalah[0],
+          province: newCategories.provinsi[0],
+        });
       });
   }, []);
 

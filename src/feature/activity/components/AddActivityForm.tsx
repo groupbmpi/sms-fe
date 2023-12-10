@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 
 export const AddActivityForm = ({
   formValue,
+  setFormValue,
   handleFormChange,
   handleAddSuccessIndicator,
   handleDeleteSuccessIndicator,
@@ -16,6 +17,7 @@ export const AddActivityForm = ({
   onEditMode = true,
 }: {
   formValue: ActivityForm;
+  setFormValue: (formValue: ActivityForm) => void;
   handleFormChange: (e: React.ChangeEvent) => void;
   handleAddSuccessIndicator: () => void;
   handleDeleteSuccessIndicator: () => void;
@@ -34,6 +36,14 @@ export const AddActivityForm = ({
         const newCategories = response.data;
         setCategories(newCategories);
         setCity(newCategories.daerah[0].kabupatenKota);
+        setFormValue({
+          ...formValue,
+          activityField: newCategories.kategoriMasalah[0],
+          province: newCategories.daerah[0].provinsi,
+          city: newCategories.daerah[0].kabupatenKota[0],
+          activityStatus: newCategories.statusKegiatan[0],
+          activityMethod: newCategories.metodePelaksanaan[0],
+        });
       });
   }, []);
 

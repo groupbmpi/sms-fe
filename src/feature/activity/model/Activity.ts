@@ -4,46 +4,26 @@ export interface SuccessIndicator {
 }
 
 export class ActivityForm {
-    activityName: string;
-    activityGoal: string;
-    activityField: string;
-    province: string;
-    city: string;
-    activityDescription: string;
-    activityStatus: string;
-    successIndicator: SuccessIndicator[];
-    outputTarget: string;
-    startDate: string;
-    endDate: string;
-    logisticsFulfilled: string;
-    logisticsNeeded: string;
-    activityMethod: string;
-    activityDocument: string;
-    additionalInfo: string;
-
-    constructor() {
-        this.activityName = "";
-        this.activityGoal = "";
-        this.activityField = "";
-        this.province = "";
-        this.city = "";
-        this.activityDescription = "";
-        this.activityStatus = "";
-        this.successIndicator = [
-            {
-                indicator: "",
-                target: 0,
-            }, 
-        ];
-        this.outputTarget = "";
-        this.startDate = "";
-        this.endDate = "";
-        this.logisticsFulfilled = "";
-        this.logisticsNeeded = "";
-        this.activityMethod = "";
-        this.activityDocument = "";
-        this.additionalInfo = "";
-    }
+    constructor(
+        public activityName: string = "",
+        public activityGoal: string = "",
+        public activityField: string = "",
+        public province: string = "",
+        public city: string = "",
+        public activityDescription: string = "",
+        public activityStatus: string = "",
+        public successIndicator: SuccessIndicator[] = [
+        ],
+        public outputTarget: string = "",
+        public startDate: string = "",
+        public endDate: string = "",
+        public logisticsFulfilled: string = "",
+        public logisticsNeeded: string = "",
+        public activityMethod: string = "",
+        public activityDocument: string = "",
+        public additionalInfo: string = "",
+        
+    ){}
 }
 
 export interface IFormActResponseData {
