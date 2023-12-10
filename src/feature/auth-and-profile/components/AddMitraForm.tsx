@@ -2,7 +2,8 @@ import { Link } from "react-router-dom";
 import { Input, InputType, Select } from "../../../core/core";
 import { RegisterForm } from "../auth-and-profile";
 import { useEffect, useState } from "react";
-import { IFormUserResponseData, UserRepository } from "../../user/user";
+import {  UserRepository } from "../../user/user";
+import { ICategoriesResponseData } from "../../user/model/User";
 
 export const AddMitraForm = ({
   formValue,
@@ -17,18 +18,20 @@ export const AddMitraForm = ({
   redirectLinkOnDismiss: string;
   dismissText: string;
 }) => {
-  const [categories, setCategories] = useState<IFormUserResponseData>(
-    {} as IFormUserResponseData
+  const [categories, setCategories] = useState<ICategoriesResponseData>(
+    {} as ICategoriesResponseData
   );
 
   const [city, setCity] = useState<string[]>([]);
 
   useEffect(() => {
     UserRepository.getInstance()
-      .getUserFormCategories()
+      .getAllCategories()
       .then((response) => {
         const newCategories = response.data;
+        newCategories.lembaga.push("Lainnya");
         setCategories(newCategories);
+        console.log(newCategories);
         setCity(newCategories.daerah[0].kabupatenKota);
       });
   }, []);
@@ -55,18 +58,18 @@ export const AddMitraForm = ({
           required
         />
       </div>
-      {/* <div className="d-flex justify-content-center align-items-center">
+      <div className="d-flex justify-content-center align-items-center">
         <Select
           id="category"
           label="Kategori"
           values={
-            new Map(categoryKeys.map((key, idx) => [key, categoryValues[idx]]))
+            new Map(categories.kategori?.map((category) => [category, category]))
           }
           value={formValue.category}
           onChange={handleFormChange}
           required
         />
-      </div> */}
+      </div>
       <div className="d-flex justify-content-center align-items-center">
         <Select
           id="province"
@@ -82,17 +85,17 @@ export const AddMitraForm = ({
           value={formValue.province}
           onChange={handleFormChange}
           required
-        />
+      />
       </div>
-      {/* <div className="d-flex justify-content-center align-items-center">
+      <div className="d-flex justify-content-center align-items-center">
         <Select
           id="institution"
           label="Institusi"
           onChange={handleFormChange}
           value={formValue.institution}
-          values={institutionValues}
+          values={new Map(categories.lembaga?.map((lembaga) => [lembaga, lembaga]) || [])}
         />
-      </div> */}
+      </div>
       {formValue.institution === "Lainnya" && (
         <div className="d-flex justify-content-center align-items-center">
           <Input
@@ -136,7 +139,7 @@ export const AddMitraForm = ({
         <Input
           type={InputType.textarea}
           placeholder="Nama jalan"
-          id="street"
+          id="streetName"
           value={formValue.streetName}
           onChange={handleFormChange}
           required

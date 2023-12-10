@@ -8,6 +8,8 @@ import {
 } from "../feature/auth-and-profile/auth-and-profile";
 import { Select } from "../core/core";
 import { UserTableRow } from "../feature/user/user";
+import { IUnverifiedUserResponseData,UnverifiedUser } from "../feature/user/model/User";
+import { UserRepository } from "../feature/user/repository/UserRepo";
 
 const initialFilterValue = {
   status: "all",
@@ -16,29 +18,17 @@ const initialFilterValue = {
 
 const User = () => {
   const [filter, setFilter] = useState(initialFilterValue);
-  const [users, setUsers] = useState([
-    {
-      id: 1,
-      name: "John Doe",
-      category: "Administrator",
-      isVerified: true,
-    },
-    {
-      id: 2,
-      name: "Fulan",
-      category: "Pemerintah",
-      isVerified: true,
-    },
-    {
-      id: 3,
-      name: "Fulan",
-      category: "Pemerintah",
-      isVerified: false,
-    },
+  const [users, setUsers] = useState<UnverifiedUser[]>([
   ]); // TODO: remove this dummy initializer after handle fetch users from API
 
   useEffect(() => {
     // TODO fetch users and do setUsers
+    UserRepository.getInstance()
+    .getAllUnverifiedUsers()
+    .then((res) => {
+      setUsers(res.data.user);
+      console.log(res.data.user);
+    });
   }, []);
 
   useEffect(() => {
@@ -50,6 +40,32 @@ const User = () => {
     const { id, value } = target;
     setFilter({ ...filter, [id]: value });
   };
+
+  const handleAccept = (id: number) => {
+    UserRepository.getInstance()
+    .verifyUser(id,true)
+    .then(() => {
+      UserRepository.getInstance()
+      .getAllUnverifiedUsers()
+      .then((res) => {
+        setUsers(res.data.user);
+        console.log(res.data.user);
+      });
+    });
+  }
+
+  const handleReject = (id: number) => {
+    UserRepository.getInstance()
+    .verifyUser(id,false)
+    .then(() => {
+      UserRepository.getInstance()
+      .getAllUnverifiedUsers()
+      .then((res) => {
+        setUsers(res.data.user);
+        console.log(res.data.user);
+      });
+    });
+  }
 
   return (
     <Container className="py-2">
@@ -118,8 +134,10 @@ const User = () => {
             <UserTableRow
               key={user.id}
               idx={idx + 1}
-              name={user.name}
-              category={user.category}
+              name={user.namaLengkap}
+              category="Unverified"
+              handleAccept={() => handleAccept(user.id)}
+              handleReject={() => handleReject(user.id)}
             />
           ))}
         </tbody>
