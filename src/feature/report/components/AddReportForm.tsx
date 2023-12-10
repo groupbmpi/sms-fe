@@ -1,17 +1,13 @@
 import { useEffect, useState } from "react";
 import { Input, InputType, Select } from "../../../core/core";
-import { IFormReportResponseData, ReportRepository } from "../report";
+import { IFormReportResponseData, IReportForm, ReportRepository } from "../report";
 
 export const AddReportForm = ({
   formValue,
   handleFormChange,
   handleSubmit,
 }: {
-  formValue: {
-    problemCategory: string;
-    province: string;
-    problemDescription: string;
-  };
+  formValue: IReportForm,
   handleFormChange: (e: React.ChangeEvent) => void;
   handleSubmit: () => void;
 }) => {
@@ -22,9 +18,8 @@ export const AddReportForm = ({
   useEffect(() => {
     ReportRepository.getInstance()
       .getProbReportCategories()
-      .then((response) => {
-        const newCategories = response.data;
-        setCategories(newCategories);
+      .then((categories) => {
+        setCategories(categories);
       });
   }, []);
 
@@ -35,7 +30,7 @@ export const AddReportForm = ({
   return (
     <form className="mb-3 px-5">
       <Select
-        id="problemCategory"
+        id="kategoriMasalah"
         label="Kategori Masalah"
         values={
           new Map(
@@ -45,25 +40,25 @@ export const AddReportForm = ({
             ]) || []
           )
         }
-        value={formValue.problemCategory}
+        value={formValue.kategoriMasalah}
         onChange={handleFormChange}
       />
       <Select
-        id="province"
+        id="provinsi"
         label="Provinsi"
         values={
           new Map(
             categories.provinsi?.map((category) => [category, category]) || []
           )
         }
-        value={formValue.province}
+        value={formValue.provinsi}
         onChange={handleFormChange}
       />
       <Input
         type={InputType.textarea}
         placeholder="Masukkan deskripsi masalah"
-        id="problemDescription"
-        value={formValue.problemDescription}
+        id="masalah"
+        value={formValue.masalah}
         onChange={handleFormChange}
         required
       />

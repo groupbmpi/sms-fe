@@ -7,17 +7,17 @@ import {
   Role,
 } from "../feature/auth-and-profile/auth-and-profile";
 import { AddReportForm } from "../feature/report/components/AddReportForm";
-import { ReportRepository } from "../feature/report/report";
+import { IReportForm, ReportRepository } from "../feature/report/report";
 
-const initialReportForm = {
-  problemDescription: "",
-  problemCategory: "",
-  province: "",
+const initialReportForm: IReportForm = {
+  kategoriMasalah: "",
+  provinsi: "",
+  masalah: "",
 };
 
 const Report = () => {
   const reportRepo: ReportRepository = ReportRepository.getInstance();
-  const [formValue, setFormValue] = useState(initialReportForm);
+  const [formValue, setFormValue] = useState<IReportForm>(initialReportForm);
 
   const handleFormChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
@@ -32,12 +32,29 @@ const Report = () => {
     };
 
     fetchData().then((data) => {
-      console.log(data.data);
+      setFormValue((prev) => ({
+        ...prev,
+        kategoriMasalah: data.kategoriMasalah[0],
+        provinsi: data.provinsi[0],
+      }));
+      return
     });
   }, [reportRepo]);
 
   const handleSubmit = () => {
-    // TODO handle submit
+    reportRepo
+      .createReport(formValue)
+      .then(() => {
+        alert("Laporan berhasil ditambahkan!");
+        setFormValue((prev) => ({
+          ...prev,
+          masalah: ""
+        }));
+      })
+      .catch((err) => {
+        alert("Laporan gagal ditambahkan!");
+        console.log(err);
+      });
   };
 
   return (
