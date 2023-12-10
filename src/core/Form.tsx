@@ -23,7 +23,7 @@ export const Input = ({
   type: InputType;
   id: string;
   placeholder: string;
-  value: string;
+  value?: string;
   onChange: (value: React.ChangeEvent) => void;
   required?: boolean;
   disabled?: boolean;

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Input, InputType, Select } from "../../../core/core";
-import { IFormReportResponseData, ReportRepository } from "../report";
+import { IFormReportResponseData, IReportForm, ReportRepository } from "../report";
 
 export const AddReportForm = ({
   formValue,
+  setFormValue,
   handleFormChange,
   handleSubmit,
 }: {
@@ -12,6 +13,11 @@ export const AddReportForm = ({
     province: string;
     problemDescription: string;
   };
+  setFormValue: (formValue: {
+    problemCategory: string;
+    province: string;
+    problemDescription: string;
+  }) => void;
   handleFormChange: (e: React.ChangeEvent) => void;
   handleSubmit: () => void;
 }) => {
@@ -25,6 +31,11 @@ export const AddReportForm = ({
       .then((response) => {
         const newCategories = response;
         setCategories(newCategories);
+        setFormValue({
+          ...formValue,
+          problemCategory: newCategories.kategoriMasalah[0],
+          province: newCategories.provinsi[0],
+        });
       });
   }, []);
 
@@ -35,7 +46,7 @@ export const AddReportForm = ({
   return (
     <form className="mb-3 px-5">
       <Select
-        id="problemCategory"
+        id="kategoriMasalah"
         label="Kategori Masalah"
         values={
           new Map(
@@ -45,25 +56,25 @@ export const AddReportForm = ({
             ]) || []
           )
         }
-        value={formValue.problemCategory}
+        value={formValue.kategoriMasalah}
         onChange={handleFormChange}
       />
       <Select
-        id="province"
+        id="provinsi"
         label="Provinsi"
         values={
           new Map(
             categories.provinsi?.map((category) => [category, category]) || []
           )
         }
-        value={formValue.province}
+        value={formValue.provinsi}
         onChange={handleFormChange}
       />
       <Input
         type={InputType.textarea}
         placeholder="Masukkan deskripsi masalah"
-        id="problemDescription"
-        value={formValue.problemDescription}
+        id="masalah"
+        value={formValue.masalah}
         onChange={handleFormChange}
         required
       />

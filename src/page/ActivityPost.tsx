@@ -78,6 +78,7 @@ const ActivityPost = () => {
         handleDeleteSuccessIndicator={handleDeleteSuccessIndicator}
         handleSubmit={handleSubmit}
         formValue={formValue}
+        setFormValue={setFormValue}
       />
     </Container>
   );

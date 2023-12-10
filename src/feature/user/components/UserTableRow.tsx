@@ -8,10 +8,14 @@ export const UserTableRow = ({
   idx,
   name,
   category,
+  handleAccept,
+  handleReject
 }: {
   idx: number;
   name: string;
   category: string;
+  handleAccept : () => void,
+  handleReject : () => void
 }) => {
   return (
     <tr>
@@ -29,8 +33,8 @@ export const UserTableRow = ({
           <Link to={`/user/${idx}/edit`}>
             <button className="btn btn-primary">Edit</button>
           </Link>
-          <button className="btn btn-success">Terima</button>
-          <button className="btn btn-danger">Tolak</button>
+          <button className="btn btn-success" onClick={handleAccept}>Terima</button>
+          <button className="btn btn-danger" onClick={handleReject}>Tolak</button>
         </div>
       </td>
     </tr>
