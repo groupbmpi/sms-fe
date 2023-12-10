@@ -26,8 +26,8 @@ const User = () => {
     UserRepository.getInstance()
     .getAllUnverifiedUsers()
     .then((res) => {
-      setUsers(res.data.user);
-      console.log(res.data.user);
+      setUsers(res.user);
+      console.log(res.user);
     });
   }, []);
 
@@ -48,8 +48,8 @@ const User = () => {
       UserRepository.getInstance()
       .getAllUnverifiedUsers()
       .then((res) => {
-        setUsers(res.data.user);
-        console.log(res.data.user);
+        setUsers(res.user);
+        console.log(res.user);
       });
     });
   }
@@ -61,8 +61,8 @@ const User = () => {
       UserRepository.getInstance()
       .getAllUnverifiedUsers()
       .then((res) => {
-        setUsers(res.data.user);
-        console.log(res.data.user);
+        setUsers(res.user);
+        console.log(res.user);
       });
     });
   }

@@ -8,7 +8,6 @@ import {
 import { PopupModal } from "../core/Modal";
 import { IFormUserRegister } from "../feature/user/model/User";
 import { UserRepository } from "../feature/user/repository/UserRepo";
-import { Navigate } from "react-router-dom";
 
 const Register = () => {
   const [formValue, setFormValue] = useState<RegisterForm>(new RegisterForm());
@@ -55,6 +54,7 @@ const Register = () => {
       </div>
       <AddMitraForm
         formValue={formValue}
+        setFormValue={setFormValue}
         handleFormChange={handleFormChange}
         onSubmit={() => setShowRegConfirmation(true)}
         redirectLinkOnDismiss="/login"

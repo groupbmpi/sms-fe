@@ -15,7 +15,7 @@ interface UserData{
     email : string,
     noHandphone : string,
     linkFoto : string,
-    lembagaOthers : string,
+    lembagaOthers? : string,
     lembaga : string,
     kabupatenKota : string,
     provinsi : string,

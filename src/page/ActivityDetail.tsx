@@ -97,6 +97,7 @@ const ActivityDetail = () => {
           handleFormChange={handleFormChange}
           handleSubmit={handleSubmit}
           formValue={formValue}
+          setFormValue={setFormValue}
           onEditMode={onEditMode}
         />
       </div>
