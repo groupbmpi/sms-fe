@@ -18,7 +18,7 @@ export class UserRepository extends HttpClient {
     }
 
     public getAllCategories = async () => {
-        const data = await this.instance.get<ICategoriesResponseData>('data/user');
+        const data = await this.instance.get<ResponseType<ICategoriesResponseData>>('data/user');
         return data;
     }
 
