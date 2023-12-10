@@ -17,11 +17,11 @@ export const AddActivityForm = ({
   onEditMode = true,
 }: {
   formValue: ActivityForm;
-  setFormValue: (formValue: ActivityForm) => void;
+  setFormValue: React.Dispatch<React.SetStateAction<ActivityForm>>,
   handleFormChange: (e: React.ChangeEvent) => void;
   handleAddSuccessIndicator: () => void;
   handleDeleteSuccessIndicator: () => void;
-  handleSubmit: () => void;
+  handleSubmit: (event: React.MouseEvent<HTMLElement>) => void;
   onEditMode?: boolean;
 }) => {
   const [categories, setCategories] = useState<IFormActResponseData>(
@@ -32,30 +32,33 @@ export const AddActivityForm = ({
   useEffect(() => {
     ActivityRepository.getInstance()
       .getActReportCategories()
-      .then((response) => {
-        const newCategories = response;
+      .then((data) => {
+        const newCategories : IFormActResponseData = data;
         setCategories(newCategories);
+
         setCity(newCategories.daerah[0].kabupatenKota);
-        setFormValue({
-          ...formValue,
+
+        setFormValue((prev : ActivityForm) => ({
+          ...prev,
           activityField: newCategories.kategoriMasalah[0],
           province: newCategories.daerah[0].provinsi,
           city: newCategories.daerah[0].kabupatenKota[0],
           activityStatus: newCategories.statusKegiatan[0],
           activityMethod: newCategories.metodePelaksanaan[0],
-        });
-      });
-  }, []);
+        }))
+    });
+  }, [setFormValue]);
 
   useEffect(() => {
     const newCity = categories.daerah?.filter(
       (category) => category.provinsi === formValue.province
     );
 
-    if (newCity !== undefined) {
+
+    if (typeof newCity !== "undefined" && newCity.length > 0) {
       setCity(newCity[0].kabupatenKota);
     }
-  }, [formValue.province]);
+  }, [formValue.province, categories.daerah]);
 
   return (
     <form className="px-5">
@@ -214,7 +217,7 @@ export const AddActivityForm = ({
       <Input
         type={InputType.textarea}
         placeholder="Kebutuhan logistik terpenuhi"
-        id="logistics-fulfilled"
+        id="logisticsFulfilled"
         value={formValue.logisticsFulfilled}
         onChange={handleFormChange}
         disabled={!onEditMode}
@@ -223,7 +226,7 @@ export const AddActivityForm = ({
       <Input
         type={InputType.textarea}
         placeholder="Kebutuhan logistik yang dibutuhkan"
-        id="logistics-needed"
+        id="logisticsNeeded"
         value={formValue.logisticsNeeded}
         onChange={handleFormChange}
         disabled={!onEditMode}

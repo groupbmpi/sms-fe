@@ -1,12 +1,10 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from "axios";
+// import { useAuth } from "./auth-and-profile/auth-and-profile";
+import Cookies from "universal-cookie";
 
 declare module 'axios' {
     interface AxiosResponse<T> extends Promise<T> {}
-}
-import { useAuth } from "./auth-and-profile/auth-and-profile";
-import Cookies from "universal-cookie";
-
-
+  }
 export abstract class HttpClient{
     protected readonly instance: AxiosInstance;
 

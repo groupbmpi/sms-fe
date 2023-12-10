@@ -79,7 +79,7 @@ export const Select = ({
   id,
 }: {
   label: string;
-  value: any;
+  value: string | number;
   values: Map<string, string>;
   id: string;
   onChange: (value: React.ChangeEvent) => void;
