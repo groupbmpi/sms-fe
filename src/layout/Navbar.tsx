@@ -1,7 +1,8 @@
 import { Button, Container, Nav, NavDropdown, Navbar } from "react-bootstrap";
-import { Outlet, NavLink } from "react-router-dom";
+import { Outlet, NavLink, Navigate, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { MdAccountCircle } from "react-icons/md";
+import Cookies from "universal-cookie"
 
 import {
   ProtectedRoleComponent,
@@ -32,9 +33,13 @@ const NavigationDropdownItem = ({ to, text }: { to: string; text: string }) => {
 
 const NavigationBar = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
-    // TODO: handle logout
+    const cookies = new Cookies();
+    cookies.remove("token");
+
+    navigate(0);
   };
 
   return (
@@ -68,7 +73,7 @@ const NavigationBar = () => {
                   <NavigationDropdownItem to="/profile" text="Profile" />
                   <NavDropdown.Divider />
                   <div className="d-flex justify-content-center">
-                    <Button variant="outline-danger" onClick={handleLogout}>
+                    <Button type="submit" variant="outline-danger" onClick={handleLogout}>
                       Logout
                     </Button>
                   </div>

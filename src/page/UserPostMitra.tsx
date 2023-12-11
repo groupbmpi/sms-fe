@@ -20,6 +20,7 @@ const UserPostMitra = () => {
       isValid: formValue.isValid,
     });
 
+    console.log(formValue);
   };
 
   const handleSubmit = () => {
