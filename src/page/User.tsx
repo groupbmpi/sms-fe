@@ -8,7 +8,10 @@ import {
 } from "../feature/auth-and-profile/auth-and-profile";
 import { Select } from "../core/core";
 import { UserTableRow } from "../feature/user/user";
-import { IUnverifiedUserResponseData,UnverifiedUser } from "../feature/user/model/User";
+import {
+  IUnverifiedUserResponseData,
+  UnverifiedUser,
+} from "../feature/user/model/User";
 import { UserRepository } from "../feature/user/repository/UserRepo";
 
 const initialFilterValue = {
@@ -18,17 +21,16 @@ const initialFilterValue = {
 
 const User = () => {
   const [filter, setFilter] = useState(initialFilterValue);
-  const [users, setUsers] = useState<UnverifiedUser[]>([
-  ]); // TODO: remove this dummy initializer after handle fetch users from API
+  const [users, setUsers] = useState<UnverifiedUser[]>([]); // TODO: remove this dummy initializer after handle fetch users from API
 
   useEffect(() => {
     // TODO fetch users and do setUsers
     UserRepository.getInstance()
-    .getAllUnverifiedUsers()
-    .then((res) => {
-      setUsers(res.user);
-      console.log(res.user);
-    });
+      .getAllUnverifiedUsers()
+      .then((res) => {
+        setUsers(res.data.user);
+        console.log(res.data.user);
+      });
   }, []);
 
   useEffect(() => {
@@ -43,29 +45,29 @@ const User = () => {
 
   const handleAccept = (id: number) => {
     UserRepository.getInstance()
-    .verifyUser(id,true)
-    .then(() => {
-      UserRepository.getInstance()
-      .getAllUnverifiedUsers()
-      .then((res) => {
-        setUsers(res.user);
-        console.log(res.user);
+      .verifyUser(id, true)
+      .then(() => {
+        UserRepository.getInstance()
+          .getAllUnverifiedUsers()
+          .then((res) => {
+            setUsers(res.data.user);
+            console.log(res.data.user);
+          });
       });
-    });
-  }
+  };
 
   const handleReject = (id: number) => {
     UserRepository.getInstance()
-    .verifyUser(id,false)
-    .then(() => {
-      UserRepository.getInstance()
-      .getAllUnverifiedUsers()
-      .then((res) => {
-        setUsers(res.user);
-        console.log(res.user);
+      .verifyUser(id, false)
+      .then(() => {
+        UserRepository.getInstance()
+          .getAllUnverifiedUsers()
+          .then((res) => {
+            setUsers(res.data.user);
+            console.log(res.data.user);
+          });
       });
-    });
-  }
+  };
 
   return (
     <Container className="py-2">
@@ -120,28 +122,34 @@ const User = () => {
           </div>
         </div>
       </div>
-      <table className="table table-hover">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Nama Lengkap</th>
-            <th scope="col">Kategori</th>
-            <th scope="col">Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user, idx) => (
-            <UserTableRow
-              key={user.id}
-              idx={idx + 1}
-              name={user.namaLengkap}
-              category="Unverified"
-              handleAccept={() => handleAccept(user.id)}
-              handleReject={() => handleReject(user.id)}
-            />
-          ))}
-        </tbody>
-      </table>
+      {users.length === 0 ? (
+        <div className="d-flex justify-content-center">
+          <h5>Tidak ada permintaan verifikasi lagi</h5>
+        </div>
+      ) : (
+        <table className="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Nama Lengkap</th>
+              <th scope="col">Kategori</th>
+              <th scope="col">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user, idx) => (
+              <UserTableRow
+                key={user.id}
+                idx={idx + 1}
+                name={user.namaLengkap}
+                category="Unverified"
+                handleAccept={() => handleAccept(user.id)}
+                handleReject={() => handleReject(user.id)}
+              />
+            ))}
+          </tbody>
+        </table>
+      )}
     </Container>
   );
 };

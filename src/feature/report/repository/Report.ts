@@ -23,11 +23,13 @@ export class ReportRepository extends HttpClient {
         return data.data
     };
 
-    public getAllReport = async (userId?: string) => {
+    public getAllReport = async (userId: string="", page: number = 1, limit: number = 10) => {
         const data: ResponseType<IReportsResponse> = await this.instance.get<ResponseType<IReportsResponse>>('problems', {
             params: {
-                user_id: userId
-            },            
+                user_id: userId,
+                page: page,
+                limit: limit
+            }
         })
         return data.data
     }

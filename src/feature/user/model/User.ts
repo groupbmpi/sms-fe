@@ -9,7 +9,7 @@ interface Daerah {
     kabupatenKota: string[]
 }
 
-interface UserData{
+export interface IUserData{
     id : number,
     namaLengkap : string,
     email : string,
@@ -26,10 +26,16 @@ interface UserData{
     kodePos : string,
 }
 
-export interface UnverifiedUser extends UserData{}
+export interface UnverifiedUser extends IUserData{}
 
 export interface IUnverifiedUserResponseData {
     user : UnverifiedUser[]
 }
 type PropsFormUserRegisterOmitted = "id" | "linkFoto"
-export interface IFormUserRegister extends Omit<UserData,PropsFormUserRegisterOmitted>{}
+export interface IFormUserRegister extends Omit<IUserData, PropsFormUserRegisterOmitted>{}
+
+export interface IUserForm {
+    namaLengkap : string,
+    noHandphone : string,
+    avatar : string
+}

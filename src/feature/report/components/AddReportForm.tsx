@@ -70,7 +70,7 @@ export const AddReportForm = ({
         type={InputType.textarea}
         placeholder="Masukkan deskripsi masalah"
         id="masalah"
-        value={formValue.kategoriMasalah}
+        value={formValue.masalah}
         onChange={handleFormChange}
         required
       />

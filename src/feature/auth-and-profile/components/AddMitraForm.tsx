@@ -30,7 +30,7 @@ export const AddMitraForm = ({
     UserRepository.getInstance()
       .getAllCategories()
       .then((response) => {
-        const newCategories = response;
+        const newCategories = response.data;
         newCategories.lembaga.push("Lainnya");
         setCategories(newCategories);
         console.log(newCategories);
