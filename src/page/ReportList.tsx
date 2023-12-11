@@ -7,21 +7,25 @@ import { generateArray } from "../helper/Iterable";
 const ReportList = () => {
   const [searchParams] = useSearchParams();
   const [reports, setReports] = useState<IReportData[]>([]);
+  const [maxPage, setMaxPage] = useState(0);
 
   useEffect(() => {
     ReportRepository.getInstance()
       .getAllReport()
       .then((res) => {
         setReports(res.data);
+        setMaxPage(res.countPages);
       });
   }, []);
 
   useEffect(() => {
-    // TODO Fetch reports based on page num
-    console.log(searchParams.get("page"));
+    ReportRepository.getInstance()
+      .getAllReport("", parseInt(searchParams.get("page") || "1"))
+      .then((res) => {
+        setReports(res.data);
+        setMaxPage(res.countPages);
+      });
   }, [searchParams]);
-
-  const maxPage = 5; // TODO remove this hardcoded maxPage
 
   const currentPage = searchParams.get("page");
   const currentPageNum = currentPage ? parseInt(currentPage) : 1;
