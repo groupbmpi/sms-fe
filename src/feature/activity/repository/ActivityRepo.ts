@@ -38,4 +38,10 @@ export class ActivityRepository extends HttpClient {
 
         return data.data
     }
+
+    public updateActivityReport = async(body: IActivityReportBody, id: number) : Promise<IActivityResponseData> => {
+        const data : ResponseType<IActivityResponseData> = await this.instance.put<ResponseType<IActivityResponseData>>(`activity/${id}`, body)
+
+        return data.data
+    }
 }

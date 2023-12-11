@@ -5,6 +5,7 @@ export interface SuccessIndicator {
 
 export class ActivityForm {
     constructor(
+        public id : number = 0,
         public activityName: string = "",
         public activityGoal: string = "",
         public activityField: string = "",
@@ -13,6 +14,10 @@ export class ActivityForm {
         public activityDescription: string = "",
         public activityStatus: string = "",
         public successIndicator: SuccessIndicator[] = [
+            {
+                indicator: "",
+                target: 0
+            }
         ],
         public outputTarget: string = "",
         public startDate: string = "",
@@ -26,6 +31,7 @@ export class ActivityForm {
     ){}
 
     public setActivityForm = (activityForm: ActivityForm) : void => {
+        this.id = activityForm.id;
         this.activityName = activityForm.activityName;
         this.activityGoal = activityForm.activityGoal;
         this.activityField = activityForm.activityField;
@@ -45,6 +51,7 @@ export class ActivityForm {
     }
 
     public toDto = () : IActivityReportDTO => {
+        console.log(this)
         return {
             namaKegiatan: this.activityName,
             tujuan: this.activityGoal,
@@ -62,6 +69,25 @@ export class ActivityForm {
             linkDokumen: this.activityDocument,
             keteranganTambahan: this.additionalInfo
         }
+    }
+
+    public fromDto = (dto: IActivityReportDTO) : void => {
+        this.id = dto.id as number,
+        this.activityName = dto.namaKegiatan;
+        this.activityGoal = dto.tujuan;
+        this.activityDescription = dto.deskripsi;
+        this.activityStatus = dto.statusKegiatan;
+        this.activityField = dto.bidangKegiatan;
+        this.province = dto.provinsi;
+        this.city = dto.kabupatenKota;
+        this.successIndicator = dto.indikatorKeberhasilan;
+        this.startDate = dto.jadwalMulai;
+        this.endDate = dto.jadwalSelesai;
+        this.logisticsFulfilled = dto.kebutuhanLogistikTerpenuhi;
+        this.logisticsNeeded = dto.kebutuhanLogistikDibutuhkan;
+        this.activityMethod = dto.metodePelaksanaan;
+        this.activityDocument = dto.linkDokumen;
+        this.additionalInfo = dto.keteranganTambahan;
     }
 }
 
