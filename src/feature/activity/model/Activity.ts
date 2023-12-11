@@ -86,5 +86,11 @@ export interface IActivityReportDTO {
     kabupatenKota: string,
     metodePelaksanaan: string,
     linkDokumen: string,
-    keteranganTambahan: string
+    keteranganTambahan: string,
+    isEditable? : boolean,
+}
+
+export interface IActivitiesReportDTO{
+    data : IActivityReportDTO[],
+    countPages: number,
 }

@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { AuthContextValue, AuthUser, Role } from "../../model/AuthData";
+import { AuthContextValue, AuthUser} from "../../model/AuthData";
 import { UserRepository } from "../../../user/user";
 
 export const AuthContext = createContext<AuthContextValue>({
@@ -12,6 +12,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // TODO: uncomment this code when backend is ready
   useEffect(() => {
+    console.log("HERE");
     if (!user) {
       UserRepository.getInstance()
         .getAuthProfile()

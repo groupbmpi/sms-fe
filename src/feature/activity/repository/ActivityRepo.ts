@@ -1,7 +1,7 @@
 import { HttpClient } from "../../httpClient";
 import { IFormActResponseData, IActivityReportBody } from "../activity";
 import {ResponseType} from "../../response";
-import { IActivityResponseData } from "../model/ActivityResponse";
+import { IActivitiesResponseData, IActivityResponseData } from "../model/ActivityResponse";
 
 export class ActivityRepository extends HttpClient {
     private static repoInstance? : ActivityRepository;
@@ -26,6 +26,17 @@ export class ActivityRepository extends HttpClient {
 
     public createActivityReport = async(body: IActivityReportBody) : Promise<IActivityResponseData> => {
         const data : ResponseType<IActivityResponseData> = await this.instance.post<ResponseType<IActivityResponseData>>('activity/', body)
+
+        return data.data
+    }
+
+    public getAllActivityReport = async (page?: number, limit?:number) : Promise<IActivitiesResponseData> => {
+        const data : ResponseType<IActivitiesResponseData> = await this.instance.get<ResponseType<IActivitiesResponseData>>('activity/', {
+            params: {
+                page: page,
+                limit: limit
+            }
+        })
 
         return data.data
     }

@@ -1,4 +1,4 @@
-import { Daerah, IActivityReportDTO } from "./Activity"
+import { Daerah, IActivitiesReportDTO, IActivityReportDTO } from "./Activity"
 
 export interface IFormActResponseData {
     kategori: string[],
@@ -9,3 +9,4 @@ export interface IFormActResponseData {
 }
 
 export interface IActivityResponseData extends IActivityReportDTO {}
+export interface IActivitiesResponseData extends IActivitiesReportDTO{}

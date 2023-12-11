@@ -27,7 +27,7 @@ export class ReportRepository extends HttpClient {
         const data: ResponseType<IReportsResponse> = await this.instance.get<ResponseType<IReportsResponse>>('problems', {
             params: {
                 user_id: userId
-            }
+            },            
         })
         return data.data
     }
