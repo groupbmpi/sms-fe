@@ -1,32 +1,41 @@
 import { Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
-
 import {
   ProtectedRoleComponent,
   Role,
 } from "../feature/auth-and-profile/auth-and-profile";
 import { ActivityRepository, Calendar } from "../feature/activity/activity";
-import { useEffect, useState } from "react";
 import { IActivitiesResponseData } from "../feature/activity/model/ActivityResponse";
 import { EventSourceInput } from "@fullcalendar/core/index.js";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Select } from "../core/core";
 import { UserRepository } from "../feature/user/user";
+import { IActivityReportQuery } from "../feature/activity/model/ActivityRequest";
 
 const ALL_LEMBAGA = "Semua Lembaga";
 
 const Activity = () => {
   const [event, setEvent] = useState<EventSourceInput>([]);
+  const [allFilter, setAllFilter] = useState<string[]>([]);
+  const [filter, setFilter] = useState<string>();
+  
   const activityRepo = ActivityRepository.getInstance();
+  const userRepo = UserRepository.getInstance();
+  
+  const fetchDataActivities = useCallback(async(query: IActivityReportQuery) : Promise<IActivitiesResponseData> => {
+    const res : IActivitiesResponseData = await activityRepo.getAllActivityReport(query)
+    return res;
+  }, [activityRepo])
+
+  const handleChangeFilter = (e: React.ChangeEvent) => {
+    const target = e.target as HTMLInputElement;
+    const { value } = target;
+    setFilter(value);
+  };
 
   useEffect(() => {
     console.log("HERE");
-    const fetchData = async () : Promise<IActivitiesResponseData> => {
-      const res : IActivitiesResponseData = await activityRepo.getAllActivityReport()
-      return res;
-    }
-    
-    fetchData().then((res: IActivitiesResponseData) => {
+    fetchDataActivities({}).then((res: IActivitiesResponseData) => {
       const newEvent = res.data.map((activity) => {
         return {
           id: `${activity.id}`,
@@ -40,34 +49,41 @@ const Activity = () => {
 
       setEvent(newEvent);
     })
-  }, [activityRepo]);
+  }, [activityRepo, fetchDataActivities]);
 
-  const [allFilter, setAllFilter] = useState<string[]>([]);
-  const [filter, setFilter] = useState<string>();
 
   useEffect(() => {
-    UserRepository.getInstance()
+    userRepo
       .getAllCategories()
       .then((res) => {
         setAllFilter([ALL_LEMBAGA, ...res.data.lembaga]);
         setFilter(ALL_LEMBAGA);
       });
-  }, []);
-
-  const handleChangeFilter = (e: React.ChangeEvent) => {
-    const target = e.target as HTMLInputElement;
-    const { value } = target;
-    setFilter(value);
-  };
+  }, [userRepo]);
 
   useEffect(() => {
-    console.log(filter);
-    // TODO fetch activity based on filter
-  }, [filter]);
+    if(typeof filter === 'undefined') return;
+
+    fetchDataActivities({
+      lembaga: encodeURIComponent(filter),
+    }).then((res: IActivitiesResponseData) => {
+      const newEvent = res.data.map((activity) => {
+        return {
+          id: `${activity.id}`,
+          title: activity.namaKegiatan,
+          start: activity.jadwalMulai.replace('Z', ''),
+          end: activity.jadwalSelesai.replace('Z', ''),
+          editable: activity.isEditable,
+          startEditable: activity.isEditable,
+        };
+      });
+
+      setEvent(newEvent);    
+    })
+  }, [filter, fetchDataActivities]);
 
   return (
     <>
-      {/* <h1>{event.toString()}</h1> */}
       <Container>
         <div className="d-flex py-2">
           <h3>Timeline dan Status Kegiatan</h3>

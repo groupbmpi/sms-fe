@@ -10,7 +10,7 @@ export abstract class HttpClient{
 
     public constructor(baseURL: string){
         this.instance = axios.create({
-            baseURL
+            baseURL,
         })
 
         this._initializeResponseInterceptor();
