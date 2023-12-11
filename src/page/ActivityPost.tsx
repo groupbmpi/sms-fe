@@ -1,21 +1,22 @@
 import { Container } from "react-bootstrap";
 import { useState } from "react";
 import { ActivityForm, ActivityRepository, AddActivityForm, IActivityReportDTO } from "../feature/activity/activity";
+import { useNavigate } from "react-router-dom";
 // import { Response } from "../feature/response";
 const ActivityPost = () => {
   const [formValue, setFormValue] = useState<ActivityForm>(new ActivityForm());
   const activityRepository = ActivityRepository.getInstance();
+  const navigate = useNavigate();
 
   const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
     
     formValue.setActivityForm(formValue)
-    
+
     formValue.startDate = new Date(formValue.startDate).toUTCString();
     formValue.endDate = new Date(formValue.startDate).toUTCString();
 
     const body : IActivityReportDTO = formValue.toDto()
-    console.log(body)
     await activityRepository.createActivityReport(body);
   };
 
@@ -70,6 +71,10 @@ const ActivityPost = () => {
     }
   };
 
+  const handleCancel = () => {
+    navigate("/activity")
+  }
+
   return (
     <Container className="my-2">
       <h4>Tambah Kegiatan Baru</h4>
@@ -78,6 +83,7 @@ const ActivityPost = () => {
         handleAddSuccessIndicator={handleAddSuccessIndicator}
         handleDeleteSuccessIndicator={handleDeleteSuccessIndicator}
         handleSubmit={handleSubmit}
+        handleCancel={handleCancel}
         formValue={formValue}
         setFormValue={setFormValue}
       />

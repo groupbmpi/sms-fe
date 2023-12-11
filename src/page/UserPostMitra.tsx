@@ -1,5 +1,5 @@
 import { Container } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import {useState } from "react";
 
 import {
   AddMitraForm,
@@ -20,7 +20,6 @@ const UserPostMitra = () => {
       isValid: formValue.isValid,
     });
 
-    console.log(formValue);
   };
 
   const handleSubmit = () => {

@@ -34,7 +34,6 @@ const Activity = () => {
   };
 
   useEffect(() => {
-    console.log("HERE");
     fetchDataActivities({}).then((res: IActivitiesResponseData) => {
       const newEvent = res.data.map((activity) => {
         return {

@@ -1,10 +1,10 @@
 import { Container } from "react-bootstrap";
 import { useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link} from "react-router-dom";
 
 import { Input, InputType } from "../core/core";
 import { UserRepository } from "../feature/user/user";
-import { Role, useAuth } from "../feature/auth-and-profile/auth-and-profile";
+import { useAuth } from "../feature/auth-and-profile/auth-and-profile";
 import Cookies from "universal-cookie";
 
 const initialLoginForm = {

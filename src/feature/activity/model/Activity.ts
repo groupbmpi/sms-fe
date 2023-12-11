@@ -51,7 +51,6 @@ export class ActivityForm {
     }
 
     public toDto = () : IActivityReportDTO => {
-        console.log(this)
         return {
             namaKegiatan: this.activityName,
             tujuan: this.activityGoal,

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { ActivityForm, ActivityRepository, AddActivityForm, IActivityReportDTO } from "../feature/activity/activity";
 import { IActivityReportQuery } from "../feature/activity/model/ActivityRequest";
@@ -11,6 +11,7 @@ const ActivityDetail = () => {
   const { id } = useParams();
   const [formValue, setFormValue] = useState<ActivityForm>(new ActivityForm());
   const [onEditMode, setOnEditMode] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const activityRepo = ActivityRepository.getInstance();
   
@@ -26,6 +27,8 @@ const ActivityDetail = () => {
       id: parseInt(id),
     }).then((res: IActivitiesResponseData) => {
         const activity : IActivityReportDTO = res.data[0];
+
+        console.log(activity);
         
         activity.jadwalMulai = moment.parseZone(activity.jadwalMulai).local().format().slice(0, -6)
         activity.jadwalSelesai = moment.parseZone(activity.jadwalSelesai).local().format().slice(0, -6)
@@ -64,7 +67,7 @@ const ActivityDetail = () => {
     const target = e.target as HTMLInputElement;
     const { id, value } = target;
     if (id.includes("successIndicator") || id.includes("outputTarget")) {
-      console.log("H")
+
       if (id.includes("successIndicator")) {
         const idx = parseInt(id[id.length - 1]) - 1;
         const newSuccessIndicator = formValue.successIndicator;
@@ -80,10 +83,8 @@ const ActivityDetail = () => {
       });
       formValue.setActivityForm(formValue);
     } else {
-      console.log(value)
       setFormValue({ ...formValue, [id]: value });
       formValue.setActivityForm(formValue);
-      console.log(formValue);
     }
   };
   const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
@@ -93,10 +94,12 @@ const ActivityDetail = () => {
 
     formValue.startDate = new Date(formValue.startDate).toUTCString();
     formValue.endDate = new Date(formValue.startDate).toUTCString();
-    
+
     const body : IActivityReportDTO = formValue.toDto()
 
     await activityRepo.updateActivityReport(body, formValue.id);
+
+    setOnEditMode(false);
   };
 
   const handleChangeEditMode = () => {
@@ -108,12 +111,9 @@ const ActivityDetail = () => {
       }).then((res: IActivitiesResponseData) => {
           const activity : IActivityReportDTO = res.data[0];
           
-          console.log(moment.parseZone(activity.jadwalMulai).local().format().slice(0, -6))
-  
-  
           activity.jadwalMulai = moment.parseZone(activity.jadwalMulai).local().format().slice(0, -6)
           activity.jadwalSelesai = moment.parseZone(activity.jadwalSelesai).local().format().slice(0, -6)
-          console.log(activity);
+
           const newFormValue : ActivityForm = new ActivityForm();
           newFormValue.fromDto(activity);
           setFormValue(newFormValue);
@@ -122,9 +122,34 @@ const ActivityDetail = () => {
     setOnEditMode(!onEditMode);
   };
 
-  const handleDelete = () => {
-    // TODO delete activity based on Id
+  const handleDelete = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+
+    formValue.setActivityForm(formValue)
+
+    await activityRepo.deleteActivityReport(formValue.id);
+
+    navigate("/activity");
   };
+
+  const handleCancel = async() => {
+    if(typeof id === 'undefined') return
+
+    fetchDataActivities({
+      id: parseInt(id),
+    }).then((res: IActivitiesResponseData) => {
+        const activity : IActivityReportDTO = res.data[0];
+        
+        activity.jadwalMulai = moment.parseZone(activity.jadwalMulai).local().format().slice(0, -6)
+        activity.jadwalSelesai = moment.parseZone(activity.jadwalSelesai).local().format().slice(0, -6)
+
+        const newFormValue : ActivityForm = new ActivityForm();
+        newFormValue.fromDto(activity);
+        setFormValue(newFormValue);
+      });
+
+    setOnEditMode(false);
+  }
 
   return (
     <Container>
@@ -149,6 +174,7 @@ const ActivityDetail = () => {
           handleDeleteSuccessIndicator={handleDeleteSuccessIndicator}
           handleFormChange={handleFormChange}
           handleSubmit={handleSubmit}
+          handleCancel={handleCancel}
           formValue={formValue}
           setFormValue={setFormValue}
           onEditMode={onEditMode}

@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { Input, InputType, Select } from "../../../core/Form";
 import {
   ActivityForm,
@@ -14,6 +13,7 @@ export const AddActivityForm = ({
   handleAddSuccessIndicator,
   handleDeleteSuccessIndicator,
   handleSubmit,
+  handleCancel,
   onEditMode = true,
 }: {
   formValue: ActivityForm;
@@ -22,6 +22,7 @@ export const AddActivityForm = ({
   handleAddSuccessIndicator: () => void;
   handleDeleteSuccessIndicator: () => void;
   handleSubmit: (event: React.MouseEvent<HTMLElement>) => void;
+  handleCancel : () => void,
   onEditMode?: boolean;
 }) => {
   const [categories, setCategories] = useState<IFormActResponseData>(
@@ -274,11 +275,13 @@ export const AddActivityForm = ({
           >
             Submit
           </button>
-          <Link to="/activity">
-            <button type="button" className="btn btn-secondary">
-              Batal
-            </button>
-          </Link>
+          <button 
+            type="button" 
+            className="btn btn-secondary"
+            onClick={handleCancel}  
+          >
+            Batal
+          </button>
         </div>
       )}
     </form>

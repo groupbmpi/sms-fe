@@ -44,4 +44,10 @@ export class ActivityRepository extends HttpClient {
 
         return data.data
     }
+
+    public deleteActivityReport = async(id : number) : Promise<IActivityResponseData> => {
+        const data : ResponseType<IActivityResponseData> = await this.instance.delete<ResponseType<IActivityResponseData>>(`activity/${id}`)
+
+        return data.data
+    }
 }
