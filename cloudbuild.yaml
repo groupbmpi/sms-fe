@@ -4,7 +4,19 @@ steps:
   args: ["install"]
 - name: node:18
   entrypoint: npm
+  args: ["run", "create-env"]
+  env:
+    - "VITE_SERVER_URL=$$API_URL"
+  secretEnv:
+    - 'API_URL'
+- name: node:18
+  entrypoint: npm
   args: ["run", "build"]
 - name: "gcr.io/cloud-builders/gcloud"
   args: ["app", "deploy", "--appyaml=app.yaml"]
+
+availableSecrets:
+  secretManager:
+  - versionName: projects/${PROJECT_ID}/secrets/API_URL/versions/latest
+    env: 'API_URL'
 timeout: "1600s"
