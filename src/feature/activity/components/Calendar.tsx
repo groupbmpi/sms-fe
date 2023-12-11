@@ -25,7 +25,6 @@ export const Calendar = ({ events }: { events: EventSourceInput }) => {
     setEventList(events);
     console.log(events);
   }, [events]);
-  }, [events])
 
   return (
     <>

@@ -10,7 +10,7 @@ import {
 
 const News = () => {
   const [searchParams] = useSearchParams();
-  const [news, setNews] = useState([
+  const [news] = useState([
     {
       id: 1,
       title: "1 Lorem ipsum dolor sit amet consectetur adipisicing elit.",

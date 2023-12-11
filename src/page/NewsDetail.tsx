@@ -1,8 +1,8 @@
 import { Container } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 
 const NewsDetail = () => {
-  const { id } = useParams(); // TODO use this id to fetch news detail
+  // const { id } = useParams(); // TODO use this id to fetch news detail
 
   return (
     <Container className="py-2">

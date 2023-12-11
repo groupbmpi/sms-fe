@@ -1,8 +1,4 @@
 import { Link } from "react-router-dom";
-import {
-  ProtectedRoleComponent,
-  Role,
-} from "../../auth-and-profile/auth-and-profile";
 
 export const UserTableRow = ({
   idx,

@@ -1,5 +1,5 @@
 import { Button, Container, Nav, NavDropdown, Navbar } from "react-bootstrap";
-import { Outlet, NavLink, Navigate, useNavigate } from "react-router-dom";
+import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { MdAccountCircle } from "react-icons/md";
 import Cookies from "universal-cookie"

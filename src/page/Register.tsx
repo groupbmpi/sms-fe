@@ -1,5 +1,5 @@
 import { Container } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import {
   AddMitraForm,
@@ -24,28 +24,27 @@ const Register = () => {
   };
 
   const handleSubmit = () => {
-    const registerFormValue : IFormUserRegister = {
-      alamat : formValue.streetName,
-      email : formValue.email,
-      kategori : formValue.category,
-      kabupatenKota : formValue.city,
-      kecamatan : formValue.subDistrict,
-      kelurahan : formValue.village,
-      namaLengkap : formValue.fullName,
-      kodePos : formValue.postalCode,
-      lembaga : formValue.institution,
-      lembagaOthers : formValue.institutionName,
-      noHandphone : formValue.phoneNumber,
-      provinsi : formValue.province,
-    }
+    const registerFormValue: IFormUserRegister = {
+      alamat: formValue.streetName,
+      email: formValue.email,
+      kategori: formValue.category,
+      kabupatenKota: formValue.city,
+      kecamatan: formValue.subDistrict,
+      kelurahan: formValue.village,
+      namaLengkap: formValue.fullName,
+      kodePos: formValue.postalCode,
+      lembaga: formValue.institution,
+      lembagaOthers: formValue.institutionName,
+      noHandphone: formValue.phoneNumber,
+      provinsi: formValue.province,
+    };
 
-    UserRepository
-    .getInstance()
-    .registerUser(registerFormValue)
-    .then(() => {
-      // TODO : Redirect to login page
-    })
-  }
+    UserRepository.getInstance()
+      .registerUser(registerFormValue)
+      .then(() => {
+        // TODO : Redirect to login page
+      });
+  };
 
   return (
     <Container>

@@ -6,7 +6,6 @@ import {
   ProtectedRoleComponent,
   Role,
 } from "../feature/auth-and-profile/auth-and-profile";
-import { Select } from "../core/core";
 import { UserTableRow } from "../feature/user/user";
 import {
   UnverifiedUser,
@@ -19,7 +18,7 @@ const initialFilterValue = {
 };
 
 const User = () => {
-  const [filter, setFilter] = useState(initialFilterValue);
+  const [filter] = useState(initialFilterValue);
   const [users, setUsers] = useState<UnverifiedUser[]>([]); // TODO: remove this dummy initializer after handle fetch users from API
 
   useEffect(() => {
