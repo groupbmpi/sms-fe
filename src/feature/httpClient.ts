@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from "axios";
 // import { useAuth } from "./auth-and-profile/auth-and-profile";
 import Cookies from "universal-cookie";
+import { toast } from "react-toastify";
 
 declare module 'axios' {
     interface AxiosResponse<T> extends Promise<T> {}
@@ -10,7 +11,7 @@ export abstract class HttpClient{
 
     public constructor(baseURL: string){
         this.instance = axios.create({
-            baseURL
+            baseURL,
         })
 
         this._initializeResponseInterceptor();
@@ -38,9 +39,9 @@ export abstract class HttpClient{
     private _handleResponseOnError = (error: Error | AxiosError) => {
         if(axios.isAxiosError(error)){
             if(error.response?.status === 401){
-                //TODO: Handle notif untuk authorized
+                toast("Maaf, Anda tidak memiliki akses untuk halaman ini, pastikan Anda memiliki akses yang sesuai")
             }else{
-                //TODO: Handle notif untuk error general
+                toast("Mohon coba beberapa saat lagi, sedang terjadi kesalahan")
             }
         }
         

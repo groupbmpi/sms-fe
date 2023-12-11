@@ -9,8 +9,13 @@ const ActivityPost = () => {
   const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
     
-    const body : IActivityReportDTO = formValue.toDto();
+    formValue.setActivityForm(formValue)
     
+    formValue.startDate = new Date(formValue.startDate).toUTCString();
+    formValue.endDate = new Date(formValue.startDate).toUTCString();
+
+    const body : IActivityReportDTO = formValue.toDto()
+    console.log(body)
     await activityRepository.createActivityReport(body);
   };
 
