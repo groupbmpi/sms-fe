@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 
 import { Input, InputType } from "../core/core";
 import { isDomainBCF } from "../helper/Parser";
+import { UserRepository } from "../feature/user/user";
+import { IFormRegisterAdmin } from "../feature/user/model/User";
 
 const UserPostAdmin = () => {
   const [formValue, setFormValue] = useState<string>("");
@@ -25,10 +27,20 @@ const UserPostAdmin = () => {
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const newAdmin : IFormRegisterAdmin = {
+      email : formValue,
+    }
     if (isDomainBCF(formValue)) {
-      // TODO add post request
+      console.log(newAdmin);
+      UserRepository.getInstance()
+        .registerAdmin(newAdmin)
+        .then(() => {
+          // TODO add notif that admin has been added
+          setFormValue("");
+        });
     } else {
       // TODO add notif that email is not BCF domain
+      console.log("not bcf domain");
     }
   };
 

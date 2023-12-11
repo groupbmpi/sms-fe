@@ -1,5 +1,5 @@
 import { HttpClient } from "../../httpClient";
-import { ICategoriesResponseData,IFormUserRegister,IFormUserUpdate,IUnverifiedUserResponseData, IUpdateUserData, IUserData, IUserForm } from "../model/User";
+import { ICategoriesResponseData,IFormRegisterAdmin,IFormUserRegister,IFormUserUpdate,IUnverifiedUserResponseData, IUpdateUserData, IUserData, IUserForm } from "../model/User";
 import {ResponseType} from "../../response";
 import { AxiosResponse } from "axios";
 
@@ -81,5 +81,10 @@ export class UserRepository extends HttpClient {
     public updateProfile = async (body : IUserForm) => {
         const data: ResponseType<IUserData> = await this.instance.put<ResponseType<IUserData>>('user', body);
         return data.data;
+    }
+
+    public registerAdmin = async (data : IFormRegisterAdmin) : Promise<AxiosResponse> => {
+        const res : ResponseType<AxiosResponse> = await this.instance.post<ResponseType<AxiosResponse>>('user/admin',data);
+        return res;
     }
 }
