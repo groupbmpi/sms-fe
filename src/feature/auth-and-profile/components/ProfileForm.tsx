@@ -7,13 +7,20 @@ export const ProfileForm = ({
   handleSubmitUpdate,
   isEditMode,
 }: {
-  formValue: any;
+  formValue: {
+    name: string;
+    institution: string;
+    address: string;
+    email: string;
+    phoneNumber: string;
+    avatar: string;
+  };
   handleFormChange: (e: React.ChangeEvent) => void;
   handleSubmitUpdate: () => void;
   isEditMode: boolean;
 }) => {
   return (
-    <form className="px-5">
+    <form className="px-5 py-5">
       <div className="mb-3 px-5 pb-5">
         <input
           type="file"
@@ -23,7 +30,6 @@ export const ProfileForm = ({
           aria-describedby="avatar"
           disabled={!isEditMode}
           onChange={handleFormChange}
-          value={formValue.avatar}
         />
       </div>
       <Input
@@ -31,6 +37,15 @@ export const ProfileForm = ({
         placeholder="Nama"
         id="name"
         value={formValue.name}
+        disabled={!isEditMode}
+        onChange={handleFormChange}
+        required
+      />
+      <Input
+        type={InputType.tel}
+        placeholder="Nomor Telepon"
+        id="phoneNumber"
+        value={formValue.phoneNumber}
         disabled={!isEditMode}
         onChange={handleFormChange}
         required
@@ -44,32 +59,12 @@ export const ProfileForm = ({
         onChange={handleFormChange}
         required
       />
-      {/* <Select
-      id="category"
-      label="Kategori"
-      values={
-        new Map(categoryKeys.map((key, idx) => [key, categoryValues[idx]]))
-      }
-      value={formValue.category}
-      onChange={handleFormChange}
-      disabled
-    />
-    <Select
-      id="province"
-      label="Provinsi"
-      values={
-        new Map(provinceKeys.map((key, idx) => [key, provinceValues[idx]]))
-      }
-      value={formValue.province}
-      onChange={handleFormChange}
-      disabled={!isEditMode}
-    /> */}
       <Input
         type={InputType.textarea}
         placeholder="Alamat Lengkap"
         id="address"
         value={formValue.address}
-        disabled={!isEditMode}
+        disabled
         onChange={handleFormChange}
         required
       />
@@ -79,15 +74,6 @@ export const ProfileForm = ({
         id="email"
         value={formValue.email}
         disabled
-        onChange={handleFormChange}
-        required
-      />
-      <Input
-        type={InputType.tel}
-        placeholder="Nomor Telepon"
-        id="phoneNumber"
-        value={formValue.phoneNumber}
-        disabled={!isEditMode}
         onChange={handleFormChange}
         required
       />
