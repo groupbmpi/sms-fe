@@ -12,6 +12,7 @@ export const AddMitraForm = ({
   onSubmit,
   redirectLinkOnDismiss,
   dismissText,
+  isEdit,
 }: {
   formValue: RegisterForm;
   setFormValue: (formValue: RegisterForm) => void;
@@ -19,6 +20,7 @@ export const AddMitraForm = ({
   onSubmit: () => void;
   redirectLinkOnDismiss: string;
   dismissText: string;
+  isEdit?: boolean;
 }) => {
   const [categories, setCategories] = useState<ICategoriesResponseData>(
     {} as ICategoriesResponseData
@@ -35,14 +37,18 @@ export const AddMitraForm = ({
         setCategories(newCategories);
         console.log(newCategories);
         setCity(newCategories.daerah[0].kabupatenKota);
-        setFormValue({
-          ...formValue,
-          institution: newCategories.lembaga[0],
-          category: newCategories.kategori[0],
-          province: newCategories.daerah[0].provinsi,
-          city: newCategories.daerah[0].kabupatenKota[0],
-          isValid: formValue.isValid,
-        });
+
+        // check if form is edit
+        if (!isEdit) {
+          setFormValue({
+            ...formValue,
+            institution: newCategories.lembaga[0],
+            category: newCategories.kategori[0],
+            province: newCategories.daerah[0].provinsi,
+            city: newCategories.daerah[0].kabupatenKota[0],
+            isValid: formValue.isValid,
+          });
+        }
       });
   }, []);
 
