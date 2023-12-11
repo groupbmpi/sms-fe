@@ -1,6 +1,7 @@
 import { HttpClient } from "../../httpClient";
-import { ICategoriesResponseData,IFormUserRegister,IUnverifiedUserResponseData, IUserData, IUserForm } from "../model/User";
+import { ICategoriesResponseData,IFormRegisterAdmin,IFormUserRegister,IFormUserUpdate,IUnverifiedUserResponseData, IUpdateUserData, IUserData, IUserForm } from "../model/User";
 import {ResponseType} from "../../response";
+import { AxiosResponse } from "axios";
 
 export class UserRepository extends HttpClient {
     private static repoInstance? : UserRepository;
@@ -24,6 +25,16 @@ export class UserRepository extends HttpClient {
 
     public getAllUnverifiedUsers = async () => {
         const data = await this.instance.get<ResponseType<IUnverifiedUserResponseData>>('user/verify');
+        return data;
+    }
+
+    public getUnverifiedUserById = async (id : number) : Promise<IUpdateUserData> => {
+        const data = await this.instance.get<ResponseType<IUpdateUserData>>(`user/${id}`);
+        return data.data;
+    }
+
+    public updateUnverifiedUserById = async (id : number, newData : IFormUserUpdate) : Promise<AxiosResponse> => {
+        const data = await this.instance.put<ResponseType<AxiosResponse>>(`user/${id}`,newData);
         return data;
     }
 
@@ -70,5 +81,10 @@ export class UserRepository extends HttpClient {
     public updateProfile = async (body : IUserForm) => {
         const data: ResponseType<IUserData> = await this.instance.put<ResponseType<IUserData>>('user', body);
         return data.data;
+    }
+
+    public registerAdmin = async (data : IFormRegisterAdmin) : Promise<AxiosResponse> => {
+        const res : ResponseType<AxiosResponse> = await this.instance.post<ResponseType<AxiosResponse>>('user/admin',data);
+        return res;
     }
 }

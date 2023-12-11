@@ -39,3 +39,11 @@ export interface IUserForm {
     noHandphone : string,
     avatar : string
 }
+
+type PropsFormUserUpdateOmitted = "id" | "linkFoto"
+export interface IUpdateUserData extends Omit<IUserData, PropsFormUserUpdateOmitted>{}
+export interface IFormUserUpdate extends IUpdateUserData{}
+
+export interface IFormRegisterAdmin{
+    email : string
+}

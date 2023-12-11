@@ -9,7 +9,6 @@ import {
 import { Select } from "../core/core";
 import { UserTableRow } from "../feature/user/user";
 import {
-  IUnverifiedUserResponseData,
   UnverifiedUser,
 } from "../feature/user/model/User";
 import { UserRepository } from "../feature/user/repository/UserRepo";
@@ -37,11 +36,11 @@ const User = () => {
     // TODO fetch users with filter and do setUsers
   }, [filter]);
 
-  const handleFormChange = (e: React.ChangeEvent) => {
-    const target = e.target as HTMLInputElement;
-    const { id, value } = target;
-    setFilter({ ...filter, [id]: value });
-  };
+  // const handleFormChange = (e: React.ChangeEvent) => {
+  //   const target = e.target as HTMLInputElement;
+  //   const { id, value } = target;
+  //   setFilter({ ...filter, [id]: value });
+  // };
 
   const handleAccept = (id: number) => {
     UserRepository.getInstance()
@@ -137,10 +136,10 @@ const User = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user, idx) => (
+            {users.map((user) => (
               <UserTableRow
                 key={user.id}
-                idx={idx + 1}
+                idx={user.id}
                 name={user.namaLengkap}
                 category="Unverified"
                 handleAccept={() => handleAccept(user.id)}
