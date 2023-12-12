@@ -1,6 +1,6 @@
 import { Container } from "react-bootstrap";
 import { useState } from "react";
-import { Link} from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 
 import { Input, InputType } from "../core/core";
 import { UserRepository } from "../feature/user/user";
@@ -14,6 +14,8 @@ const initialLoginForm = {
 
 const Login = () => {
   const [formValue, setFormValue] = useState(initialLoginForm);
+
+  const navigate = useNavigate();
 
   const {setUser} = useAuth();
   
@@ -42,6 +44,7 @@ const Login = () => {
               role: res.data.role,
               access: res.data.akses,
             });
+            navigate("/activity");
           })
       });
   };

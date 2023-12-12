@@ -6,12 +6,13 @@ import {
   RegisterForm,
 } from "../feature/auth-and-profile/auth-and-profile";
 import { UserRepository } from "../feature/user/repository/UserRepo";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { IFormUserUpdate } from "../feature/user/model/User";
 
 const UserEdit = () => {
   const {id} = useParams();
   const [formValue, setFormValue] = useState<RegisterForm>(new RegisterForm());
+  const navigate = useNavigate();
 
   useEffect(() => {
     UserRepository.getInstance()
@@ -66,7 +67,7 @@ const UserEdit = () => {
     UserRepository.getInstance()
       .updateUnverifiedUserById(parseInt(id as string), updateFormValue)
       .then(() => {
-        // TODO : Redirect to login page
+        navigate("/user");
       });
   }
 

@@ -7,9 +7,11 @@ import {
 } from "../feature/auth-and-profile/auth-and-profile";
 import { UserRepository } from "../feature/user/repository/UserRepo";
 import { IFormUserRegister } from "../feature/user/model/User";
+import { useNavigate } from "react-router-dom";
 
 const UserPostMitra = () => {
   const [formValue, setFormValue] = useState<RegisterForm>(new RegisterForm());
+  const navigate = useNavigate();
 
   const handleFormChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
@@ -43,7 +45,7 @@ const UserPostMitra = () => {
     .getInstance()
     .registerUser(registerFormValue)
     .then(() => {
-      // TODO : Redirect to login page
+      navigate("/user");
     })
   }
 

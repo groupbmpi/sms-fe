@@ -1,5 +1,5 @@
 import { Container } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 import { Input, InputType } from "../core/core";
@@ -13,6 +13,7 @@ const initialActivationForm = {
 
 const AccountActivation = () => {
   const [formValue, setFormValue] = useState(initialActivationForm);
+  const navigate = useNavigate();
 
   const handleFormChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
@@ -24,8 +25,8 @@ const AccountActivation = () => {
     console.log(formValue)
     UserRepository.getInstance()
       .activateUser(formValue.email, formValue.password, formValue.otp)
-      .then((res) => {
-        console.log(res);
+      .then(() => {
+        navigate("/login");
       });
   };
 

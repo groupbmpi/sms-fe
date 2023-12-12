@@ -8,10 +8,12 @@ import {
 import { PopupModal } from "../core/Modal";
 import { IFormUserRegister } from "../feature/user/model/User";
 import { UserRepository } from "../feature/user/repository/UserRepo";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [formValue, setFormValue] = useState<RegisterForm>(new RegisterForm());
   const [showRegConfirmation, setShowRegConfirmation] = useState(false);
+  const navigate = useNavigate();
 
   const handleFormChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
@@ -42,7 +44,7 @@ const Register = () => {
     UserRepository.getInstance()
       .registerUser(registerFormValue)
       .then(() => {
-        // TODO : Redirect to login page
+        navigate("/activation");
       });
   };
 

@@ -1,6 +1,6 @@
 import { Container } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { Input, InputType } from "../core/core";
 import { isDomainBCF } from "../helper/Parser";
@@ -10,6 +10,8 @@ import { IFormRegisterAdmin } from "../feature/user/model/User";
 const UserPostAdmin = () => {
   const [formValue, setFormValue] = useState<string>("");
   const [isDomain, setIsDomain] = useState<boolean>(false);
+
+  const navigate = useNavigate();
 
   const handleEmailChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
@@ -37,6 +39,7 @@ const UserPostAdmin = () => {
         .then(() => {
           // TODO add notif that admin has been added
           setFormValue("");
+          navigate("/user");
         });
     } else {
       // TODO add notif that email is not BCF domain
