@@ -1,0 +1,1 @@
+export {type ILembagaWithKategoriDTO} from "./model/lembaga"

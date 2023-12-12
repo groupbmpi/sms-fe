@@ -55,7 +55,13 @@ const Activity = () => {
     userRepo
       .getAllCategories()
       .then((res) => {
-        setAllFilter([ALL_LEMBAGA, ...res.data.lembaga]);
+        const lembagaParsed : string[] = []
+
+        res.data.lembaga.forEach((data) => {
+            lembagaParsed.push(...data.lembaga)
+        })
+
+        setAllFilter([ALL_LEMBAGA, ...lembagaParsed]);
         setFilter(ALL_LEMBAGA);
       });
   }, [userRepo]);

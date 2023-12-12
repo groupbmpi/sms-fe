@@ -15,7 +15,7 @@ export const AddMitraForm = ({
   isEdit,
 }: {
   formValue: RegisterForm;
-  setFormValue: (formValue: RegisterForm) => void;
+  setFormValue: React.Dispatch<React.SetStateAction<RegisterForm>>,
   handleFormChange: (e: React.ChangeEvent) => void;
   onSubmit: () => void;
   redirectLinkOnDismiss: string;
@@ -24,33 +24,37 @@ export const AddMitraForm = ({
 }) => {
   const [categories, setCategories] = useState<ICategoriesResponseData>(
     {} as ICategoriesResponseData
-  );
-
+    );
   const [city, setCity] = useState<string[]>([]);
+  const [lembaga, setLembaga] = useState<string[]>([])
+
 
   useEffect(() => {
     UserRepository.getInstance()
       .getAllCategories()
       .then((response) => {
-        const newCategories = response.data;
-        newCategories.lembaga.push("Lainnya");
+        const newCategories = response.data
+
         setCategories(newCategories);
-        console.log(newCategories);
         setCity(newCategories.daerah[0].kabupatenKota);
+        setLembaga([
+          ...newCategories.lembaga[0].lembaga,
+          "Lainnya",
+        ])
 
         // check if form is edit
         if (!isEdit) {
-          setFormValue({
-            ...formValue,
-            institution: newCategories.lembaga[0],
+          setFormValue((prev : RegisterForm) => ({
+            ...prev,
+            institution: newCategories.lembaga[0].lembaga[0],
             category: newCategories.kategori[0],
             province: newCategories.daerah[0].provinsi,
             city: newCategories.daerah[0].kabupatenKota[0],
-            isValid: formValue.isValid,
-          });
+            isValid: prev.isValid,
+          }));
         }
       });
-  }, []);
+  }, [isEdit, setFormValue]);
 
   useEffect(() => {
     const newCity = categories.daerah?.filter(
@@ -60,7 +64,18 @@ export const AddMitraForm = ({
     if (newCity !== undefined) {
       setCity(newCity[0].kabupatenKota);
     }
-  }, [formValue.province]);
+  }, [formValue.province, categories.daerah]);
+
+
+  useEffect(() => {
+    const newLembaga = categories.lembaga?.filter(
+      (lembaga) => lembaga.kategori === formValue.category
+    )
+
+    if(typeof newLembaga !== "undefined"){
+      setLembaga(newLembaga[0].lembaga)
+    }
+  }, [categories.lembaga, formValue.category])
 
   return (
     <form className="">
@@ -113,7 +128,7 @@ export const AddMitraForm = ({
           value={formValue.institution}
           values={
             new Map(
-              categories.lembaga?.map((lembaga) => [lembaga, lembaga]) || []
+              lembaga?.map((lembaga) => [lembaga, lembaga]) || []
             )
           }
         />

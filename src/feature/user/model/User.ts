@@ -1,12 +1,10 @@
+import { Daerah } from "../../activity/activity"
+import { ILembagaWithKategoriDTO } from "../../lembaga/lembaga"
+
 export interface ICategoriesResponseData {
     kategori: string[],
     daerah: Daerah[],
-    lembaga: string[]
-}
-
-interface Daerah {
-    provinsi: string,
-    kabupatenKota: string[]
+    lembaga: ILembagaWithKategoriDTO[]
 }
 
 export interface IUserData{

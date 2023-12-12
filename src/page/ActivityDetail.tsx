@@ -28,8 +28,6 @@ const ActivityDetail = () => {
     }).then((res: IActivitiesResponseData) => {
         const activity : IActivityReportDTO = res.data[0];
 
-        console.log(activity);
-        
         activity.jadwalMulai = moment.parseZone(activity.jadwalMulai).local().format().slice(0, -6)
         activity.jadwalSelesai = moment.parseZone(activity.jadwalSelesai).local().format().slice(0, -6)
 

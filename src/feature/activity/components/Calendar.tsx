@@ -23,7 +23,6 @@ export const Calendar = ({ events }: { events: EventSourceInput }) => {
 
   useEffect(() => {
     setEventList(events);
-    console.log(events);
   }, [events]);
 
   return (
