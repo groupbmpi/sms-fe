@@ -1,6 +1,7 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { Role } from "../model/AuthData";
 import { useAuth } from "../auth-and-profile";
+import { useEffect } from "react";
 
 /// [Protected Route]
 /// This function is used to protect a route from unauthorized user
@@ -11,11 +12,17 @@ export const RequiredLoggedInRoute = ({
   children: JSX.Element;
   redirectPath: string;
 }): JSX.Element => {
-  const { user } = useAuth();
+  const { user, isLoadComplete } = useAuth();
 
-  if (!user) {
-    return <Navigate to={redirectPath} replace />;
-  }
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log('useEffect',isLoadComplete,user)
+    if(!isLoadComplete) return;
+    if (!user) {
+      navigate(redirectPath);
+    }
+  }, [user, isLoadComplete]);
 
   return children;
 };
@@ -29,11 +36,17 @@ export const RequiredNotLoggedInRoute = ({
   children: JSX.Element;
   redirectPath: string;
 }): JSX.Element => {
-  const { user } = useAuth();
 
-  if (user) {
-    return <Navigate to={redirectPath} replace />;
-  }
+  const { user, isLoadComplete } = useAuth();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if(!isLoadComplete) return;
+    if (user) {
+      navigate(redirectPath);
+    }
+  }, [user, isLoadComplete]);
 
   return children;
 };
@@ -49,11 +62,18 @@ export const RoleBasedProtectedRoute = ({
   children: JSX.Element;
   redirectPath: string;
 }): JSX.Element => {
-  const { user } = useAuth();
+  const { user, isLoadComplete } = useAuth();
 
-  if (!rolesAllowed.includes(user!.role)) {
-    return <Navigate to={redirectPath} replace />;
-  }
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if(!isLoadComplete) return;
+    if (user) {
+      if (!rolesAllowed.includes(user!.role)) {
+        navigate(redirectPath);
+      }
+    }
+  }, [user, isLoadComplete]);
 
   return children;
 };

@@ -5,14 +5,16 @@ import { UserRepository } from "../../../user/user";
 export const AuthContext = createContext<AuthContextValue>({
   user: null,
   setUser: () => {},
+  isLoadComplete: false,
+  setIsLoadComplete: () => {},
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<AuthUser | null>(null);
+  const [isLoadComplete, setIsLoadComplete] = useState<boolean>(false);
 
   // TODO: uncomment this code when backend is ready
   useEffect(() => {
-    console.log("HERE");
     if (!user) {
       UserRepository.getInstance()
         .getAuthProfile()
@@ -23,13 +25,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             token: res.data.token,
             role: res.data.role,
             access: res.data.akses,
-          });
+          });  
+        setIsLoadComplete(true);
         })
     }
   }, [user]);
 
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
+    <AuthContext.Provider value={{ user, setUser, isLoadComplete,setIsLoadComplete }}>
       {children}
     </AuthContext.Provider>
   );

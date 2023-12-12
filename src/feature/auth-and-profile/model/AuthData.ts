@@ -7,6 +7,8 @@ export enum Role {
 export interface AuthContextValue {
     user: AuthUser | null;
     setUser: React.Dispatch<React.SetStateAction<AuthUser | null>>;
+    isLoadComplete : boolean;
+    setIsLoadComplete : React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 
