@@ -15,7 +15,7 @@ export const AddReportForm = ({
   formValue: IReportForm;
   setFormValue: (formValue: IReportForm) => void;
   handleFormChange: (e: React.ChangeEvent) => void;
-  handleSubmit: () => void;
+  handleSubmit: (e: React.MouseEvent) => void;
 }) => {
   const [categories, setCategories] = useState<IFormReportResponseData>(
     {} as IFormReportResponseData

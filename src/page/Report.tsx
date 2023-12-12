@@ -37,23 +37,27 @@ const Report = () => {
         kategoriMasalah: data.kategoriMasalah[0],
         provinsi: data.provinsi[0],
       }));
-      return
+      return;
     });
   }, [reportRepo]);
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.MouseEvent) => {
+    e.preventDefault();
+    console.log(formValue);
     reportRepo
       .createReport(formValue)
       .then(() => {
         alert("Laporan berhasil ditambahkan!");
-        setFormValue((prev) => ({
-          ...prev,
-          masalah: ""
-        }));
       })
       .catch((err) => {
         alert("Laporan gagal ditambahkan!");
         console.log(err);
+      })
+      .finally(() => {
+        setFormValue({
+          ...formValue,
+          masalah: "",
+        });
       });
   };
 
@@ -76,7 +80,7 @@ const Report = () => {
         formValue={formValue}
         setFormValue={setFormValue}
         handleFormChange={handleFormChange}
-        handleSubmit={handleSubmit}
+        handleSubmit={(e) => handleSubmit(e)}
       />
     </Container>
   );
