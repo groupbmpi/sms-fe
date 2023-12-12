@@ -41,7 +41,7 @@ export abstract class HttpClient{
             if(error.response?.status === 401){
                 toast("Maaf, Anda tidak memiliki akses untuk halaman ini, pastikan Anda memiliki akses yang sesuai")
             }else{
-                toast("Mohon coba beberapa saat lagi, sedang terjadi kesalahan")
+                // toast("Mohon coba beberapa saat lagi, sedang terjadi kesalahan")
             }
         }
         
