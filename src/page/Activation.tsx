@@ -68,9 +68,9 @@ const AccountActivation = () => {
         </div>
         <div className="d-flex justify-content-center align-items-center mb-2 gap-1">
           <button
-            type="submit"
+            type="button"
             className="btn btn-primary"
-            onSubmit={handleActivation}
+            onClick={handleActivation}
           >
             Aktivasi
           </button>
