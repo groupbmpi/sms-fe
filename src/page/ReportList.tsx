@@ -3,11 +3,13 @@ import { Container } from "react-bootstrap";
 import { IReportData, ReportRepository } from "../feature/report/report";
 import { Link, useSearchParams } from "react-router-dom";
 import { generateArray } from "../helper/Iterable";
+import { Loading } from "../core/Loading";
 
 const ReportList = () => {
   const [searchParams] = useSearchParams();
   const [reports, setReports] = useState<IReportData[]>([]);
   const [maxPage, setMaxPage] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     ReportRepository.getInstance()
@@ -19,11 +21,15 @@ const ReportList = () => {
   }, []);
 
   useEffect(() => {
+    setIsLoading(true);
     ReportRepository.getInstance()
       .getAllReport("", parseInt(searchParams.get("page") || "1"))
       .then((res) => {
         setReports(res.data);
         setMaxPage(res.countPages);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, [searchParams]);
 
@@ -48,17 +54,21 @@ const ReportList = () => {
             <th scope="col">Deskripsi</th>
           </tr>
         </thead>
-        <tbody>
-          {reports.map((report, idx) => (
-            <tr key={report.id}>
-              <th scope="row">{idx + 1}</th>
-              <td>{report.namaUser}</td>
-              <td>{report.kategoriMasalah}</td>
-              <td>{report.provinsi}</td>
-              <td>{report.masalah}</td>
-            </tr>
-          ))}
-        </tbody>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <tbody>
+            {reports.map((report, idx) => (
+              <tr key={report.id}>
+                <th scope="row">{idx + 1}</th>
+                <td>{report.namaUser}</td>
+                <td>{report.kategoriMasalah}</td>
+                <td>{report.provinsi}</td>
+                <td>{report.masalah}</td>
+              </tr>
+            ))}
+          </tbody>
+        )}
       </table>
 
       <nav aria-label="reportlist-pagination">

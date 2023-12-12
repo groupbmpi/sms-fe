@@ -8,6 +8,7 @@ import {
   Role,
 } from "../feature/auth-and-profile/auth-and-profile";
 import { NewsRepository } from "../feature/news/news";
+import { Loading } from "../core/Loading";
 
 const News = () => {
   const [searchParams] = useSearchParams();
@@ -19,6 +20,7 @@ const News = () => {
       detail: string;
     }[]
   >([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [filter, setFilter] = useState({
     "year-news-filter": "all",
@@ -52,10 +54,14 @@ const News = () => {
 
   useEffect(() => {
     // TODO fetch news based on currentPageNum and setNews
+    setIsLoading(true);
     NewsRepository.getInstance()
       .getAllNews(currentPageNum)
       .then((res) => {
         setNews(res.news);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, [searchParams]);
 
@@ -120,43 +126,55 @@ const News = () => {
           }
         />
       </div>
-      {news.map((item) => (
-        <div className="card p-1 my-2" key={item.id}>
-          <div className="d-flex flex-row">
-            <img
-              src="https://picsum.photos/200/300"
-              className="card-img-top"
-              alt={`image-news-${item.id}`}
-              style={{ width: "250px", height: "200px", borderRadius: "10px" }}
-            />
-            <div className="card-body d-flex flex-column justify-content-around">
-              <h5 className="card-title">{item.title}</h5>
-              <div className="text-body-tertiary fst-italic">
-                16 November 2023 - John Doe
-              </div>
-              <p className="card-text">{item.detail.substring(0, 100)}...</p>
-              <div className="d-flex flex-justify-start gap-1">
-                <Link to={`/news/${item.id}`}>
-                  <Button variant="primary">Read More</Button>
-                </Link>
-                <ProtectedRoleComponent
-                  roleAllowed={[Role.ADMIN, Role.SUPERADMIN]}
-                  component={
-                    <div className="d-flex gap-1">
-                      <Link to={`/news/${item.id}/edit`}>
-                        <Button variant="secondary">Edit</Button>
-                      </Link>
-                      <Button variant="danger" onClick={handleDelete}>
-                        Delete
-                      </Button>
-                    </div>
-                  }
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <>
+          {news.map((item) => (
+            <div className="card p-1 my-2" key={item.id}>
+              <div className="d-flex flex-row">
+                <img
+                  src="https://picsum.photos/200/300"
+                  className="card-img-top"
+                  alt={`image-news-${item.id}`}
+                  style={{
+                    width: "250px",
+                    height: "200px",
+                    borderRadius: "10px",
+                  }}
                 />
+                <div className="card-body d-flex flex-column justify-content-around">
+                  <h5 className="card-title">{item.title}</h5>
+                  <div className="text-body-tertiary fst-italic">
+                    16 November 2023 - John Doe
+                  </div>
+                  <p className="card-text">
+                    {item.detail.substring(0, 100)}...
+                  </p>
+                  <div className="d-flex flex-justify-start gap-1">
+                    <Link to={`/news/${item.id}`}>
+                      <Button variant="primary">Read More</Button>
+                    </Link>
+                    <ProtectedRoleComponent
+                      roleAllowed={[Role.ADMIN, Role.SUPERADMIN]}
+                      component={
+                        <div className="d-flex gap-1">
+                          <Link to={`/news/${item.id}/edit`}>
+                            <Button variant="secondary">Edit</Button>
+                          </Link>
+                          <Button variant="danger" onClick={handleDelete}>
+                            Delete
+                          </Button>
+                        </div>
+                      }
+                    />
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      ))}
+          ))}
+        </>
+      )}
       <nav aria-label="news-pagination">
         <ul className="pagination justify-content-center">
           <li

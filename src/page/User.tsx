@@ -7,10 +7,9 @@ import {
   Role,
 } from "../feature/auth-and-profile/auth-and-profile";
 import { UserTableRow } from "../feature/user/user";
-import {
-  UnverifiedUser,
-} from "../feature/user/model/User";
+import { UnverifiedUser } from "../feature/user/model/User";
 import { UserRepository } from "../feature/user/repository/UserRepo";
+import { Loading } from "../core/Loading";
 
 const initialFilterValue = {
   status: "all",
@@ -19,15 +18,19 @@ const initialFilterValue = {
 
 const User = () => {
   const [filter] = useState(initialFilterValue);
-  const [users, setUsers] = useState<UnverifiedUser[]>([]); // TODO: remove this dummy initializer after handle fetch users from API
+  const [users, setUsers] = useState<UnverifiedUser[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // TODO fetch users and do setUsers
+    setIsLoading(true);
     UserRepository.getInstance()
       .getAllUnverifiedUsers()
       .then((res) => {
         setUsers(res.data.user);
         console.log(res.data.user);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
 
@@ -120,33 +123,39 @@ const User = () => {
           </div>
         </div>
       </div>
-      {users.length === 0 ? (
-        <div className="d-flex justify-content-center">
-          <h5>Tidak ada permintaan verifikasi lagi</h5>
-        </div>
+      {isLoading ? (
+        <Loading />
       ) : (
-        <table className="table table-hover">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Nama Lengkap</th>
-              <th scope="col">Kategori</th>
-              <th scope="col">Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <UserTableRow
-                key={user.id}
-                idx={user.id}
-                name={user.namaLengkap}
-                category="Unverified"
-                handleAccept={() => handleAccept(user.id)}
-                handleReject={() => handleReject(user.id)}
-              />
-            ))}
-          </tbody>
-        </table>
+        <>
+          {users.length === 0 ? (
+            <div className="d-flex justify-content-center">
+              <h5>Tidak ada permintaan verifikasi lagi</h5>
+            </div>
+          ) : (
+            <table className="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Nama Lengkap</th>
+                  <th scope="col">Kategori</th>
+                  <th scope="col">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map((user) => (
+                  <UserTableRow
+                    key={user.id}
+                    idx={user.id}
+                    name={user.namaLengkap}
+                    category="Unverified"
+                    handleAccept={() => handleAccept(user.id)}
+                    handleReject={() => handleReject(user.id)}
+                  />
+                ))}
+              </tbody>
+            </table>
+          )}
+        </>
       )}
     </Container>
   );
