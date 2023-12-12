@@ -7,16 +7,18 @@ import {
   ProtectedRoleComponent,
   Role,
 } from "../feature/auth-and-profile/auth-and-profile";
+import { NewsRepository } from "../feature/news/news";
 
 const News = () => {
   const [searchParams] = useSearchParams();
-  const [news] = useState([
+  // TODO make news type in NewsModel
+  const [news, setNews] = useState<
     {
-      id: 1,
-      title: "1 Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-      body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut natus odit molestias, soluta sit dolor! Ea sapiente est asperiores enim tempore dolores repellendus vel animi, odit, unde, tenetur blanditiis? Modi.",
-    },
-  ]);
+      id: number;
+      title: string;
+      detail: string;
+    }[]
+  >([]);
 
   const [filter, setFilter] = useState({
     "year-news-filter": "all",
@@ -50,6 +52,11 @@ const News = () => {
 
   useEffect(() => {
     // TODO fetch news based on currentPageNum and setNews
+    NewsRepository.getInstance()
+      .getAllNews(currentPageNum)
+      .then((res) => {
+        setNews(res.news);
+      });
   }, [searchParams]);
 
   return (
@@ -127,7 +134,7 @@ const News = () => {
               <div className="text-body-tertiary fst-italic">
                 16 November 2023 - John Doe
               </div>
-              <p className="card-text">{item.body.substring(0, 100)}</p>
+              <p className="card-text">{item.detail.substring(0, 100)}...</p>
               <div className="d-flex flex-justify-start gap-1">
                 <Link to={`/news/${item.id}`}>
                   <Button variant="primary">Read More</Button>

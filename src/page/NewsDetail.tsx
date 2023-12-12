@@ -1,25 +1,46 @@
+import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
-// import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { NewsRepository } from "../feature/news/news";
+import { Loading } from "../core/Loading";
 
 const NewsDetail = () => {
-  // const { id } = useParams(); // TODO use this id to fetch news detail
+  const { id } = useParams(); // TODO use this id to fetch news detail
+  const [news, setNews] = useState<any>(); // TODO make news type in NewsModel
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // TODO fetch news by id, and setNews with the data
+    setIsLoading(true);
+    NewsRepository.getInstance()
+      .getNewsbyId(id!)
+      .then((res) => {
+        setNews(res);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
 
   return (
     <Container className="py-2">
-      <img
-        src="https://via.placeholder.com/600x400"
-        alt="News"
-        className="img-fluid mx-auto d-block"
-      />
-      <h3 className="my-2">News Title</h3>
-      <div className="text-body-tertiary fst-italic">
-        16 November 2023 - John Doe
-      </div>
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum optio animi
-        sapiente accusantium, sit minus ut illum. Hic quis ducimus harum, nobis
-        sequi fuga, veniam praesentium qui voluptatum, beatae provident.
-      </p>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <>
+          <img
+            // src={news.photoLink}
+            src="https://picsum.photos/200/300"
+            alt="News"
+            className="img-fluid mx-auto d-block"
+          />
+          <h3 className="my-2">{news.title}</h3>
+          <div className="text-body-tertiary fst-italic">
+            {news.updatedAt} - John Doe
+          </div>
+          <p>{news.detail}</p>
+        </>
+      )}
     </Container>
   );
 };

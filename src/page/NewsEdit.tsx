@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
-import { NewsForm } from "../feature/news/news";
-import { AddNewsForm } from "../feature/news/components/AddNewsForm";
+import { NewsForm, AddNewsForm } from "../feature/news/news";
 
 const initialNewsForm: NewsForm = {
   newsTitle: "",
