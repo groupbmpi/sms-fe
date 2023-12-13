@@ -1,6 +1,11 @@
 export interface IFormReportResponseData {
     kategoriMasalah : string[],
-    provinsi : string[],
+    daerah : Daerah[],
+}
+
+interface Daerah {
+    provinsi : string,
+    kabupatenKota : string[],
 }
 
 export interface IReportData {
@@ -8,6 +13,7 @@ export interface IReportData {
     masalah : string,
     kategoriMasalah : string,
     provinsi : string,
+    kabupatenKota : string,
     namaUser : string,
     createdAt : Date,
     updatedAt : Date

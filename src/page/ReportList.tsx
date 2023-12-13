@@ -44,19 +44,18 @@ const ReportList = () => {
   return (
     <Container>
       <h3>Daftar Laporan</h3>
-      <table className="table table-hover">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Nama Pelapor</th>
-            <th scope="col">Kategori</th>
-            <th scope="col">Provinsi</th>
-            <th scope="col">Deskripsi</th>
-          </tr>
-        </thead>
-        {isLoading ? (
-          <Loading />
-        ) : (
+      {!isLoading ? (
+        <table className="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Nama Pelapor</th>
+              <th scope="col">Kategori</th>
+              <th scope="col">Provinsi</th>
+              <th scope="col">Kabupaten/Kota</th>
+              <th scope="col">Deskripsi</th>
+            </tr>
+          </thead>
           <tbody>
             {reports.map((report, idx) => (
               <tr key={report.id}>
@@ -64,12 +63,15 @@ const ReportList = () => {
                 <td>{report.namaUser}</td>
                 <td>{report.kategoriMasalah}</td>
                 <td>{report.provinsi}</td>
+                <td>{report.kabupatenKota}</td>
                 <td>{report.masalah}</td>
               </tr>
             ))}
           </tbody>
-        )}
-      </table>
+        </table>
+      ) : (
+        <Loading />
+      )}
 
       <nav aria-label="reportlist-pagination">
         <ul className="pagination justify-content-center">

@@ -21,23 +21,35 @@ export const AddReportForm = ({
     {} as IFormReportResponseData
   );
 
+  const [city, setCity] = useState<string[]>([]);
+
   useEffect(() => {
     ReportRepository.getInstance()
       .getProbReportCategories()
       .then((response) => {
         const newCategories = response;
         setCategories(newCategories);
+
+        setCity(newCategories.daerah[0].kabupatenKota);
+
         setFormValue({
           ...formValue,
           kategoriMasalah: newCategories.kategoriMasalah[0],
-          provinsi: newCategories.provinsi[0],
+          provinsi: newCategories.daerah[0].provinsi,
+          kabupatenKota: newCategories.daerah[0].kabupatenKota[0],
         });
       });
   }, []);
 
   useEffect(() => {
-    console.log(categories);
-  }, [categories]);
+    const newCity = categories.daerah?.filter(
+      (category) => category.provinsi === formValue.provinsi
+    );
+
+    if (typeof newCity !== "undefined" && newCity.length > 0) {
+      setCity(newCity[0].kabupatenKota);
+    }
+  }, [formValue.provinsi]);
 
   return (
     <form className="mb-3 px-5">
@@ -60,10 +72,20 @@ export const AddReportForm = ({
         label="Provinsi"
         values={
           new Map(
-            categories.provinsi?.map((category) => [category, category]) || []
+            categories.daerah?.map((category) => [
+              category.provinsi,
+              category.provinsi,
+            ]) || []
           )
         }
         value={formValue.provinsi}
+        onChange={handleFormChange}
+      />
+      <Select
+        id="kabupatenKota"
+        label="Kabupaten/Kota"
+        value={formValue.kabupatenKota}
+        values={new Map(city?.map((city) => [city, city]) || [])}
         onChange={handleFormChange}
       />
       <Input

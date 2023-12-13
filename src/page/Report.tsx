@@ -12,6 +12,7 @@ import { IReportForm, ReportRepository } from "../feature/report/report";
 const initialReportForm: IReportForm = {
   kategoriMasalah: "",
   provinsi: "",
+  kabupatenKota: "",
   masalah: "",
 };
 
@@ -24,22 +25,6 @@ const Report = () => {
     const { id, value } = target;
     setFormValue({ ...formValue, [id]: value });
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await reportRepo.getProbReportCategories();
-      return data;
-    };
-
-    fetchData().then((data) => {
-      setFormValue((prev) => ({
-        ...prev,
-        kategoriMasalah: data.kategoriMasalah[0],
-        provinsi: data.provinsi[0],
-      }));
-      return;
-    });
-  }, [reportRepo]);
 
   const handleSubmit = (e: React.MouseEvent) => {
     e.preventDefault();
