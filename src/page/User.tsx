@@ -1,5 +1,5 @@
 import { Container } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import {
@@ -10,6 +10,7 @@ import { UserTableRow } from "../feature/user/user";
 import { UnverifiedUser } from "../feature/user/model/User";
 import { UserRepository } from "../feature/user/repository/UserRepo";
 import { Loading } from "../core/Loading";
+import { generateArray } from "../helper/Iterable";
 
 const initialFilterValue = {
   status: "all",
@@ -21,12 +22,24 @@ const User = () => {
   const [users, setUsers] = useState<UnverifiedUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const [searchParams] = useSearchParams();
+  const [maxPage, setMaxPage] = useState(5);
+
+  const currentPage = searchParams.get("page");
+  const currentPageNum = currentPage ? parseInt(currentPage) : 1;
+
+  const listOfPage = generateArray(
+    Math.max(1, currentPageNum - 2),
+    Math.min(currentPageNum + 2, maxPage)
+  );
+
   useEffect(() => {
     setIsLoading(true);
     UserRepository.getInstance()
       .getAllUnverifiedUsers()
       .then((res) => {
         setUsers(res.data.user);
+        // TODO setMax page
         console.log(res.data.user);
       })
       .finally(() => {
@@ -38,11 +51,9 @@ const User = () => {
     // TODO fetch users with filter and do setUsers
   }, [filter]);
 
-  // const handleFormChange = (e: React.ChangeEvent) => {
-  //   const target = e.target as HTMLInputElement;
-  //   const { id, value } = target;
-  //   setFilter({ ...filter, [id]: value });
-  // };
+  useEffect(() => {
+    // TODO fetch users with searchParams and do setUsers
+  }, [searchParams]);
 
   const handleAccept = (id: number) => {
     UserRepository.getInstance()
@@ -75,6 +86,7 @@ const User = () => {
       <div className="d-flex py-2 justify-content-between">
         <div className="d-flex justify-content-start">
           <h3>User</h3>
+          {/* TODO Remove this if no need to have filter feature */}
           {/* <Select
             id="status"
             label="Status"
@@ -157,6 +169,37 @@ const User = () => {
           )}
         </>
       )}
+      <nav aria-label="user-pagination">
+        <ul className="pagination justify-content-center">
+          <li
+            className={`page-item ${currentPageNum === 1 ? "disabled" : null}`}
+          >
+            <Link to={`/user?page=${currentPageNum - 1}`} className="page-link">
+              Previous
+            </Link>
+          </li>
+          {listOfPage.map((item) => (
+            <li
+              className={`page-item ${item === currentPageNum ? "active" : ""}`}
+              key={item}
+            >
+              <Link to={`/user?page=${item}`} className="page-link">
+                {item}
+              </Link>
+            </li>
+          ))}
+
+          <li
+            className={`page-item ${
+              currentPageNum === maxPage ? "disabled" : null
+            }`}
+          >
+            <Link to={`/user?page=${currentPageNum + 1}`} className="page-link">
+              Next
+            </Link>
+          </li>
+        </ul>
+      </nav>
     </Container>
   );
 };
