@@ -19,6 +19,7 @@ const NewsPost = () => {
 
   const handleFormChange = (e: React.ChangeEvent) => {
     console.log('here');
+    console.log(isLoading);
 
     const target = e.target as HTMLInputElement;
     const id = target.id;

@@ -23,7 +23,7 @@ const User = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [searchParams] = useSearchParams();
-  const [maxPage, setMaxPage] = useState(5);
+  const [maxPage] = useState(5);
 
   const currentPage = searchParams.get("page");
   const currentPageNum = currentPage ? parseInt(currentPage) : 1;

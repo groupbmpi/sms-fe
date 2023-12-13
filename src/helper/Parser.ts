@@ -56,7 +56,7 @@ export const getStartDateByMonthYear = (month?: number, year?: number): Date => 
     }
     
     if (month === undefined) {
-        return new Date(year, currentDate.getMonth(), 1);
+        return new Date(year as number, currentDate.getMonth(), 1);
     }
 
     if (year === undefined) {
@@ -74,7 +74,7 @@ export const getEndDateByMonthYear = (month?: number, year?: number): Date => {
     }
 
     if (month === undefined) {
-        return new Date(year, currentDate.getMonth() + 1, 0);
+        return new Date(year as number, currentDate.getMonth() + 1, 0);
     }
 
     if (year === undefined) {

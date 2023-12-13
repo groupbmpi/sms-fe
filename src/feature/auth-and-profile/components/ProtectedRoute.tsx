@@ -1,4 +1,4 @@
-import { Navigate, useNavigate } from "react-router-dom";
+import {useNavigate } from "react-router-dom";
 import { Role } from "../model/AuthData";
 import { useAuth } from "../auth-and-profile";
 import { useEffect } from "react";
