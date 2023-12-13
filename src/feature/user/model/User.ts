@@ -48,3 +48,9 @@ export interface IFormUserUpdate extends IUpdateUserData{}
 export interface IFormRegisterAdmin{
     email : string
 }
+
+export interface IUserStatusDTO{
+    is_verified : boolean,
+    is_accepted : boolean,
+    is_activated : boolean
+}

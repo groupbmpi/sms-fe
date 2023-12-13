@@ -12,11 +12,12 @@ import { IFormUserUpdate } from "../feature/user/model/User";
 const UserEdit = () => {
   const {id} = useParams();
   const [formValue, setFormValue] = useState<RegisterForm>(new RegisterForm());
+  const [statusVerif, setStatusVerif] = useState<boolean>(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     UserRepository.getInstance()
-      .getUnverifiedUserById(parseInt(id as string))
+      .getUserById(parseInt(id as string))
       .then((user) => {
         setFormValue({
           fullName: user.namaLengkap,
@@ -33,6 +34,11 @@ const UserEdit = () => {
           postalCode: user.kodePos,
           isValid: formValue.isValid,
         });
+      });
+    UserRepository.getInstance()
+      .getStatusUserByID(parseInt(id as string))
+      .then((res) => {
+        setStatusVerif(res.data.is_verified);
       });
   }, []);
 
@@ -64,7 +70,7 @@ const UserEdit = () => {
     };
 
     UserRepository.getInstance()
-      .updateUnverifiedUserById(parseInt(id as string), updateFormValue)
+      .updateUserById(parseInt(id as string), updateFormValue)
       .then(() => {
         navigate("/user");
       });
@@ -81,6 +87,7 @@ const UserEdit = () => {
         redirectLinkOnDismiss="/user"
         dismissText="Batal"
         isEdit={true}
+        isUsedOthersLembaga={statusVerif}
       />
     </Container>
   );

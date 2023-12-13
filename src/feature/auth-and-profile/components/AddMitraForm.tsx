@@ -13,6 +13,7 @@ export const AddMitraForm = ({
   redirectLinkOnDismiss,
   dismissText,
   isEdit,
+  isUsedOthersLembaga,
 }: {
   formValue: RegisterForm;
   setFormValue: React.Dispatch<React.SetStateAction<RegisterForm>>,
@@ -21,6 +22,7 @@ export const AddMitraForm = ({
   redirectLinkOnDismiss: string;
   dismissText: string;
   isEdit?: boolean;
+  isUsedOthersLembaga?: boolean;
 }) => {
   const [categories, setCategories] = useState<ICategoriesResponseData>(
     {} as ICategoriesResponseData
@@ -35,12 +37,17 @@ export const AddMitraForm = ({
       .then((response) => {
         const newCategories = response.data
 
+        console.log(newCategories)
         setCategories(newCategories);
         setCity(newCategories.daerah[0].kabupatenKota);
-        setLembaga([
-          ...newCategories.lembaga[0].lembaga,
-          "Lainnya",
-        ])
+        if(isUsedOthersLembaga){
+          setLembaga([
+            ...newCategories.lembaga[0].lembaga,
+            "Lainnya",
+          ])
+        }else{
+          setLembaga(newCategories.lembaga[0].lembaga)
+        }
 
         // check if form is edit
         if (!isEdit) {
@@ -73,7 +80,14 @@ export const AddMitraForm = ({
     )
 
     if(typeof newLembaga !== "undefined"){
-      setLembaga(newLembaga[0].lembaga)
+      if(isUsedOthersLembaga){
+        setLembaga([
+          ...newLembaga[0].lembaga,
+          "Lainnya",
+        ])
+      }else{
+        setLembaga(newLembaga[0].lembaga)
+      }
     }
   }, [categories.lembaga, formValue.category])
 
