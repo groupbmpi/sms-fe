@@ -23,8 +23,13 @@ export class UserRepository extends HttpClient {
         return data;
     }
 
-    public getAllUnverifiedUsers = async () => {
-        const data = await this.instance.get<ResponseType<IUnverifiedUserResponseData>>('user/verify');
+    public getAllUnverifiedUsers = async (page: number,limit: number = 5) => {
+        const data = await this.instance.get<ResponseType<IUnverifiedUserResponseData>>('user/verify',{
+            params: {
+                page: page,
+                limit: limit
+            }
+        });
         return data;
     }
 

@@ -1,12 +1,14 @@
 import { Link } from "react-router-dom";
 
 export const UserTableRow = ({
+  id,
   idx,
   name,
   category,
   handleAccept,
   handleReject
 }: {
+  id : number;
   idx: number;
   name: string;
   category: string;
@@ -26,7 +28,7 @@ export const UserTableRow = ({
       </td>
       <td>
         <div className="d-flex gap-2">
-          <Link to={`/user/${idx}/edit`}>
+          <Link to={`/user/${id}/edit`}>
             <button className="btn btn-primary">Edit</button>
           </Link>
           <button className="btn btn-success" onClick={handleAccept}>Terima</button>

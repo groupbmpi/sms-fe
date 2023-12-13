@@ -27,7 +27,8 @@ export interface IUserData{
 export interface UnverifiedUser extends IUserData{}
 
 export interface IUnverifiedUserResponseData {
-    user : UnverifiedUser[]
+    listUser : UnverifiedUser[]
+    countPages : number
 }
 type PropsFormUserRegisterOmitted = "id" | "linkFoto"
 export interface IFormUserRegister extends Omit<IUserData, PropsFormUserRegisterOmitted>{}

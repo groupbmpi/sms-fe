@@ -23,7 +23,7 @@ const User = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [searchParams] = useSearchParams();
-  const [maxPage] = useState(5);
+  const [maxPage, setMaxPage] = useState(5);
 
   const currentPage = searchParams.get("page");
   const currentPageNum = currentPage ? parseInt(currentPage) : 1;
@@ -36,16 +36,15 @@ const User = () => {
   useEffect(() => {
     setIsLoading(true);
     UserRepository.getInstance()
-      .getAllUnverifiedUsers()
+      .getAllUnverifiedUsers(currentPageNum)
       .then((res) => {
-        setUsers(res.data.user);
-        // TODO setMax page
-        console.log(res.data.user);
+        setUsers(res.data.listUser);
+        setMaxPage(res.data.countPages);
       })
       .finally(() => {
         setIsLoading(false);
       });
-  }, []);
+  }, [currentPageNum]);
 
   useEffect(() => {
     // TODO fetch users with filter and do setUsers
@@ -60,11 +59,11 @@ const User = () => {
       .verifyUser(id, true)
       .then(() => {
         UserRepository.getInstance()
-          .getAllUnverifiedUsers()
-          .then((res) => {
-            setUsers(res.data.user);
-            console.log(res.data.user);
-          });
+        .getAllUnverifiedUsers(currentPageNum)
+        .then((res) => {
+          setUsers(res.data.listUser);
+          setMaxPage(res.data.countPages);
+        });
       });
   };
 
@@ -73,11 +72,11 @@ const User = () => {
       .verifyUser(id, false)
       .then(() => {
         UserRepository.getInstance()
-          .getAllUnverifiedUsers()
-          .then((res) => {
-            setUsers(res.data.user);
-            console.log(res.data.user);
-          });
+        .getAllUnverifiedUsers(currentPageNum)
+        .then((res) => {
+          setUsers(res.data.listUser);
+          setMaxPage(res.data.countPages);
+        });
       });
   };
 
@@ -154,10 +153,11 @@ const User = () => {
                 </tr>
               </thead>
               <tbody>
-                {users.map((user) => (
+                {users.map((user,idx) => (
                   <UserTableRow
                     key={user.id}
-                    idx={user.id}
+                    id={user.id}
+                    idx={idx+1}
                     name={user.namaLengkap}
                     category="Unverified"
                     handleAccept={() => handleAccept(user.id)}
