@@ -45,6 +45,7 @@ export interface IFormNewsByIdResponseData {
 export interface NewsForm {
     title: string,
     detail: string,
+    date: Date,
     photoLink: string,
     publicationLink: string,
 }

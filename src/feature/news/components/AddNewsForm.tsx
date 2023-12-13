@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Input, InputType } from "../../../core/core";
 import { NewsForm } from "../news";
+import { useEffect } from "react";
 
 export const AddNewsForm = ({
   formValue,
@@ -13,6 +14,11 @@ export const AddNewsForm = ({
   handleSubmit: () => void;
   affirmativeText?: string;
 }) => {
+
+  useEffect(() => {
+    console.log(formValue)
+  }, [formValue])
+
   return (
     <form className="px-5">
       <Input
@@ -27,6 +33,13 @@ export const AddNewsForm = ({
         id="detail"
         placeholder="Deskripsi berita"
         value={formValue.detail}
+        onChange={handleFormChange}
+      />
+      <Input
+        type={InputType.date}
+        id="date"
+        placeholder=""
+        value={formValue.date?.toString()}
         onChange={handleFormChange}
       />
       <Input
