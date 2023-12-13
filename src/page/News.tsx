@@ -219,8 +219,8 @@ const News = () => {
       ) : (
         <>
           {news.news.map((item) => (
-            <>
-              <div className="card p-1 my-2" key={item.id}>
+            <div key={item.id}>
+              <div className="card p-1 my-2">
                 <div className="d-flex flex-row">
                   <img
                     src={item.photoLink}
@@ -278,7 +278,7 @@ const News = () => {
                 handleDismiss={() => setShowDeleteConfirmation(false)}
                 affirmativeText="Hapus"
               />
-            </>
+            </div>
           ))}
         </>
       )}

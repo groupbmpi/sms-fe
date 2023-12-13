@@ -2,10 +2,16 @@ import { useCallback, useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { ActivityForm, ActivityRepository, AddActivityForm, IActivityReportDTO } from "../feature/activity/activity";
+import {
+  ActivityForm,
+  ActivityRepository,
+  AddActivityForm,
+  IActivityReportDTO,
+} from "../feature/activity/activity";
 import { IActivityReportQuery } from "../feature/activity/model/ActivityRequest";
 import { IActivitiesResponseData } from "../feature/activity/model/ActivityResponse";
 import moment from "moment";
+import { PopupModal } from "../core/Modal";
 
 const ActivityDetail = () => {
   const { id } = useParams();
@@ -13,29 +19,43 @@ const ActivityDetail = () => {
   const [onEditMode, setOnEditMode] = useState<boolean>(false);
   const navigate = useNavigate();
 
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
   const activityRepo = ActivityRepository.getInstance();
-  
-  const fetchDataActivities = useCallback(async(query: IActivityReportQuery) : Promise<IActivitiesResponseData> => {
-    const res : IActivitiesResponseData = await activityRepo.getAllActivityReport(query)
-    return res;
-  }, [activityRepo])
+
+  const fetchDataActivities = useCallback(
+    async (query: IActivityReportQuery): Promise<IActivitiesResponseData> => {
+      const res: IActivitiesResponseData =
+        await activityRepo.getAllActivityReport(query);
+      return res;
+    },
+    [activityRepo]
+  );
 
   useEffect(() => {
-    if(typeof id === 'undefined') return
+    if (typeof id === "undefined") return;
 
     fetchDataActivities({
       id: parseInt(id),
     }).then((res: IActivitiesResponseData) => {
-        const activity : IActivityReportDTO = res.data[0];
+      const activity: IActivityReportDTO = res.data[0];
 
-        activity.jadwalMulai = moment.parseZone(activity.jadwalMulai).local().format().slice(0, -6)
-        activity.jadwalSelesai = moment.parseZone(activity.jadwalSelesai).local().format().slice(0, -6)
+      activity.jadwalMulai = moment
+        .parseZone(activity.jadwalMulai)
+        .local()
+        .format()
+        .slice(0, -6);
+      activity.jadwalSelesai = moment
+        .parseZone(activity.jadwalSelesai)
+        .local()
+        .format()
+        .slice(0, -6);
 
-        const newFormValue : ActivityForm = new ActivityForm();
-        newFormValue.fromDto(activity);
+      const newFormValue: ActivityForm = new ActivityForm();
+      newFormValue.fromDto(activity);
 
-        setFormValue(newFormValue);
-      });
+      setFormValue(newFormValue);
+    });
   }, [fetchDataActivities, id]);
 
   const handleAddSuccessIndicator = () => {
@@ -65,7 +85,6 @@ const ActivityDetail = () => {
     const target = e.target as HTMLInputElement;
     const { id, value } = target;
     if (id.includes("successIndicator") || id.includes("outputTarget")) {
-
       if (id.includes("successIndicator")) {
         const idx = parseInt(id[id.length - 1]) - 1;
         const newSuccessIndicator = formValue.successIndicator;
@@ -88,12 +107,12 @@ const ActivityDetail = () => {
   const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
 
-    formValue.setActivityForm(formValue)
+    formValue.setActivityForm(formValue);
 
     formValue.startDate = new Date(formValue.startDate).toUTCString();
     formValue.endDate = new Date(formValue.startDate).toUTCString();
 
-    const body : IActivityReportDTO = formValue.toDto()
+    const body: IActivityReportDTO = formValue.toDto();
 
     await activityRepo.updateActivityReport(body, formValue.id);
 
@@ -102,20 +121,28 @@ const ActivityDetail = () => {
 
   const handleChangeEditMode = () => {
     if (onEditMode) {
-      if(typeof id === 'undefined') return
+      if (typeof id === "undefined") return;
 
       fetchDataActivities({
         id: parseInt(id),
       }).then((res: IActivitiesResponseData) => {
-          const activity : IActivityReportDTO = res.data[0];
-          
-          activity.jadwalMulai = moment.parseZone(activity.jadwalMulai).local().format().slice(0, -6)
-          activity.jadwalSelesai = moment.parseZone(activity.jadwalSelesai).local().format().slice(0, -6)
+        const activity: IActivityReportDTO = res.data[0];
 
-          const newFormValue : ActivityForm = new ActivityForm();
-          newFormValue.fromDto(activity);
-          setFormValue(newFormValue);
-        });
+        activity.jadwalMulai = moment
+          .parseZone(activity.jadwalMulai)
+          .local()
+          .format()
+          .slice(0, -6);
+        activity.jadwalSelesai = moment
+          .parseZone(activity.jadwalSelesai)
+          .local()
+          .format()
+          .slice(0, -6);
+
+        const newFormValue: ActivityForm = new ActivityForm();
+        newFormValue.fromDto(activity);
+        setFormValue(newFormValue);
+      });
     }
     setOnEditMode(!onEditMode);
   };
@@ -123,31 +150,39 @@ const ActivityDetail = () => {
   const handleDelete = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
-    formValue.setActivityForm(formValue)
+    formValue.setActivityForm(formValue);
 
     await activityRepo.deleteActivityReport(formValue.id);
 
     navigate("/activity");
   };
 
-  const handleCancel = async() => {
-    if(typeof id === 'undefined') return
+  const handleCancel = async () => {
+    if (typeof id === "undefined") return;
 
     fetchDataActivities({
       id: parseInt(id),
     }).then((res: IActivitiesResponseData) => {
-        const activity : IActivityReportDTO = res.data[0];
-        
-        activity.jadwalMulai = moment.parseZone(activity.jadwalMulai).local().format().slice(0, -6)
-        activity.jadwalSelesai = moment.parseZone(activity.jadwalSelesai).local().format().slice(0, -6)
+      const activity: IActivityReportDTO = res.data[0];
 
-        const newFormValue : ActivityForm = new ActivityForm();
-        newFormValue.fromDto(activity);
-        setFormValue(newFormValue);
-      });
+      activity.jadwalMulai = moment
+        .parseZone(activity.jadwalMulai)
+        .local()
+        .format()
+        .slice(0, -6);
+      activity.jadwalSelesai = moment
+        .parseZone(activity.jadwalSelesai)
+        .local()
+        .format()
+        .slice(0, -6);
+
+      const newFormValue: ActivityForm = new ActivityForm();
+      newFormValue.fromDto(activity);
+      setFormValue(newFormValue);
+    });
 
     setOnEditMode(false);
-  }
+  };
 
   return (
     <Container>
@@ -161,7 +196,10 @@ const ActivityDetail = () => {
             >
               {onEditMode ? "Batal Ubah" : "Ubah"}
             </button>
-            <button className="btn btn-danger ms-2" onClick={handleDelete}>
+            <button
+              className="btn btn-danger ms-2"
+              onClick={() => setShowDeleteConfirm(true)}
+            >
               Hapus
             </button>
           </div>
@@ -178,6 +216,15 @@ const ActivityDetail = () => {
           onEditMode={onEditMode}
         />
       </div>
+      <PopupModal
+        show={showDeleteConfirm}
+        title="Hapus Kegiatan"
+        body="Apakah Anda yakin ingin menghapus kegiatan?"
+        handleClose={() => setShowDeleteConfirm(false)}
+        handleAffirmative={(e) => handleDelete(e)}
+        handleDismiss={() => setShowDeleteConfirm(false)}
+        affirmativeText="Ya"
+      />
     </Container>
   );
 };

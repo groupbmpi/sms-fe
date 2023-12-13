@@ -13,7 +13,7 @@ export const PopupModal = ({
   title: string;
   body: JSX.Element | string;
   handleClose: () => void;
-  handleAffirmative: () => void;
+  handleAffirmative: (e: any) => void;
   handleDismiss: () => void;
   affirmativeText?: string;
 }) => {
@@ -24,7 +24,7 @@ export const PopupModal = ({
       </Modal.Header>
       <Modal.Body>{body}</Modal.Body>
       <Modal.Footer>
-        <Button variant="primary" onClick={handleAffirmative}>
+        <Button variant="primary" onClick={(e) => handleAffirmative(e)}>
           {affirmativeText}
         </Button>
         <Button variant="secondary" onClick={handleDismiss}>

@@ -91,3 +91,14 @@ export const generateDateQueryStringFormat = (date: Date): string => {
 
     return `${yyyy}-${mm}-${dd}`;
 }
+
+export const getAllLembagaByKategori = (
+    kategori: string,
+    arrOfObj: {
+      kategori: string;
+      lembaga: string[];
+    }[]
+  ) => {
+    const lembaga = arrOfObj.filter((obj) => obj["kategori"] === kategori);
+    return lembaga[0].lembaga;
+  };
