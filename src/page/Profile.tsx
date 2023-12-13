@@ -4,6 +4,7 @@ import { Button, Container } from "react-bootstrap";
 import { ProfileForm } from "../feature/auth-and-profile/auth-and-profile";
 import { UserRepository } from "../feature/user/user";
 import { IUserData } from "../feature/user/model/User";
+import profilePhoto from "../assets/images/profile-icon.png";
 
 const initialProfileValue = {
   name: "John Doe",
@@ -14,7 +15,7 @@ const initialProfileValue = {
   email: "johndoe@gmail.com",
   phoneNumber: "",
   avatar: "",
-  linkFoto: ""
+  linkFoto: "",
 };
 
 const Profile = () => {
@@ -24,9 +25,9 @@ const Profile = () => {
   const [formValue, setFormValue] = useState(initialProfileValue);
 
   useEffect(() => {
-    const fetchData = async () =>  {
-        const data = await userRepo.getProfile();
-        return data;
+    const fetchData = async () => {
+      const data = await userRepo.getProfile();
+      return data;
     };
 
     fetchData().then((data) => {
@@ -44,27 +45,35 @@ const Profile = () => {
     });
   }, [userRepo]);
 
-  function getBase64(file: File, value: string) : Promise<{value: string, base64: string}> {
+  function getBase64(
+    file: File,
+    value: string
+  ): Promise<{ value: string; base64: string }> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
-      reader.onload = () => resolve({
-        value: value,
-        base64: reader.result as string
-      });
-      reader.onerror = error => reject(error);
+      reader.onload = () =>
+        resolve({
+          value: value,
+          base64: reader.result as string,
+        });
+      reader.onerror = (error) => reject(error);
     });
   }
 
   const handleFormChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
     const id = target.id;
-    if(id === "avatar") {
+    if (id === "avatar") {
       getBase64(target.files![0], target.value).then((data) => {
-        setFormValue({ ...formValue, avatar: data.value, linkFoto: data.base64});
+        setFormValue({
+          ...formValue,
+          avatar: data.value,
+          linkFoto: data.base64,
+        });
       });
       return;
-    } 
+    }
     const value = target.value;
     setFormValue({ ...formValue, [id]: value });
   };
@@ -83,7 +92,7 @@ const Profile = () => {
       ...prev,
       name: newProfile.namaLengkap,
       phoneNumber: newProfile.noHandphone,
-      linkFoto: newProfile.linkFoto
+      linkFoto: newProfile.linkFoto,
     }));
     setIsEditMode(!isEditMode);
   };
@@ -102,7 +111,11 @@ const Profile = () => {
       </div>
       <div className="d-flex justify-content-center my-2">
         <img
-          src={formValue.linkFoto}
+          src={
+            formValue.linkFoto == "" || formValue.linkFoto == null
+              ? profilePhoto
+              : formValue.linkFoto
+          }
           alt="profile"
           className="rounded-circle object-fit-cover"
           width={150}
