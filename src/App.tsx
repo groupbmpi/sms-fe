@@ -18,6 +18,8 @@ import AccountActivation from "./page/Activation";
 import ReportList from "./page/ReportList";
 import UserEdit from "./page/UserEdit";
 import NewsEdit from "./page/NewsEdit";
+import ActivityDetail from "./page/ActivityDetail";
+import Institution from "./page/Institution";
 
 import {
   AuthProvider,
@@ -26,7 +28,8 @@ import {
   RequiredNotLoggedInRoute,
   RoleBasedProtectedRoute,
 } from "./feature/auth-and-profile/auth-and-profile";
-import ActivityDetail from "./page/ActivityDetail";
+import InstitutionPost from "./page/InstitutionPost";
+import InstitutionEdit from "./page/InstitutionEdit";
 
 function App() {
   return (
@@ -162,6 +165,38 @@ function App() {
                       children={<UserEdit />}
                     />
                   }
+                />
+              }
+            />
+          </Route>
+          <Route path="institution">
+            <Route
+              index
+              element={
+                <RoleBasedProtectedRoute
+                  rolesAllowed={[Role.ADMIN, Role.SUPERADMIN]}
+                  redirectPath="/"
+                  children={<Institution />}
+                />
+              }
+            />
+            <Route
+              path="new"
+              element={
+                <RoleBasedProtectedRoute
+                  rolesAllowed={[Role.ADMIN, Role.SUPERADMIN]}
+                  redirectPath="/"
+                  children={<InstitutionPost />}
+                />
+              }
+            />
+            <Route
+              path=":id/edit"
+              element={
+                <RoleBasedProtectedRoute
+                  rolesAllowed={[Role.ADMIN, Role.SUPERADMIN]}
+                  redirectPath="/"
+                  children={<InstitutionEdit />}
                 />
               }
             />

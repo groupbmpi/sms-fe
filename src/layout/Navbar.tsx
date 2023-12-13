@@ -2,7 +2,7 @@ import { Button, Container, Nav, NavDropdown, Navbar } from "react-bootstrap";
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { MdAccountCircle } from "react-icons/md";
-import Cookies from "universal-cookie"
+import Cookies from "universal-cookie";
 
 import {
   ProtectedRoleComponent,
@@ -64,6 +64,14 @@ const NavigationBar = () => {
                   component={<NavigationItem to="/user" text="User" />}
                 />
               )}
+              {user && (
+                <ProtectedRoleComponent
+                  roleAllowed={[Role.ADMIN, Role.SUPERADMIN]}
+                  component={
+                    <NavigationItem to="/institution" text="Lembaga" />
+                  }
+                />
+              )}
             </Nav>
             <Nav className="d-flex align-items-center">
               {user && <MdAccountCircle size={20} />}
@@ -73,7 +81,11 @@ const NavigationBar = () => {
                   <NavigationDropdownItem to="/profile" text="Profile" />
                   <NavDropdown.Divider />
                   <div className="d-flex justify-content-center">
-                    <Button type="submit" variant="outline-danger" onClick={handleLogout}>
+                    <Button
+                      type="submit"
+                      variant="outline-danger"
+                      onClick={handleLogout}
+                    >
                       Logout
                     </Button>
                   </div>
