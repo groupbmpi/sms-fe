@@ -15,30 +15,30 @@ export const AddNewsForm = ({
     <form className="px-5">
       <Input
         type={InputType.text}
-        id="newsTitle"
+        id="title"
         placeholder="Judul berita"
-        value={formValue.newsTitle}
+        value={formValue.title}
         onChange={handleFormChange}
       />
       <Input
         type={InputType.textarea}
-        id="newsDescription"
+        id="detail"
         placeholder="Deskripsi berita"
-        value={formValue.newsDescription}
+        value={formValue.detail}
         onChange={handleFormChange}
       />
       <Input
         type={InputType.url}
-        id="newsImage"
+        id="photoLink"
         placeholder="Link gambar berita"
-        value={formValue.newsImage}
+        value={formValue.photoLink}
         onChange={handleFormChange}
       />
       <Input
         type={InputType.url}
-        id="newsLink"
+        id="publicationLink"
         placeholder="Link publikasi"
-        value={formValue.newsLink}
+        value={formValue.publicationLink}
         onChange={handleFormChange}
       />
       <div className="d-flex align-items-center justify-content-center gap-2">
