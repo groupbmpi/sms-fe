@@ -7,19 +7,20 @@ import {
   Role,
 } from "../feature/auth-and-profile/auth-and-profile";
 import { UserTableRow } from "../feature/user/user";
-import { UnverifiedUser } from "../feature/user/model/User";
+import { IVerifUserDTO } from "../feature/user/model/User";
 import { UserRepository } from "../feature/user/repository/UserRepo";
 import { Loading } from "../core/Loading";
 import { generateArray } from "../helper/Iterable";
+import { Select } from "../core/Form";
 
 const initialFilterValue = {
-  status: "all",
+  status: "Semua status",
   category: "all",
 };
 
 const User = () => {
-  const [filter] = useState(initialFilterValue);
-  const [users, setUsers] = useState<UnverifiedUser[]>([]);
+  const [filter,setFilter] = useState(initialFilterValue);
+  const [users, setUsers] = useState<IVerifUserDTO[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const [searchParams] = useSearchParams();
@@ -33,10 +34,21 @@ const User = () => {
     Math.min(currentPageNum + 2, maxPage)
   );
 
+  const getKeyFilterStatus = (value: string) => {
+    if (value === "Semua status"){
+      return "all"
+    }else if (value === "Terverifikasi"){
+      return "verif"
+    }else {
+      return "unverif"
+    }
+  }
+
   useEffect(() => {
     setIsLoading(true);
+    console.log('filter',filter)
     UserRepository.getInstance()
-      .getAllUnverifiedUsers(currentPageNum)
+      .getAllUsers(currentPageNum,getKeyFilterStatus(filter.status))
       .then((res) => {
         setUsers(res.data.listUser);
         setMaxPage(res.data.countPages);
@@ -44,7 +56,7 @@ const User = () => {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [currentPageNum]);
+  }, [filter,currentPageNum]);
 
   useEffect(() => {
     // TODO fetch users with filter and do setUsers
@@ -59,7 +71,7 @@ const User = () => {
       .verifyUser(id, true)
       .then(() => {
         UserRepository.getInstance()
-        .getAllUnverifiedUsers(currentPageNum)
+        .getAllUsers(currentPageNum,getKeyFilterStatus(filter.status))
         .then((res) => {
           setUsers(res.data.listUser);
           setMaxPage(res.data.countPages);
@@ -72,7 +84,7 @@ const User = () => {
       .verifyUser(id, false)
       .then(() => {
         UserRepository.getInstance()
-        .getAllUnverifiedUsers(currentPageNum)
+        .getAllUsers(currentPageNum,getKeyFilterStatus(filter.status))
         .then((res) => {
           setUsers(res.data.listUser);
           setMaxPage(res.data.countPages);
@@ -80,39 +92,33 @@ const User = () => {
       });
   };
 
+  const handleChangeFilter = (e: React.ChangeEvent) => {
+    const target = e.target as HTMLInputElement;
+    const { value } = target;
+    setFilter({
+      ...filter,
+      status: value
+    });
+  };
+
   return (
     <Container className="py-2">
       <div className="d-flex py-2 justify-content-between">
         <div className="d-flex justify-content-start">
           <h3>User</h3>
-          {/* TODO Remove this if no need to have filter feature */}
-          {/* <Select
+          <Select
             id="status"
             label="Status"
             values={
               new Map([
                 ["all", "Semua status"],
-                ["verified", "Terverifikasi"],
-                ["unverified", "Belum Terverifikasi"],
+                ["verif", "Terverifikasi"],
+                ["unverif", "Belum Terverifikasi"],
               ])
             }
             value={filter.status}
-            onChange={handleFormChange}
-          /> */}
-          {/* <Select
-            id="category"
-            label="Semua Kategori"
-            values={
-              new Map(
-                categoryKeys.map((key, idx) => [
-                  key,
-                  categoryValuesWithAll[idx],
-                ])
-              )
-            }
-            value={filter.category}
-            onChange={handleFormChange}
-          /> */}
+            onChange={handleChangeFilter}
+          />
         </div>
         <div className="d-flex justify-content-end">
           <div className="d-flex gap-2">
@@ -148,7 +154,6 @@ const User = () => {
                 <tr>
                   <th scope="col">#</th>
                   <th scope="col">Nama Lengkap</th>
-                  <th scope="col">Kategori</th>
                   <th scope="col">Aksi</th>
                 </tr>
               </thead>
@@ -159,7 +164,7 @@ const User = () => {
                     id={user.id}
                     idx={idx+1}
                     name={user.namaLengkap}
-                    category="Unverified"
+                    statusVerify={user.is_verified}
                     handleAccept={() => handleAccept(user.id)}
                     handleReject={() => handleReject(user.id)}
                   />

@@ -4,14 +4,14 @@ export const UserTableRow = ({
   id,
   idx,
   name,
-  category,
+  statusVerify,
   handleAccept,
   handleReject
 }: {
   id : number;
   idx: number;
   name: string;
-  category: string;
+  statusVerify: boolean;
   handleAccept : () => void,
   handleReject : () => void
 }) => {
@@ -24,15 +24,12 @@ export const UserTableRow = ({
         </div>
       </td>
       <td>
-        <span className={`badge rounded-pill text-bg-warning`}>{category}</span>
-      </td>
-      <td>
         <div className="d-flex gap-2">
           <Link to={`/user/${id}/edit`}>
             <button className="btn btn-primary">Edit</button>
           </Link>
-          <button className="btn btn-success" onClick={handleAccept}>Terima</button>
-          <button className="btn btn-danger" onClick={handleReject}>Tolak</button>
+          <button disabled={statusVerify} className="btn btn-success" onClick={handleAccept}>Terima</button>
+          <button disabled={statusVerify} className="btn btn-danger" onClick={handleReject}>Tolak</button>
         </div>
       </td>
     </tr>

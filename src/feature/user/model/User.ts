@@ -24,10 +24,12 @@ export interface IUserData{
     kodePos : string,
 }
 
-export interface UnverifiedUser extends IUserData{}
+export interface IVerifUserDTO extends IUserData{
+    is_verified : boolean
+}
 
-export interface IUnverifiedUserResponseData {
-    listUser : UnverifiedUser[]
+export interface IUserResponseData {
+    listUser : IVerifUserDTO[]
     countPages : number
 }
 type PropsFormUserRegisterOmitted = "id" | "linkFoto"

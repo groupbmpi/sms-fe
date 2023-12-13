@@ -219,7 +219,7 @@ export const AddMitraForm = ({
           disabled={!formValue.isValid()}
           onClick={onSubmit}
         >
-          Daftar
+          Simpan
         </button>
       </div>
       <div className="d-flex justify-content-center align-items-center mb-2">

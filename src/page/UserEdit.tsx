@@ -18,7 +18,6 @@ const UserEdit = () => {
     UserRepository.getInstance()
       .getUnverifiedUserById(parseInt(id as string))
       .then((user) => {
-        console.log('set',user);
         setFormValue({
           fullName: user.namaLengkap,
           email: user.email,

@@ -1,5 +1,5 @@
 import { HttpClient } from "../../httpClient";
-import { ICategoriesResponseData,IFormRegisterAdmin,IFormUserRegister,IFormUserUpdate,IUnverifiedUserResponseData, IUpdateUserData, IUserData, IUserForm } from "../model/User";
+import { ICategoriesResponseData,IFormRegisterAdmin,IFormUserRegister,IFormUserUpdate, IUpdateUserData, IUserData, IUserForm, IUserResponseData } from "../model/User";
 import {ResponseType} from "../../response";
 import { AxiosResponse } from "axios";
 
@@ -23,9 +23,10 @@ export class UserRepository extends HttpClient {
         return data;
     }
 
-    public getAllUnverifiedUsers = async (page: number,limit: number = 5) => {
-        const data = await this.instance.get<ResponseType<IUnverifiedUserResponseData>>('user/verify',{
+    public getAllUsers = async (page: number,filter:string,limit: number = 5) => {
+        const data = await this.instance.get<ResponseType<IUserResponseData>>('user/verify',{
             params: {
+                filterVerif: filter,
                 page: page,
                 limit: limit
             }
