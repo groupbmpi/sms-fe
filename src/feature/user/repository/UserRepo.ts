@@ -51,6 +51,11 @@ export class UserRepository extends HttpClient {
         return res;
     }
 
+    public registerUserAutoAccepted = async (data : IFormUserRegister) => {
+        const res = await this.instance.post('user/register/accepted',data);
+        return res;
+    }
+
     public loginUser = async (email : string,password : string) => {
         const res = await this.instance.post('user/login',{
             email:email,

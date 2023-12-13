@@ -43,7 +43,7 @@ const UserPostMitra = () => {
 
     UserRepository
     .getInstance()
-    .registerUser(registerFormValue)
+    .registerUserAutoAccepted(registerFormValue)
     .then(() => {
       navigate("/user");
     })
