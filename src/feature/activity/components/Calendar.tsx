@@ -26,7 +26,7 @@ export const Calendar = ({ events }: { events: EventSourceInput }) => {
   }, [events]);
 
   return (
-    <>
+    <div className="mb-5">
       <FullCalendar
         locale="id"
         ref={calendarRef}
@@ -43,6 +43,6 @@ export const Calendar = ({ events }: { events: EventSourceInput }) => {
         dayMaxEventRows={true}
         dayMaxEvents={true}
       />
-    </>
+    </div>
   );
 };

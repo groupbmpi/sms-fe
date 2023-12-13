@@ -95,6 +95,7 @@ const NewsEdit = () => {
           formValue={formValue}
           handleFormChange={handleFormChange}
           handleSubmit={handleUpdate}
+          affirmativeText="Edit"
         />
       }
     </Container>

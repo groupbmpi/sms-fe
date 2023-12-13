@@ -6,10 +6,12 @@ export const AddNewsForm = ({
   formValue,
   handleFormChange,
   handleSubmit,
+  affirmativeText = "Submit",
 }: {
   formValue: NewsForm;
   handleFormChange: (e: React.ChangeEvent) => void;
   handleSubmit: () => void;
+  affirmativeText?: string;
 }) => {
   return (
     <form className="px-5">
@@ -47,7 +49,7 @@ export const AddNewsForm = ({
           className="btn btn-primary"
           onSubmit={handleSubmit}
         >
-          Submit
+          {affirmativeText}
         </button>
         <Link to="/news">
           <button type="button" className="btn btn-secondary">

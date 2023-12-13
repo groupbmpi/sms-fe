@@ -41,6 +41,7 @@ const InstitutionEdit = () => {
         handleFormChange={handleFormChange}
         handleSubmit={handleSubmit}
         handleCancel={handleCancel}
+        affirmativeText="Edit"
       />
     </Container>
   );

@@ -9,6 +9,7 @@ export const AddLembagaForm = ({
   handleFormChange,
   handleSubmit,
   handleCancel,
+  affirmativeText = "Submit",
 }: {
   formValue: {
     nama: string;
@@ -23,6 +24,7 @@ export const AddLembagaForm = ({
   handleFormChange: (e: React.ChangeEvent) => void;
   handleSubmit: (event: React.MouseEvent<HTMLElement>) => void;
   handleCancel: () => void;
+  affirmativeText?: string;
 }) => {
   const [listKategori, setListKategori] = useState<string[]>([]);
 
@@ -56,7 +58,7 @@ export const AddLembagaForm = ({
       />
       <div className="d-flex justify-content-center gap-2">
         <Button variant="primary" type="submit" onClick={handleSubmit}>
-          Submit
+          {affirmativeText}
         </Button>
         <Button variant="secondary" className="me-2" onClick={handleCancel}>
           Batal

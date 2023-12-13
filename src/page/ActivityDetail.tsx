@@ -214,6 +214,7 @@ const ActivityDetail = () => {
           formValue={formValue}
           setFormValue={setFormValue}
           onEditMode={onEditMode}
+          affirmativeText="Edit"
         />
       </div>
       <PopupModal

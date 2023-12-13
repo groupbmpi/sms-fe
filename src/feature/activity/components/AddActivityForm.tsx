@@ -14,15 +14,17 @@ export const AddActivityForm = ({
   handleDeleteSuccessIndicator,
   handleSubmit,
   handleCancel,
+  affirmativeText = "Submit",
   onEditMode = true,
 }: {
   formValue: ActivityForm;
-  setFormValue: React.Dispatch<React.SetStateAction<ActivityForm>>,
+  setFormValue: React.Dispatch<React.SetStateAction<ActivityForm>>;
   handleFormChange: (e: React.ChangeEvent) => void;
   handleAddSuccessIndicator: () => void;
   handleDeleteSuccessIndicator: () => void;
   handleSubmit: (event: React.MouseEvent<HTMLElement>) => void;
-  handleCancel : () => void,
+  handleCancel: () => void;
+  affirmativeText?: string;
   onEditMode?: boolean;
 }) => {
   const [categories, setCategories] = useState<IFormActResponseData>(
@@ -34,27 +36,26 @@ export const AddActivityForm = ({
     ActivityRepository.getInstance()
       .getActReportCategories()
       .then((data) => {
-        const newCategories : IFormActResponseData = data;
+        const newCategories: IFormActResponseData = data;
         setCategories(newCategories);
 
         setCity(newCategories.daerah[0].kabupatenKota);
 
-        setFormValue((prev : ActivityForm) => ({
+        setFormValue((prev: ActivityForm) => ({
           ...prev,
           activityField: newCategories.kategoriMasalah[0],
           province: newCategories.daerah[0].provinsi,
           city: newCategories.daerah[0].kabupatenKota[0],
           activityStatus: newCategories.statusKegiatan[0],
           activityMethod: newCategories.metodePelaksanaan[0],
-        }))
-    });
+        }));
+      });
   }, [setFormValue]);
 
   useEffect(() => {
     const newCity = categories.daerah?.filter(
       (category) => category.provinsi === formValue.province
     );
-
 
     if (typeof newCity !== "undefined" && newCity.length > 0) {
       setCity(newCity[0].kabupatenKota);
@@ -273,12 +274,12 @@ export const AddActivityForm = ({
             className="btn btn-primary"
             onClick={handleSubmit}
           >
-            Submit
+            {affirmativeText}
           </button>
-          <button 
-            type="button" 
+          <button
+            type="button"
             className="btn btn-secondary"
-            onClick={handleCancel}  
+            onClick={handleCancel}
           >
             Batal
           </button>

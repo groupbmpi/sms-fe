@@ -259,6 +259,7 @@ const News = () => {
                           </div>
                         }
                       />
+                      {/* TODO Change link to based on publicationLink field */}
                       <Link to={item.photoLink}>
                         <Button variant="warning">Lihat Sumber Berita</Button>
                       </Link>
