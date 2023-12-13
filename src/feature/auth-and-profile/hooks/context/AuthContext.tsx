@@ -27,6 +27,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             access: res.data.akses,
           });  
         setIsLoadComplete(true);
+        }).catch(() => {
+          setIsLoadComplete(true);
         })
     }
   }, [user]);

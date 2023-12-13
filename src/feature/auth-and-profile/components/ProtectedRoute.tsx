@@ -67,11 +67,14 @@ export const RoleBasedProtectedRoute = ({
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log('useEffect',isLoadComplete,user)
     if(!isLoadComplete) return;
     if (user) {
       if (!rolesAllowed.includes(user!.role)) {
         navigate(redirectPath);
       }
+    }else{
+      navigate(redirectPath);
     }
   }, [user, isLoadComplete]);
 
