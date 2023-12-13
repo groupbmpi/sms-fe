@@ -83,11 +83,11 @@ const Login = () => {
           >
             Masuk
           </button>
-          <Link to="/activation">
+          {/* <Link to="/activation">
             <button type="button" className="btn btn-secondary">
               Aktivasi
             </button>
-          </Link>
+          </Link> */}
         </div>
         <div className="d-flex justify-content-center align-items-center mb-2">
           <Link to="/register">
