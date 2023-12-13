@@ -7,11 +7,24 @@ import {
   ProtectedRoleComponent,
   Role,
 } from "../feature/auth-and-profile/auth-and-profile";
-import { IAllNewsRetDto, IFormAllNewsResponseData, INewsIdArgDto, INewsOptionsArgDto } from "../feature/news/model/News";
-import { generateDateQueryStringFormat, generateDateStringIdFormat, getEndDateByMonthYear, getNumberFromString, getStartDateByMonthYear, maxPageByRecords } from "../helper/Parser";
+import {
+  IAllNewsRetDto,
+  IFormAllNewsResponseData,
+  INewsIdArgDto,
+  INewsOptionsArgDto,
+} from "../feature/news/model/News";
+import {
+  generateDateQueryStringFormat,
+  generateDateStringIdFormat,
+  getEndDateByMonthYear,
+  getNumberFromString,
+  getStartDateByMonthYear,
+  maxPageByRecords,
+} from "../helper/Parser";
 import { ResponseType } from "../feature/response";
 import { NewsRepo } from "../feature/news/repository/NewsRepo";
 import { Loading } from "../core/Loading";
+import { PopupModal } from "../core/Modal";
 
 const News = () => {
   const [searchParams] = useSearchParams();
@@ -22,12 +35,13 @@ const News = () => {
   });
 
   const [isLoading, setIsLoading] = useState(true);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
   const [filter, setFilter] = useState<{
-    "year-news-filter"?: number,
-    "month-news-filter"?: number,
-    "institution-id-news-filter"?: number,
-    "creator-id-news-filter"?: number,    
+    "year-news-filter"?: number;
+    "month-news-filter"?: number;
+    "institution-id-news-filter"?: number;
+    "creator-id-news-filter"?: number;
   }>({
     "year-news-filter": undefined,
     "month-news-filter": undefined,
@@ -51,8 +65,8 @@ const News = () => {
 
     const { id, value } = target;
 
-    setFilter({ 
-      ...filter, 
+    setFilter({
+      ...filter,
       [id]: getNumberFromString(value),
     });
   };
@@ -63,23 +77,32 @@ const News = () => {
     const newsArgDto: INewsOptionsArgDto = {
       institutionId: filter["institution-id-news-filter"],
       creatorId: filter["creator-id-news-filter"],
-      startDateAt: filter["month-news-filter"] !== undefined || filter["year-news-filter"] !== undefined
-        ? generateDateQueryStringFormat(getStartDateByMonthYear(
-            filter["month-news-filter"],
-            filter["year-news-filter"]
-          ))
-        : undefined,
-      endDateAt: filter["month-news-filter"] !== undefined || filter["year-news-filter"] !== undefined
-        ? generateDateQueryStringFormat(getEndDateByMonthYear(
-            filter["month-news-filter"],
-            filter["year-news-filter"]
-          ))
-        : undefined,
+      startDateAt:
+        filter["month-news-filter"] !== undefined ||
+        filter["year-news-filter"] !== undefined
+          ? generateDateQueryStringFormat(
+              getStartDateByMonthYear(
+                filter["month-news-filter"],
+                filter["year-news-filter"]
+              )
+            )
+          : undefined,
+      endDateAt:
+        filter["month-news-filter"] !== undefined ||
+        filter["year-news-filter"] !== undefined
+          ? generateDateQueryStringFormat(
+              getEndDateByMonthYear(
+                filter["month-news-filter"],
+                filter["year-news-filter"]
+              )
+            )
+          : undefined,
       limit: maxRecordsPerPage,
       page: currentPageNum,
-    }
+    };
 
-    NewsRepo.getInstance().getAllNews(newsArgDto)
+    NewsRepo.getInstance()
+      .getAllNews(newsArgDto)
       .then(function (response: ResponseType<IFormAllNewsResponseData>) {
         const data = response.data;
 
@@ -88,7 +111,7 @@ const News = () => {
             return {
               ...item,
               createdAt: new Date(item.createdAt),
-              updatedAt: new Date(item.updatedAt)
+              updatedAt: new Date(item.updatedAt),
             };
           }),
           totalRecords: data.totalRecords,
@@ -104,13 +127,16 @@ const News = () => {
   const handleDelete = (newsId: number) => {
     setIsLoading(true);
 
-    const newsArgDto: INewsIdArgDto = { 
-      id: newsId 
-    }
+    const newsArgDto: INewsIdArgDto = {
+      id: newsId,
+    };
 
-    NewsRepo.getInstance().deleteNews(newsArgDto)
+    NewsRepo.getInstance()
+      .deleteNews(newsArgDto)
       .then(function () {
-        const updatedNews = news.news.filter((item) => item.id !== newsArgDto.id);
+        const updatedNews = news.news.filter(
+          (item) => item.id !== newsArgDto.id
+        );
 
         const updatedTotalRecords = news.totalRecords - 1;
 
@@ -119,7 +145,7 @@ const News = () => {
           totalRecords: updatedTotalRecords,
         });
 
-        alert('Berhasil menghapus berita');
+        alert("Berhasil menghapus berita");
       })
       .finally(function () {
         setIsLoading(false);
@@ -130,7 +156,7 @@ const News = () => {
     <Container>
       <div className="d-flex py-2 justify-content-between">
         <div className="d-flex gap-2 justify-content-start">
-        <h3>Berita</h3>
+          <h3>Berita</h3>
           <select
             className="form-control"
             id="year-news-filter"
@@ -190,48 +216,73 @@ const News = () => {
 
       {isLoading ? (
         <Loading />
-      )  : (
+      ) : (
         <>
           {news.news.map((item) => (
-            <div className="card p-1 my-2" key={item.id}>
-              <div className="d-flex flex-row">
-                <img
-                  src={item.photoLink}
-                  className="card-img-top"
-                  alt={`image-news-${item.id}`}
-                  style={{ width: "250px", height: "200px", borderRadius: "10px" }}
-                />
-                <div className="card-body d-flex flex-column justify-content-around">
-                  <h5 className="card-title">{item.title}</h5>
-                  <div className="text-body-tertiary fst-italic">
-                    {generateDateStringIdFormat(item.updatedAt)} - {'John Doe'}
-                  </div>
-                  <p className="card-text">{item.detail.substring(0, 100)}</p>
-                  <div className="d-flex flex-justify-start gap-1">
-                    <Link to={`/news/${item.id}`}>
-                      <Button variant="primary">Read More</Button>
-                    </Link>
-                    <ProtectedRoleComponent
-                      roleAllowed={[Role.ADMIN, Role.SUPERADMIN]}
-                      component={
-                        <div className="d-flex gap-1">
-                          <Link to={`/news/${item.id}/edit`}>
-                            <Button variant="secondary">Edit</Button>
-                          </Link>
-                          <Button variant="danger" onClick={() => handleDelete(item.id)}>
-                            Delete
-                          </Button>
-                        </div>
-                      }
-                    />
+            <>
+              <div className="card p-1 my-2" key={item.id}>
+                <div className="d-flex flex-row">
+                  <img
+                    src={item.photoLink}
+                    className="card-img-top"
+                    alt={`image-news-${item.id}`}
+                    style={{
+                      width: "250px",
+                      height: "200px",
+                      borderRadius: "10px",
+                    }}
+                  />
+                  <div className="card-body d-flex flex-column justify-content-around">
+                    <h5 className="card-title">{item.title}</h5>
+                    <div className="text-body-tertiary fst-italic">
+                      {generateDateStringIdFormat(item.updatedAt)} -{" "}
+                      {"John Doe"}
+                    </div>
+                    <p className="card-text">{item.detail.substring(0, 100)}</p>
+                    <div className="d-flex flex-justify-start gap-1">
+                      <Link to={`/news/${item.id}`}>
+                        <Button variant="primary">Baca Selengkapnya</Button>
+                      </Link>
+                      <ProtectedRoleComponent
+                        roleAllowed={[Role.ADMIN, Role.SUPERADMIN]}
+                        component={
+                          <div className="d-flex gap-1">
+                            <Link to={`/news/${item.id}/edit`}>
+                              <Button variant="secondary">Edit</Button>
+                            </Link>
+                            <Button
+                              variant="danger"
+                              onClick={() => setShowDeleteConfirmation(true)}
+                            >
+                              Delete
+                            </Button>
+                          </div>
+                        }
+                      />
+                      <Link to={item.photoLink}>
+                        <Button variant="warning">Lihat Sumber Berita</Button>
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+              <PopupModal
+                show={showDeleteConfirmation}
+                title="Konfirmasi Hapus Berita"
+                body="Apakah anda yakin ingin menghapus berita ini?"
+                handleClose={() => setShowDeleteConfirmation(false)}
+                handleAffirmative={() => {
+                  setShowDeleteConfirmation(false);
+                  handleDelete(item.id);
+                }}
+                handleDismiss={() => setShowDeleteConfirmation(false)}
+                affirmativeText="Hapus"
+              />
+            </>
           ))}
         </>
       )}
-      
+
       <nav aria-label="news-pagination">
         <ul className="pagination justify-content-center">
           <li

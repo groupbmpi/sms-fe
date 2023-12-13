@@ -7,6 +7,7 @@ export const PopupModal = ({
   handleClose,
   handleAffirmative,
   handleDismiss,
+  affirmativeText = "Save Changes",
 }: {
   show: boolean;
   title: string;
@@ -14,6 +15,7 @@ export const PopupModal = ({
   handleClose: () => void;
   handleAffirmative: () => void;
   handleDismiss: () => void;
+  affirmativeText?: string;
 }) => {
   return (
     <Modal show={show} onHide={handleClose}>
@@ -23,7 +25,7 @@ export const PopupModal = ({
       <Modal.Body>{body}</Modal.Body>
       <Modal.Footer>
         <Button variant="primary" onClick={handleAffirmative}>
-          Save Changes
+          {affirmativeText}
         </Button>
         <Button variant="secondary" onClick={handleDismiss}>
           Close
