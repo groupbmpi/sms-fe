@@ -26,6 +26,7 @@ import { NewsRepo } from "../feature/news/repository/NewsRepo";
 import { Loading } from "../core/Loading";
 import { UserRepository } from "../feature/user/user";
 import { NewsCard } from "../feature/news/news";
+import { toast } from "react-toastify";
 
 const ALL_LEMBAGA = "Semua Lembaga";
 const ALL_KATEGORI = "Semua Kategori";
@@ -185,8 +186,6 @@ const News = () => {
   }, [filter["kategori-inst-news-filter"]]);
 
   const handleDelete = (newsId: number) => {
-    setIsLoading(true);
-
     const newsArgDto: INewsIdArgDto = {
       id: newsId,
     };
@@ -205,10 +204,10 @@ const News = () => {
           totalRecords: updatedTotalRecords,
         });
 
-        alert("Berhasil menghapus berita");
+        toast.success("Berhasil menghapus berita");
       })
-      .finally(function () {
-        setIsLoading(false);
+      .catch((err) => {
+        toast.error(err.response.data.meta.message);
       });
   };
 
