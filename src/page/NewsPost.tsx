@@ -15,6 +15,7 @@ const NewsPost = () => {
     detail: "",
     photoLink: "",
     publicationLink: "",
+    date: new Date(),
   });
 
   const handleFormChange = (e: React.ChangeEvent) => {
