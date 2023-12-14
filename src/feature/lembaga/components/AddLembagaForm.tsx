@@ -2,6 +2,7 @@ import { Button } from "react-bootstrap";
 import { Input, InputType, Select } from "../../../core/core";
 import { useEffect, useState } from "react";
 import { LembagaRepository } from "../lembaga";
+import { ILembagaDTO } from "../model/lembaga";
 
 export const AddLembagaForm = ({
   formValue,
@@ -11,16 +12,8 @@ export const AddLembagaForm = ({
   handleCancel,
   affirmativeText = "Submit",
 }: {
-  formValue: {
-    nama: string;
-    kategori: string;
-  };
-  setFormValue: React.Dispatch<
-    React.SetStateAction<{
-      nama: string;
-      kategori: string;
-    }>
-  >;
+  formValue: ILembagaDTO;
+  setFormValue: React.Dispatch<React.SetStateAction<ILembagaDTO>>;
   handleFormChange: (e: React.ChangeEvent) => void;
   handleSubmit: (event: React.MouseEvent<HTMLElement>) => void;
   handleCancel: () => void;
