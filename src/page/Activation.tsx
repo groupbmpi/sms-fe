@@ -22,7 +22,6 @@ const AccountActivation = () => {
   };
 
   const handleActivation = () => {
-    console.log(formValue)
     UserRepository.getInstance()
       .activateUser(formValue.email, formValue.password, formValue.otp)
       .then(() => {

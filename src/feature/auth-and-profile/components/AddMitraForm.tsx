@@ -16,7 +16,7 @@ export const AddMitraForm = ({
   isUsedOthersLembaga,
 }: {
   formValue: RegisterForm;
-  setFormValue: React.Dispatch<React.SetStateAction<RegisterForm>>,
+  setFormValue: React.Dispatch<React.SetStateAction<RegisterForm>>;
   handleFormChange: (e: React.ChangeEvent) => void;
   onSubmit: () => void;
   redirectLinkOnDismiss: string;
@@ -26,32 +26,27 @@ export const AddMitraForm = ({
 }) => {
   const [categories, setCategories] = useState<ICategoriesResponseData>(
     {} as ICategoriesResponseData
-    );
+  );
   const [city, setCity] = useState<string[]>([]);
-  const [lembaga, setLembaga] = useState<string[]>([])
-
+  const [lembaga, setLembaga] = useState<string[]>([]);
 
   useEffect(() => {
     UserRepository.getInstance()
       .getAllCategories()
       .then((response) => {
-        const newCategories = response.data
+        const newCategories = response.data;
 
-        console.log(newCategories)
         setCategories(newCategories);
         setCity(newCategories.daerah[0].kabupatenKota);
-        if(isUsedOthersLembaga){
-          setLembaga([
-            ...newCategories.lembaga[0].lembaga,
-            "Lainnya",
-          ])
-        }else{
-          setLembaga(newCategories.lembaga[0].lembaga)
+        if (isUsedOthersLembaga) {
+          setLembaga([...newCategories.lembaga[0].lembaga, "Lainnya"]);
+        } else {
+          setLembaga(newCategories.lembaga[0].lembaga);
         }
 
         // check if form is edit
         if (!isEdit) {
-          setFormValue((prev : RegisterForm) => ({
+          setFormValue((prev: RegisterForm) => ({
             ...prev,
             institution: newCategories.lembaga[0].lembaga[0],
             category: newCategories.kategori[0],
@@ -73,23 +68,19 @@ export const AddMitraForm = ({
     }
   }, [formValue.province, categories.daerah]);
 
-
   useEffect(() => {
     const newLembaga = categories.lembaga?.filter(
       (lembaga) => lembaga.kategori === formValue.category
-    )
+    );
 
-    if(typeof newLembaga !== "undefined"){
-      if(isUsedOthersLembaga){
-        setLembaga([
-          ...newLembaga[0].lembaga,
-          "Lainnya",
-        ])
-      }else{
-        setLembaga(newLembaga[0].lembaga)
+    if (typeof newLembaga !== "undefined") {
+      if (isUsedOthersLembaga) {
+        setLembaga([...newLembaga[0].lembaga, "Lainnya"]);
+      } else {
+        setLembaga(newLembaga[0].lembaga);
       }
     }
-  }, [categories.lembaga, formValue.category])
+  }, [categories.lembaga, formValue.category]);
 
   return (
     <form className="">
@@ -119,6 +110,15 @@ export const AddMitraForm = ({
       </div>
       <div className="d-flex justify-content-center align-items-center">
         <Select
+          id="institution"
+          label="Institusi"
+          onChange={handleFormChange}
+          value={formValue.institution}
+          values={new Map(lembaga?.map((lembaga) => [lembaga, lembaga]) || [])}
+        />
+      </div>
+      <div className="d-flex justify-content-center align-items-center">
+        <Select
           id="province"
           label="Provinsi"
           values={
@@ -134,19 +134,6 @@ export const AddMitraForm = ({
           required
         />
       </div>
-      <div className="d-flex justify-content-center align-items-center">
-        <Select
-          id="institution"
-          label="Institusi"
-          onChange={handleFormChange}
-          value={formValue.institution}
-          values={
-            new Map(
-              lembaga?.map((lembaga) => [lembaga, lembaga]) || []
-            )
-          }
-        />
-      </div>
       {formValue.institution === "Lainnya" && (
         <div className="d-flex justify-content-center align-items-center">
           <Input
@@ -159,13 +146,15 @@ export const AddMitraForm = ({
           />
         </div>
       )}
-      <Select
-        id="city"
-        label="Kota"
-        onChange={handleFormChange}
-        value={formValue.city}
-        values={new Map(city.map((kota) => [kota, kota]) || [])}
-      />
+      <div className="d-flex justify-content-center align-items-center">
+        <Select
+          id="city"
+          label="Kota"
+          onChange={handleFormChange}
+          value={formValue.city}
+          values={new Map(city.map((kota) => [kota, kota]) || [])}
+        />
+      </div>
       <div className="d-flex justify-content-center align-items-center">
         <Input
           type={InputType.text}

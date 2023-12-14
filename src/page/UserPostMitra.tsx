@@ -1,5 +1,5 @@
 import { Container } from "react-bootstrap";
-import {useState } from "react";
+import { useState } from "react";
 
 import {
   AddMitraForm,
@@ -21,33 +21,30 @@ const UserPostMitra = () => {
       [id]: value,
       isValid: formValue.isValid,
     });
-
-    console.log(formValue);
   };
 
   const handleSubmit = () => {
-    const registerFormValue : IFormUserRegister = {
-      alamat : formValue.streetName,
-      email : formValue.email,
-      kategori : formValue.category,
-      kabupatenKota : formValue.city,
-      kecamatan : formValue.subDistrict,
-      kelurahan : formValue.village,
-      namaLengkap : formValue.fullName,
-      kodePos : formValue.postalCode,
-      lembaga : formValue.institution,
-      lembagaOthers : formValue.institutionName,
-      noHandphone : formValue.phoneNumber,
-      provinsi : formValue.province,
-    }
+    const registerFormValue: IFormUserRegister = {
+      alamat: formValue.streetName,
+      email: formValue.email,
+      kategori: formValue.category,
+      kabupatenKota: formValue.city,
+      kecamatan: formValue.subDistrict,
+      kelurahan: formValue.village,
+      namaLengkap: formValue.fullName,
+      kodePos: formValue.postalCode,
+      lembaga: formValue.institution,
+      lembagaOthers: formValue.institutionName,
+      noHandphone: formValue.phoneNumber,
+      provinsi: formValue.province,
+    };
 
-    UserRepository
-    .getInstance()
-    .registerUserAutoAccepted(registerFormValue)
-    .then(() => {
-      navigate("/user");
-    })
-  }
+    UserRepository.getInstance()
+      .registerUserAutoAccepted(registerFormValue)
+      .then(() => {
+        navigate("/user");
+      });
+  };
 
   return (
     <Container className="my-2">
