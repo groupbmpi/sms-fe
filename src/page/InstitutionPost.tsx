@@ -24,7 +24,7 @@ const InstitutionPost = () => {
 
   const handleSubmit = (e: React.MouseEvent) => {
     e.preventDefault();
-    console.log(formValue);
+    // TODO add lembaga based of formvalue
   };
 
   const handleCancel = () => {

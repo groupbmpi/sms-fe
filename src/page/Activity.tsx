@@ -48,16 +48,11 @@ const Activity = () => {
   const handleChangeFilter = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
     const { value, id } = target;
-    console.log(value, id);
     setFilter({
       ...filter,
       [id]: value,
     });
   };
-
-  useEffect(() => {
-    console.log(filter);
-  }, [filter]);
 
   useEffect(() => {
     fetchDataActivities({}).then((res: IActivitiesResponseData) => {
@@ -79,7 +74,6 @@ const Activity = () => {
   useEffect(() => {
     userRepo.getAllCategories().then((res) => {
       const lembagaParsed: string[] = [];
-      console.log(res.data);
 
       res.data.lembaga.forEach((data) => {
         lembagaParsed.push(...data.lembaga);
@@ -120,7 +114,6 @@ const Activity = () => {
   useEffect(() => {
     if (filter["filter-kategori"] == ALL_KATEGORI) return;
     userRepo.getAllCategories().then((res) => {
-      console.log(res.data);
 
       const filteredLembaga = getAllLembagaByKategori(
         filter["filter-kategori"],

@@ -14,10 +14,7 @@ export const AddNewsForm = ({
   handleSubmit: () => void;
   affirmativeText?: string;
 }) => {
-
-  useEffect(() => {
-    console.log(formValue)
-  }, [formValue])
+  useEffect(() => {}, [formValue]);
 
   return (
     <form className="px-5">

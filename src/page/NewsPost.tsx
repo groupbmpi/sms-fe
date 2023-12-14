@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { Container } from "react-bootstrap";
-import { AddNewsForm, ICreateNewsArgDto, NewsForm, NewsRepo } from "../feature/news/news";
+import {
+  AddNewsForm,
+  ICreateNewsArgDto,
+  NewsForm,
+  NewsRepo,
+} from "../feature/news/news";
 import { useNavigate } from "react-router-dom";
 
 const NewsPost = () => {
-  console.log('here0');
-
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -19,22 +22,17 @@ const NewsPost = () => {
   });
 
   const handleFormChange = (e: React.ChangeEvent) => {
-    console.log('here');
-    console.log(isLoading);
-
     const target = e.target as HTMLInputElement;
     const id = target.id;
     const value = target.value;
 
-    setFormValue({ 
-      ...formValue, 
-      [id]: value 
+    setFormValue({
+      ...formValue,
+      [id]: value,
     });
   };
 
   const handleSubmit = () => {
-    console.log('here');
-
     setIsLoading(true);
 
     const newsArgDto: ICreateNewsArgDto = {
@@ -44,13 +42,12 @@ const NewsPost = () => {
       creatorId: 1,
     };
 
-    console.log(newsArgDto);
-
-    NewsRepo.getInstance().createNews(newsArgDto)
+    NewsRepo.getInstance()
+      .createNews(newsArgDto)
       .then(function () {
-        alert('Berhasil menambahkan berita');
+        alert("Berhasil menambahkan berita");
 
-        navigate('/news');
+        navigate("/news");
       })
       .finally(function () {
         setIsLoading(false);

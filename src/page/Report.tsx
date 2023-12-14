@@ -1,5 +1,5 @@
 import { Container } from "react-bootstrap";
-import {useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import {
@@ -28,7 +28,6 @@ const Report = () => {
 
   const handleSubmit = (e: React.MouseEvent) => {
     e.preventDefault();
-    console.log(formValue);
     reportRepo
       .createReport(formValue)
       .then(() => {

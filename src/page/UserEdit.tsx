@@ -10,7 +10,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { IFormUserUpdate } from "../feature/user/model/User";
 
 const UserEdit = () => {
-  const {id} = useParams();
+  const { id } = useParams();
   const [formValue, setFormValue] = useState<RegisterForm>(new RegisterForm());
   const [statusVerif, setStatusVerif] = useState<boolean>(true);
   const navigate = useNavigate();
@@ -43,7 +43,6 @@ const UserEdit = () => {
   }, []);
 
   const handleFormChange = (e: React.ChangeEvent) => {
-    console.log(formValue)
     const target = e.target as HTMLInputElement;
     const { id, value } = target;
     setFormValue({
@@ -54,7 +53,7 @@ const UserEdit = () => {
   };
 
   const handleFormSubmit = () => {
-    const updateFormValue : IFormUserUpdate = {
+    const updateFormValue: IFormUserUpdate = {
       alamat: formValue.streetName,
       email: formValue.email,
       kategori: formValue.category,
@@ -74,7 +73,7 @@ const UserEdit = () => {
       .then(() => {
         navigate("/user");
       });
-  }
+  };
 
   return (
     <Container className="my-2">

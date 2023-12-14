@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
-import { NewsForm, AddNewsForm, IUpdateNewsArgDto, NewsRepo, INewsByIdRetDto, IFormNewsByIdResponseData, INewsIdArgDto } from "../feature/news/news";
+import {
+  NewsForm,
+  AddNewsForm,
+  IUpdateNewsArgDto,
+  NewsRepo,
+  INewsByIdRetDto,
+  IFormNewsByIdResponseData,
+  INewsIdArgDto,
+} from "../feature/news/news";
 import { useNavigate, useParams } from "react-router-dom";
 import { getNumberFromString } from "../helper/Parser";
 import { ResponseType } from "../feature/response";
@@ -16,6 +24,7 @@ const NewsEdit = () => {
     detail: "",
     photoLink: "",
     publicationLink: "",
+    date: new Date(),
   });
 
   const [isLoading, setIsLoading] = useState(true);
@@ -26,9 +35,10 @@ const NewsEdit = () => {
 
     const newsArgDto: INewsIdArgDto = {
       id: getNumberFromString(id) as number,
-    }
+    };
 
-    NewsRepo.getInstance().getNewsById(newsArgDto)
+    NewsRepo.getInstance()
+      .getNewsById(newsArgDto)
       .then((response: ResponseType<IFormNewsByIdResponseData>) => {
         const data = response.data;
 
@@ -46,6 +56,7 @@ const NewsEdit = () => {
           detail: newsDto.detail,
           photoLink: newsDto.photoLink,
           publicationLink: "",
+          date: newsDto.updatedAt,
         });
       })
       .finally(() => {
@@ -58,15 +69,13 @@ const NewsEdit = () => {
     const id = target.id;
     const value = target.value;
 
-    setFormValue({ 
-      ...formValue, 
-      [id]: value 
+    setFormValue({
+      ...formValue,
+      [id]: value,
     });
   };
 
   const handleUpdate = () => {
-    console.log('here');
-
     setIsLoading(true);
 
     const newsArgDto: IUpdateNewsArgDto = {
@@ -75,29 +84,31 @@ const NewsEdit = () => {
         title: formValue.title,
         detail: formValue.detail,
         photoLink: formValue.photoLink,
-      }
+      },
     };
 
-    NewsRepo.getInstance().updateNews(newsArgDto)
+    NewsRepo.getInstance()
+      .updateNews(newsArgDto)
       .then(function () {
-        alert('Berhasil mengedit berita');
+        alert("Berhasil mengedit berita");
 
-        navigate('/news');
+        navigate("/news");
       });
   };
 
   return (
     <Container className="my-2">
       <h4>Ubah Berita</h4>
-      { isLoading
-        ? <Loading />
-        : <AddNewsForm
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <AddNewsForm
           formValue={formValue}
           handleFormChange={handleFormChange}
           handleSubmit={handleUpdate}
           affirmativeText="Edit"
         />
-      }
+      )}
     </Container>
   );
 };

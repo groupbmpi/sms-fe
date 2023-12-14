@@ -25,7 +25,7 @@ const InstitutionEdit = () => {
 
   const handleSubmit = (e: React.MouseEvent) => {
     e.preventDefault();
-    console.log(formValue); // TODO edit lembaga based of formvalue
+    // TODO edit lembaga based of formvalue
   };
 
   const handleCancel = () => {

@@ -19,7 +19,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       UserRepository.getInstance()
         .getAuthProfile()
         .then((res) => {
-          console.log(res);
           setUser({
             email: res.data.email,
             token: res.data.token,

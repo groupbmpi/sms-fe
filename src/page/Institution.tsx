@@ -15,7 +15,7 @@ const Institution = () => {
   };
 
   const handleDeleteLembaga = (id: number) => () => {
-    console.log(id); // TODO delete lembaga by Id
+    // TODO delete lembaga by Id
   };
 
   useEffect(() => {
@@ -24,7 +24,6 @@ const Institution = () => {
 
   useEffect(() => {
     // TODO setListLembaga based on searchKeyword
-    console.log(searchKeyword);
   }, [searchKeyword]);
 
   return (

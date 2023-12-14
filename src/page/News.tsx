@@ -167,11 +167,9 @@ const News = () => {
   }, []);
 
   useEffect(() => {
-    console.log(filter);
   }, [filter]);
 
   useEffect(() => {
-    console.log(filter["kategori-inst-news-filter"]);
     if (filter["kategori-inst-news-filter"] === ALL_KATEGORI) {
     } else {
       UserRepository.getInstance()

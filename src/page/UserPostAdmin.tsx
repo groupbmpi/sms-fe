@@ -6,6 +6,7 @@ import { Input, InputType } from "../core/core";
 import { isDomainBCF } from "../helper/Parser";
 import { UserRepository } from "../feature/user/user";
 import { IFormRegisterAdmin } from "../feature/user/model/User";
+import { toast } from "react-toastify";
 
 const UserPostAdmin = () => {
   const [formValue, setFormValue] = useState<string>("");
@@ -29,21 +30,21 @@ const UserPostAdmin = () => {
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const newAdmin : IFormRegisterAdmin = {
-      email : formValue,
-    }
+    const newAdmin: IFormRegisterAdmin = {
+      email: formValue,
+    };
     if (isDomainBCF(formValue)) {
-      console.log(newAdmin);
       UserRepository.getInstance()
         .registerAdmin(newAdmin)
         .then(() => {
           // TODO add notif that admin has been added
           setFormValue("");
+          toast.success("Admin berhasil ditambahkan");
           navigate("/user");
         });
     } else {
       // TODO add notif that email is not BCF domain
-      console.log("not bcf domain");
+      toast.error("Email harus berdomain BCF (@bcf.or.id)");
     }
   };
 

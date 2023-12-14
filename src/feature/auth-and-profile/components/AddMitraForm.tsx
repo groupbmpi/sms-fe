@@ -36,7 +36,6 @@ export const AddMitraForm = ({
       .then((response) => {
         const newCategories = response.data;
 
-        console.log(newCategories);
         setCategories(newCategories);
         setCity(newCategories.daerah[0].kabupatenKota);
         if (isUsedOthersLembaga) {

@@ -17,7 +17,6 @@ export const RequiredLoggedInRoute = ({
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log('useEffect',isLoadComplete,user)
     if(!isLoadComplete) return;
     if (!user) {
       navigate(redirectPath);
@@ -67,7 +66,6 @@ export const RoleBasedProtectedRoute = ({
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log('useEffect',isLoadComplete,user)
     if(!isLoadComplete) return;
     if (user) {
       if (!rolesAllowed.includes(user!.role)) {
