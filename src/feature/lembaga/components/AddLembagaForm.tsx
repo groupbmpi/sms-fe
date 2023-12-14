@@ -57,7 +57,7 @@ export const AddLembagaForm = ({
         onChange={handleFormChange}
       />
       <div className="d-flex justify-content-center gap-2">
-        <Button variant="primary" type="submit" onClick={handleSubmit}>
+        <Button variant="primary" type="button" onClick={handleSubmit}>
           {affirmativeText}
         </Button>
         <Button variant="secondary" className="me-2" onClick={handleCancel}>

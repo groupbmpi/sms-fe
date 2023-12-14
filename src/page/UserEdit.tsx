@@ -23,7 +23,7 @@ const UserEdit = () => {
           fullName: user.namaLengkap,
           email: user.email,
           phoneNumber: user.noHandphone,
-          institution: user.lembaga,
+          institution: user.lembaga == "" ? "Lainnya" : user.lembaga,
           institutionName: user.lembagaOthers,
           category: user.kategori,
           province: user.provinsi,
@@ -87,7 +87,7 @@ const UserEdit = () => {
         redirectLinkOnDismiss="/user"
         dismissText="Batal"
         isEdit={true}
-        isUsedOthersLembaga={statusVerif}
+        isUsedOthersLembaga={!statusVerif}
       />
     </Container>
   );
