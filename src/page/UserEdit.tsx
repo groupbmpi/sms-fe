@@ -8,6 +8,7 @@ import {
 import { UserRepository } from "../feature/user/repository/UserRepo";
 import { useNavigate, useParams } from "react-router-dom";
 import { IFormUserUpdate } from "../feature/user/model/User";
+import { toast } from "react-toastify";
 
 const UserEdit = () => {
   const { id } = useParams();
@@ -71,7 +72,11 @@ const UserEdit = () => {
     UserRepository.getInstance()
       .updateUserById(parseInt(id as string), updateFormValue)
       .then(() => {
+        toast.success("Berhasil mengubah user");
         navigate("/user");
+      })
+      .catch((err) => {
+        toast.error(err.response.data.meta.message);
       });
   };
 
