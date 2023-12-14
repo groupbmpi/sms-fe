@@ -95,6 +95,7 @@ const Activity = () => {
 
     fetchDataActivities({
       lembaga: encodeURIComponent(filter["filter-lembaga"]),
+      kategori: encodeURIComponent(filter["filter-kategori"]),
     }).then((res: IActivitiesResponseData) => {
       const newEvent = res.data.map((activity) => {
         return {
@@ -112,19 +113,26 @@ const Activity = () => {
   }, [filter, fetchDataActivities]);
 
   useEffect(() => {
-    if (filter["filter-kategori"] == ALL_KATEGORI) return;
     userRepo.getAllCategories().then((res) => {
+      let lembagaParsed: string[] = [];
+      if (filter["filter-kategori"] === ALL_KATEGORI){
 
-      const filteredLembaga = getAllLembagaByKategori(
-        filter["filter-kategori"],
-        res.data.lembaga
-      );
-      setAllFilter({
-        ...allFilter,
-        lembaga: [ALL_LEMBAGA, ...filteredLembaga],
-      });
+        res.data.lembaga.forEach((data) => {
+          lembagaParsed.push(...data.lembaga);
+        });
+      }else{
+        lembagaParsed = getAllLembagaByKategori(
+          filter["filter-kategori"],
+          res.data.lembaga
+        );
+      }
+
+      setAllFilter((prev) => ({
+        ...prev,
+        lembaga: [ALL_LEMBAGA, ...lembagaParsed],
+      }));
     });
-  }, [filter["filter-kategori"]]);
+  }, [filter, userRepo]);
 
   return (
     <>
