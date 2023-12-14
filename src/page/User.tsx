@@ -154,6 +154,7 @@ const User = () => {
                 <tr>
                   <th scope="col">#</th>
                   <th scope="col">Nama Lengkap</th>
+                  <th scope="col">Kategori</th>
                   <th scope="col">Aksi</th>
                 </tr>
               </thead>

@@ -23,6 +23,17 @@ export const UserTableRow = ({
           <p className="mb-0">{name}</p>
         </div>
       </td>
+      {
+        statusVerify?(
+          <td>
+              <span className={`badge rounded-pill text-bg-success`}>Terverifikasi</span>
+          </td>
+        ):(
+          <td>
+            <span className={`badge rounded-pill text-bg-warning`}>Belum Terverifikasi</span>
+          </td>
+        )
+      }
       <td>
         <div className="d-flex gap-2">
           <Link to={`/user/${id}/edit`}>
