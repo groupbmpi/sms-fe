@@ -5,6 +5,7 @@ import { ProfileForm } from "../feature/auth-and-profile/auth-and-profile";
 import { UserRepository } from "../feature/user/user";
 import { IUserData } from "../feature/user/model/User";
 import profilePhoto from "../assets/images/profile-icon.png";
+import { useNavigate } from "react-router-dom";
 
 const initialProfileValue = {
   name: "John Doe",
@@ -23,6 +24,8 @@ const Profile = () => {
   const [isEditMode, setIsEditMode] = useState(false);
 
   const [formValue, setFormValue] = useState(initialProfileValue);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -95,6 +98,7 @@ const Profile = () => {
       linkFoto: newProfile.linkFoto,
     }));
     setIsEditMode(!isEditMode);
+    navigate(0);
   };
 
   return (
