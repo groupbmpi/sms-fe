@@ -1,5 +1,5 @@
 export interface INewsOptionsArgDto {
-    institutionId?: number,
+    institutionId?: string,
     creatorId?: number,
     page?: number,
     limit?: number,
