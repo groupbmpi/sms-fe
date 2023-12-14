@@ -6,6 +6,7 @@ import { generateArray } from "../helper/Iterable";
 import PaginationNavigation from "../layout/Pagination";
 import { LembagaRepository } from "../feature/lembaga/lembaga";
 import { ILembagaDTO } from "../feature/lembaga/model/lembaga";
+import { toast } from "react-toastify";
 
 const LIMIT_PER_PAGE = 10;
 
@@ -28,10 +29,6 @@ const Institution = () => {
     const target = e.target as HTMLInputElement;
     const { value } = target;
     setSearchKeyword(value);
-  };
-
-  const handleDeleteLembaga = (id: number) => () => {
-    // TODO delete lembaga by Id
   };
 
   useEffect(() => {
@@ -69,35 +66,37 @@ const Institution = () => {
           Tambah Lembaga
         </Button>
       </div>
-      <div>
-        <Input
-          type={InputType.text}
-          placeholder="Cari lembaga"
-          id="search"
-          value={searchKeyword}
-          onChange={handleFormChange}
-          withLabel={false}
-        />
-        <div>
-          <div className="d-flex gap-3 align-items-center justify-content-between mt-2">
-            <div className="fw-bold">Nama Lembaga</div>
-            <div className="fw-bold">Kategori</div>
-            <div className="fw-bold">Aksi</div>
-          </div>
-        </div>
-        {listLembaga.length === 0 ? (
-          <h5 className="text-center p-5">Tidak ada lembaga dengan pencarian tersebut</h5>
-        ) : (
-          <>
-            {listLembaga.map((lembaga: ILembagaDTO) => {
-              return (
-                <div
-                  className="d-flex gap-3 align-items-center justify-content-between mt-2"
-                  key={lembaga.id}
-                >
-                  <div>{lembaga.nama}</div>
-                  <div>{lembaga.kategori}</div>
-                  <div className="d-flex justify-content-end gap-2">
+      <Input
+        type={InputType.text}
+        placeholder="Cari lembaga"
+        id="search"
+        value={searchKeyword}
+        onChange={handleFormChange}
+        withLabel={false}
+      />
+
+      {listLembaga.length === 0 ? (
+        <h5 className="text-center p-5">
+          Tidak ada lembaga dengan pencarian tersebut
+        </h5>
+      ) : (
+        <>
+          <table className="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">No</th>
+                <th scope="col">Nama Lembaga</th>
+                <th scope="col">Kategori</th>
+                <th scope="col">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {listLembaga.map((lembaga, index) => (
+                <tr key={lembaga.id}>
+                  <td>{(currentPageNum - 1) * LIMIT_PER_PAGE + index + 1}</td>
+                  <td>{lembaga.nama}</td>
+                  <td>{lembaga.kategori}</td>
+                  <td>
                     <Button
                       variant="secondary"
                       onClick={() =>
@@ -106,19 +105,13 @@ const Institution = () => {
                     >
                       Edit
                     </Button>
-                    <Button
-                      variant="danger"
-                      onClick={handleDeleteLembaga(lembaga.id!)}
-                    >
-                      Hapus
-                    </Button>
-                  </div>
-                </div>
-              );
-            })}
-          </>
-        )}
-      </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      )}
       <PaginationNavigation
         currentPageNum={currentPageNum}
         maxPage={maxPage}

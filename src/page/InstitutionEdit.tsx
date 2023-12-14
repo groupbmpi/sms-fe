@@ -10,7 +10,6 @@ const InstitutionEdit = () => {
   const navigate = useNavigate();
 
   const [formValue, setFormValue] = useState<ILembagaDTO>({
-    id: parseInt(id!),
     nama: "",
     kategori: "",
   });
@@ -20,7 +19,7 @@ const InstitutionEdit = () => {
     LembagaRepository.getInstance()
       .getAllLembaga({ id: parseInt(id!) })
       .then((res) => {
-        console.log(res);
+        setFormValue(res.data[0]);
       })
       .catch((err) => {
         toast.error(err.response.data.message);
@@ -37,6 +36,21 @@ const InstitutionEdit = () => {
   const handleSubmit = (e: React.MouseEvent) => {
     e.preventDefault();
     // TODO edit lembaga based of formvalue
+    LembagaRepository.getInstance()
+      .updateLembaga(
+        {
+          nama: formValue.nama,
+          kategori: formValue.kategori,
+        },
+        parseInt(id!)
+      )
+      .then(() => {
+        toast.success("Berhasil mengubah lembaga");
+        navigate("/institution");
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+      });
   };
 
   const handleCancel = () => {

@@ -40,7 +40,7 @@ export class LembagaRepository extends HttpClient{
     }
 
     public updateLembaga = async(body: ILembagaBody, id: number) : Promise<ILembagasResponseData> => {
-        const data : ResponseType<ILembagasResponseData> = await this.instance.put<ResponseType<ILembagasResponseData>>(`lembaga${id}`, body)
+        const data : ResponseType<ILembagasResponseData> = await this.instance.put<ResponseType<ILembagasResponseData>>(`lembaga/${id}`, body)
 
         return data.data
     }
