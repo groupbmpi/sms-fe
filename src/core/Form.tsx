@@ -30,7 +30,10 @@ export const Input = ({
   textAreaRows?: number;
 }) => {
   return (
-    <div className="mb-3 px-5">
+    <div className="mb-3 px-5 d-flex flex-column">
+      <label htmlFor={id} className="form-label fw-bold">
+        {placeholder}:
+      </label>
       {/* Switch case */}
       {(type === InputType.text ||
         type === InputType.date ||

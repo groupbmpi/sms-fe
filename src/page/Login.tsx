@@ -1,11 +1,12 @@
 import { Container } from "react-bootstrap";
 import { useState } from "react";
-import { Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { Input, InputType } from "../core/core";
 import { UserRepository } from "../feature/user/user";
 import { useAuth } from "../feature/auth-and-profile/auth-and-profile";
 import Cookies from "universal-cookie";
+import { toast } from "react-toastify";
 
 const initialLoginForm = {
   email: "",
@@ -17,8 +18,8 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const {setUser} = useAuth();
-  
+  const { setUser } = useAuth();
+
   const handleFormChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
     const { id, value } = target;
@@ -32,7 +33,7 @@ const Login = () => {
         const expirationDate = new Date();
         expirationDate.setDate(expirationDate.getDate() + 1);
         const cookies = new Cookies();
-        cookies.set("token", res.data, { path: "/" ,expires: expirationDate});
+        cookies.set("token", res.data, { path: "/", expires: expirationDate });
         UserRepository.getInstance()
           .getAuthProfile()
           .then((res) => {
@@ -43,7 +44,10 @@ const Login = () => {
               access: res.data.akses,
             });
             navigate("/activity");
-          })
+          });
+      })
+      .catch((err) => {
+        toast.error(err.response.data.meta.message);
       });
   };
 

@@ -8,6 +8,7 @@ import {
 } from "../feature/auth-and-profile/auth-and-profile";
 import { AddReportForm } from "../feature/report/components/AddReportForm";
 import { IReportForm, ReportRepository } from "../feature/report/report";
+import { toast } from "react-toastify";
 
 const initialReportForm: IReportForm = {
   kategoriMasalah: "",
@@ -31,11 +32,10 @@ const Report = () => {
     reportRepo
       .createReport(formValue)
       .then(() => {
-        alert("Laporan berhasil ditambahkan!");
+        toast.success("Laporan berhasil ditambahkan!");
       })
       .catch((err) => {
-        alert("Laporan gagal ditambahkan!");
-        console.log(err);
+        toast.error(err.response.data.meta.message);
       })
       .finally(() => {
         setFormValue({

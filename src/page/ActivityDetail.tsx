@@ -12,6 +12,7 @@ import { IActivityReportQuery } from "../feature/activity/model/ActivityRequest"
 import { IActivitiesResponseData } from "../feature/activity/model/ActivityResponse";
 import moment from "moment";
 import { PopupModal } from "../core/Modal";
+import { toast } from "react-toastify";
 
 const ActivityDetail = () => {
   const { id } = useParams();
@@ -104,7 +105,7 @@ const ActivityDetail = () => {
       formValue.setActivityForm(formValue);
     }
   };
-  const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
+  const handleSubmit = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
 
     formValue.setActivityForm(formValue);
@@ -114,7 +115,12 @@ const ActivityDetail = () => {
 
     const body: IActivityReportDTO = formValue.toDto();
 
-    await activityRepo.updateActivityReport(body, formValue.id);
+    activityRepo.updateActivityReport(body, formValue.id).then(() => {
+      toast.success("Berhasil mengubah kegiatan");
+      navigate("/activity");
+    }).catch((err) => {
+      toast.error(err.response.data.meta.message);
+    });
 
     setOnEditMode(false);
   };
