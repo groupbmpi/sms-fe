@@ -26,7 +26,7 @@ export class LembagaRepository extends HttpClient{
     }
 
     public getAllLembaga = async(query: ILembagaQuery) : Promise<ILembagasResponseData> => {
-        const data : ResponseType<ILembagasResponseData> = await this.instance.get("lembaga/", {
+        const data : ResponseType<ILembagasResponseData> = await this.instance.get("lembaga", {
             params: query
         })
 
@@ -34,13 +34,13 @@ export class LembagaRepository extends HttpClient{
     }
 
     public createLembaga = async(body: ILembagaBody) : Promise<ILembagasResponseData> => {
-        const data : ResponseType<ILembagasResponseData> = await this.instance.post<ResponseType<ILembagasResponseData>>("lembaga/", body)
+        const data : ResponseType<ILembagasResponseData> = await this.instance.post<ResponseType<ILembagasResponseData>>("lembaga", body)
 
         return data.data
     }
 
     public updateLembaga = async(body: ILembagaBody, id: number) : Promise<ILembagasResponseData> => {
-        const data : ResponseType<ILembagasResponseData> = await this.instance.put<ResponseType<ILembagasResponseData>>(`lembaga/${id}`, body)
+        const data : ResponseType<ILembagasResponseData> = await this.instance.put<ResponseType<ILembagasResponseData>>(`lembaga${id}`, body)
 
         return data.data
     }

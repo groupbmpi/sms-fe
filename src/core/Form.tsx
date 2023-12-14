@@ -19,6 +19,7 @@ export const Input = ({
   disabled,
   onChange,
   textAreaRows = 3,
+  withLabel = true,
 }: {
   type: InputType;
   id: string;
@@ -28,12 +29,15 @@ export const Input = ({
   required?: boolean;
   disabled?: boolean;
   textAreaRows?: number;
+  withLabel?: boolean;
 }) => {
   return (
     <div className="mb-3 px-5 d-flex flex-column">
-      <label htmlFor={id} className="form-label fw-bold">
-        {placeholder}:
-      </label>
+      {withLabel && (
+        <label htmlFor={id} className="form-label fw-bold">
+          {placeholder}:
+        </label>
+      )}
       {/* Switch case */}
       {(type === InputType.text ||
         type === InputType.date ||
