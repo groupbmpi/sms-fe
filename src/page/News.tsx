@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { Link, useSearchParams } from "react-router-dom";
 
 import { generateArray } from "../helper/Iterable";
@@ -15,7 +15,6 @@ import {
 } from "../feature/news/model/News";
 import {
   generateDateQueryStringFormat,
-  generateDateStringIdFormat,
   getAllLembagaByKategori,
   getEndDateByMonthYear,
   getNumberFromString,
@@ -25,8 +24,8 @@ import {
 import { ResponseType } from "../feature/response";
 import { NewsRepo } from "../feature/news/repository/NewsRepo";
 import { Loading } from "../core/Loading";
-import { PopupModal } from "../core/Modal";
 import { UserRepository } from "../feature/user/user";
+import { NewsCard } from "../feature/news/news";
 
 const ALL_LEMBAGA = "Semua Lembaga";
 const ALL_KATEGORI = "Semua Kategori";
@@ -167,9 +166,6 @@ const News = () => {
   }, []);
 
   useEffect(() => {
-  }, [filter]);
-
-  useEffect(() => {
     if (filter["kategori-inst-news-filter"] === ALL_KATEGORI) {
     } else {
       UserRepository.getInstance()
@@ -293,71 +289,20 @@ const News = () => {
       {isLoading ? (
         <Loading />
       ) : (
-        <>
-          {news.news.map((item) => (
-            <div key={item.id}>
-              <div className="card p-1 my-2">
-                <div className="d-flex flex-row">
-                  <img
-                    src={item.photoLink}
-                    className="card-img-top"
-                    alt={`image-news-${item.id}`}
-                    style={{
-                      width: "250px",
-                      height: "200px",
-                      borderRadius: "10px",
-                    }}
-                  />
-                  <div className="card-body d-flex flex-column justify-content-around">
-                    <h5 className="card-title">{item.title}</h5>
-                    <div className="text-body-tertiary fst-italic">
-                      {generateDateStringIdFormat(item.updatedAt)} -{" "}
-                      {"John Doe"}
-                    </div>
-                    <p className="card-text">{item.detail.substring(0, 100)}</p>
-                    <div className="d-flex flex-justify-start gap-1">
-                      <Link to={`/news/${item.id}`}>
-                        <Button variant="primary">Baca Selengkapnya</Button>
-                      </Link>
-                      <ProtectedRoleComponent
-                        roleAllowed={[Role.ADMIN, Role.SUPERADMIN]}
-                        component={
-                          <div className="d-flex gap-1">
-                            <Link to={`/news/${item.id}/edit`}>
-                              <Button variant="secondary">Edit</Button>
-                            </Link>
-                            <Button
-                              variant="danger"
-                              onClick={() => setShowDeleteConfirmation(true)}
-                            >
-                              Delete
-                            </Button>
-                          </div>
-                        }
-                      />
-                      {/* TODO Change link to based on publicationLink field */}
-                      <Link to={item.photoLink}>
-                        <Button variant="warning">Lihat Sumber Berita</Button>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
+        <div className="container">
+          <div className="row">
+            {news.news.map((item) => (
+              <div className="col-md-4" key={item.id}>
+                <NewsCard
+                  item={item}
+                  showDeleteConfirmation={showDeleteConfirmation}
+                  setShowDeleteConfirmation={setShowDeleteConfirmation}
+                  handleDelete={handleDelete}
+                />
               </div>
-              <PopupModal
-                show={showDeleteConfirmation}
-                title="Konfirmasi Hapus Berita"
-                body="Apakah anda yakin ingin menghapus berita ini?"
-                handleClose={() => setShowDeleteConfirmation(false)}
-                handleAffirmative={() => {
-                  setShowDeleteConfirmation(false);
-                  handleDelete(item.id);
-                }}
-                handleDismiss={() => setShowDeleteConfirmation(false)}
-                affirmativeText="Hapus"
-              />
-            </div>
-          ))}
-        </>
+            ))}
+          </div>
+        </div>
       )}
 
       <nav aria-label="news-pagination">
