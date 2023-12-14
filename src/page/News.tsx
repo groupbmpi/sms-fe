@@ -16,6 +16,7 @@ import {
 import {
   generateDateQueryStringFormat,
   generateDateStringIdFormat,
+  getAllLembagaByKategori,
   getEndDateByMonthYear,
   getNumberFromString,
   getStartDateByMonthYear,
@@ -25,6 +26,10 @@ import { ResponseType } from "../feature/response";
 import { NewsRepo } from "../feature/news/repository/NewsRepo";
 import { Loading } from "../core/Loading";
 import { PopupModal } from "../core/Modal";
+import { UserRepository } from "../feature/user/user";
+
+const ALL_LEMBAGA = "Semua Lembaga";
+const ALL_KATEGORI = "Semua Kategori";
 
 const News = () => {
   const [searchParams] = useSearchParams();
@@ -37,15 +42,25 @@ const News = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
+  const [allFilter, setAllFilter] = useState<{
+    daftarLembaga: string[];
+    daftarKategori: string[];
+  }>({
+    daftarLembaga: [],
+    daftarKategori: [],
+  });
+
   const [filter, setFilter] = useState<{
     "year-news-filter"?: number;
     "month-news-filter"?: number;
-    "institution-id-news-filter"?: number;
+    "kategori-inst-news-filter"?: string;
+    "institution-news-filter"?: string;
     "creator-id-news-filter"?: number;
   }>({
     "year-news-filter": undefined,
     "month-news-filter": undefined,
-    "institution-id-news-filter": undefined,
+    "kategori-inst-news-filter": undefined,
+    "institution-news-filter": undefined,
     "creator-id-news-filter": undefined,
   });
 
@@ -67,7 +82,10 @@ const News = () => {
 
     setFilter({
       ...filter,
-      [id]: getNumberFromString(value),
+      [id]:
+        id === "year-news-filter" || id === "month-news-filter"
+          ? getNumberFromString(value)
+          : value,
     });
   };
 
@@ -75,7 +93,7 @@ const News = () => {
     setIsLoading(true);
 
     const newsArgDto: INewsOptionsArgDto = {
-      institutionId: filter["institution-id-news-filter"],
+      institutionId: filter["institution-news-filter"],
       creatorId: filter["creator-id-news-filter"],
       startDateAt:
         filter["month-news-filter"] !== undefined ||
@@ -123,6 +141,54 @@ const News = () => {
         setIsLoading(false);
       });
   }, [filter, searchParams]);
+
+  useEffect(() => {
+    UserRepository.getInstance()
+      .getAllCategories()
+      .then((res) => {
+        let allLembaga: string[] = [];
+        allLembaga.push(ALL_LEMBAGA);
+
+        res.data.lembaga.forEach((item) => {
+          allLembaga = [...allLembaga, ...item.lembaga];
+        });
+
+        setAllFilter({
+          daftarKategori: [ALL_KATEGORI, ...res.data.kategori],
+          daftarLembaga: allLembaga,
+        });
+
+        setFilter({
+          ...filter,
+          "kategori-inst-news-filter": ALL_KATEGORI,
+          "institution-news-filter": ALL_LEMBAGA,
+        });
+      });
+  }, []);
+
+  useEffect(() => {
+    console.log(filter);
+  }, [filter]);
+
+  useEffect(() => {
+    console.log(filter["kategori-inst-news-filter"]);
+    if (filter["kategori-inst-news-filter"] === ALL_KATEGORI) {
+    } else {
+      UserRepository.getInstance()
+        .getAllCategories()
+        .then((res) => {
+          const lembagaByCategory = getAllLembagaByKategori(
+            filter["kategori-inst-news-filter"]!,
+            res.data.lembaga
+          );
+
+          setAllFilter({
+            ...allFilter,
+            daftarLembaga: [ALL_LEMBAGA, ...lembagaByCategory],
+          });
+        });
+    }
+  }, [filter["kategori-inst-news-filter"]]);
 
   const handleDelete = (newsId: number) => {
     setIsLoading(true);
@@ -192,15 +258,27 @@ const News = () => {
           </select>
           <select
             className="form-control"
-            id="institution-id-news-filter"
-            aria-label="institution-id-news-filter"
+            id="kategori-inst-news-filter"
+            aria-label="kategori-inst-news-filter"
             onChange={handleFormChange}
           >
-            <option value="">Semua Institusi</option>
-            <option value="1">Pemerintah</option>
-            <option value="2">Swasta</option>
-            <option value="3">Pendidikan</option>
-            <option value="4">Lainnya</option>
+            {allFilter.daftarKategori.map((item) => (
+              <option value={item} key={item}>
+                {item}
+              </option>
+            ))}
+          </select>
+          <select
+            className="form-control"
+            id="institution-news-filter"
+            aria-label="institution-news-filter"
+            onChange={handleFormChange}
+          >
+            {allFilter.daftarLembaga.map((item) => (
+              <option value={item} key={item}>
+                {item}
+              </option>
+            ))}
           </select>
         </div>
 
