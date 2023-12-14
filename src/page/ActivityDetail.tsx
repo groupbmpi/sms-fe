@@ -118,11 +118,11 @@ const ActivityDetail = () => {
     activityRepo.updateActivityReport(body, formValue.id).then(() => {
       toast.success("Berhasil mengubah kegiatan");
       navigate("/activity");
+      setOnEditMode(false);
     }).catch((err) => {
       toast.error(err.response.data.meta.message);
+      handleChangeEditMode()
     });
-
-    setOnEditMode(false);
   };
 
   const handleChangeEditMode = () => {
