@@ -1,6 +1,24 @@
+import { useEffect, useRef, useState } from "react";
 import { Container } from "react-bootstrap";
+import { IChatQuery, IChatResponseData, IFormChat } from "../feature/forum/model/Forum";
+import { ForumRepository } from "../feature/forum/repository/ForumRepo";
 
-const ChatItem = ({ isSelf }: { isSelf: boolean }) => {
+const ChatItem = (
+  { 
+    isSelf,
+    message,
+    user,
+    time,
+    linkFoto
+  }: 
+  { 
+    isSelf: boolean,
+    message: string,
+    user: string,
+    time: string,
+    linkFoto: string
+  }
+  ) => {
   const conditionalClass = isSelf
     ? "bg-body-secondary text-dark"
     : "bg-dark text-light";
@@ -11,7 +29,7 @@ const ChatItem = ({ isSelf }: { isSelf: boolean }) => {
     >
       <div>
         <img
-          src="https://via.placeholder.com/500"
+          src={linkFoto}
           alt="profile"
           className="rounded-circle"
           width={50}
@@ -20,13 +38,10 @@ const ChatItem = ({ isSelf }: { isSelf: boolean }) => {
         />
       </div>
       <div>
-        <p className="mb-0 fw-bold">Ferguso</p>
-        <p className="mb-0 fst-italic">25 Mei 2022 02.00 PM</p>
+        <p className="mb-0 fw-bold">{user}</p>
+        <p className="mb-0 fst-italic">{time}</p>
         <p className="">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laborum
-          magnam soluta assumenda repellendus culpa vitae eveniet incidunt
-          voluptatem aliquam ea nisi libero optio consequuntur placeat provident
-          autem dolorum, ullam magni.
+          {message}
         </p>
       </div>
     </div>
@@ -40,17 +55,120 @@ const ChatItem = ({ isSelf }: { isSelf: boolean }) => {
 };
 
 const Forum = () => {
+
+  const [formValue, setFormValue] = useState<string>("");
+  const [chatData, setChatData] = useState<IChatResponseData[]>([]);
+  const [minID, setMinID] = useState<IChatQuery>({lowID : null});
+  const ref = useRef<HTMLDivElement>(null);
+  const [lenChat, setLenChat] = useState<number>(0);
+  // const [lastTimeScrollZero, setLastTimeScrollZero] = useState<number>(0);
+
+  useEffect(() => {
+    ForumRepository.getInstance()
+      .getChat(minID)
+      .then((res) => {
+        if(res.data.length != chatData.length){
+          if(res.data.length > 0){
+            setMinID({
+              lowID : res.data[0].id
+            })
+            setLenChat(res.data.length)
+          }
+        }
+      })
+  },[])
+
+  useEffect(() => {
+    ForumRepository.getInstance()
+      .getChat(minID)
+      .then((res) => {
+        if(res.data.length != chatData.length){
+          setChatData([...res.data]);
+        }
+      })
+  },[minID,lenChat])
+
+  useEffect(() => {
+    if(ref != null){
+      if(ref.current != null){
+        ref.current.scrollTop = ref?.current.scrollHeight
+      }
+    }
+  },[ref.current])
+
+  useEffect(() => {
+    if(!ref)return;
+    if(!ref.current)return;
+  },[ref.current?.scrollTop])
+
+  const handleFormChange = (e: React.ChangeEvent) => {
+    const target = e.target as HTMLInputElement;
+    const { value } = target;
+    setFormValue(value);
+  }
+
+  const handleFormSubmit = () => {
+    const body : IFormChat = {
+      message : formValue
+    }
+    ForumRepository.getInstance()
+      .postChat(body)
+      .then(() => {
+        ForumRepository.getInstance()
+        .getChat(minID)
+        .then((res) => {
+          setChatData(res.data);
+          if(res.data.length > 0){
+            setMinID({lowID : res.data[0].id})
+            setLenChat(res.data.length)
+          }
+        })
+        setFormValue("");
+      })
+  }
+
+  const handleScroll = () => {
+    if(ref.current != null){
+      if(ref.current.scrollTop == 0){
+        const num : number = minID.lowID as number;
+        const newMinID : IChatQuery = {
+          lowID : num - 5
+        }
+        ForumRepository.getInstance()
+        .getChat(newMinID)
+        .then((res) => {
+          setChatData(res.data);
+          if(res.data.length > 0){
+            if(res.data[0].id != minID.lowID && ref.current != null){
+              ref.current.scrollTop = 20;
+              setMinID({lowID : res.data[0].id})
+              setLenChat(res.data.length)
+            }
+          }
+        })
+      }
+    }
+  }
+
   return (
     <Container className="mt-2">
       <section
         className="bg-light w-75 mx-auto p-4 rounded-3 overflow-scroll"
-        style={{ height: "75vh" }}
+        style={{ height: "75vh" }} onScroll={handleScroll}ref={ref}
       >
-        <ChatItem isSelf={false} />
-        <ChatItem isSelf={true} />
+        {chatData.map((chat) => (
+          <ChatItem
+          key={chat.id}
+          linkFoto={chat.linkFoto}
+          message={chat.pesan}
+          time={chat.messageTime}
+          user={chat.user}
+          isSelf={chat.isSelf} 
+          />
+        ))}
         <div className="d-flex gap-2 sticky-bottom">
-          <input className="form-control"></input>
-          <button className="btn btn-primary">Kirim</button>
+          <input className="form-control" value={formValue} onChange={handleFormChange}></input>
+          <button disabled={formValue==""} className="btn btn-primary" type="button" onClick={handleFormSubmit}>Kirim</button>
         </div>
       </section>
     </Container>
