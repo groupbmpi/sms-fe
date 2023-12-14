@@ -76,11 +76,25 @@ export const AddMitraForm = ({
     if (typeof newLembaga !== "undefined") {
       if (isUsedOthersLembaga) {
         setLembaga([...newLembaga[0].lembaga, "Lainnya"]);
+        setFormValue({
+          ...formValue,
+          institution: newLembaga[0].lembaga[0] || "Lainnya",
+          isValid: formValue.isValid,
+        });
       } else {
-        setLembaga(newLembaga[0].lembaga);
+        setLembaga([...newLembaga[0].lembaga, "Lainnya"]);
+        setFormValue({
+          ...formValue,
+          institution: newLembaga[0].lembaga[0] || "Lainnya",
+          isValid: formValue.isValid,
+        });
       }
     }
   }, [categories.lembaga, formValue.category]);
+
+  useEffect(() => {
+    console.log(formValue);
+  }, [formValue]);
 
   return (
     <form className="">
