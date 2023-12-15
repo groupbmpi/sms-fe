@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Container } from "react-bootstrap";
 import { IChatQuery, IChatResponseData, IFormChat } from "../feature/forum/model/Forum";
 import { ForumRepository } from "../feature/forum/repository/ForumRepo";
+import profilePhoto from "../assets/images/profile-icon.png";
 
 const ChatItem = (
   { 
@@ -159,7 +160,11 @@ const Forum = () => {
         {chatData.map((chat) => (
           <ChatItem
           key={chat.id}
-          linkFoto={chat.linkFoto}
+          linkFoto={            
+            chat.linkFoto == "" || chat.linkFoto == null
+            ? profilePhoto
+            : chat.linkFoto
+          } 
           message={chat.pesan}
           time={chat.messageTime}
           user={chat.user}

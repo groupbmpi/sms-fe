@@ -39,7 +39,7 @@ export abstract class HttpClient{
     private _handleResponseOnError = (error: Error | AxiosError) => {
         if(axios.isAxiosError(error)){
             if(error.response?.status === 401){
-                toast("Maaf, Anda tidak memiliki akses untuk halaman ini, pastikan Anda memiliki akses yang sesuai")
+                // toast("Maaf, Anda tidak memiliki akses untuk halaman ini, pastikan Anda memiliki akses yang sesuai")
             }else{
                 // toast("Mohon coba beberapa saat lagi, sedang terjadi kesalahan")
             }
