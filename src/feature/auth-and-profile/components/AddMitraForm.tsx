@@ -92,10 +92,6 @@ export const AddMitraForm = ({
     }
   }, [categories.lembaga, formValue.category]);
 
-  useEffect(() => {
-    console.log(formValue);
-  }, [formValue]);
-
   return (
     <form className="">
       <Input

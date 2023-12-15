@@ -15,7 +15,6 @@ const InstitutionEdit = () => {
   });
 
   useEffect(() => {
-    // TODO fetch lembaga by id and setFormValue (nama dan kategori based on fetched data)
     LembagaRepository.getInstance()
       .getAllLembaga({ id: parseInt(id!) })
       .then((res) => {
@@ -25,7 +24,7 @@ const InstitutionEdit = () => {
         toast.error(err.response.data.message);
         navigate("/institution");
       });
-  }, []);
+  }, [id, navigate]);
 
   const handleFormChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
@@ -35,7 +34,6 @@ const InstitutionEdit = () => {
 
   const handleSubmit = (e: React.MouseEvent) => {
     e.preventDefault();
-    // TODO edit lembaga based of formvalue
     LembagaRepository.getInstance()
       .updateLembaga(
         {

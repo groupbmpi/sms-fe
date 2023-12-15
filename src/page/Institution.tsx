@@ -6,7 +6,6 @@ import { generateArray } from "../helper/Iterable";
 import PaginationNavigation from "../layout/Pagination";
 import { LembagaRepository } from "../feature/lembaga/lembaga";
 import { ILembagaDTO } from "../feature/lembaga/model/lembaga";
-import { toast } from "react-toastify";
 
 const LIMIT_PER_PAGE = 10;
 
@@ -32,7 +31,6 @@ const Institution = () => {
   };
 
   useEffect(() => {
-    // TODO fetch list lembaga
     LembagaRepository.getInstance()
       .getAllLembaga({
         page: currentPageNum,
@@ -45,7 +43,6 @@ const Institution = () => {
   }, [currentPageNum]);
 
   useEffect(() => {
-    // TODO setListLembaga based on searchKeyword
     LembagaRepository.getInstance()
       .getAllLembaga({
         page: currentPageNum,
