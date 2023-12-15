@@ -39,6 +39,7 @@ const News = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [idToDelete, setIdToDelete] = useState<number>(-1)
 
   const [allFilter, setAllFilter] = useState<{
     daftarLembaga: string[];
@@ -78,7 +79,7 @@ const News = () => {
   useEffect(() => {
     setIsLoading(true);
 
-    let newsArgDto: INewsOptionsArgDto = {
+    const newsArgDto: INewsOptionsArgDto = {
       institutionCategory: filter["kategori-inst-news-filter"],
       institution: filter["institution-news-filter"],
       creatorId: filter["creator-id-news-filter"],
@@ -211,8 +212,8 @@ const News = () => {
   };
 
   const handleDelete = (newsId: number, creatorId: number) => {
-    setIsLoading(true);
-
+    setIsLoading(false);
+  
     const newsIdArgDto: INewsIdArgDto = {
       id: newsId,
     };
@@ -330,8 +331,10 @@ const News = () => {
               <div className="col-md-4" key={item.news.id}>
                 <NewsCard
                   item={item}
+                  idToDelete={idToDelete}
                   showDeleteConfirmation={showDeleteConfirmation}
                   setShowDeleteConfirmation={setShowDeleteConfirmation}
+                  setIdToDelete={setIdToDelete}
                   handleDelete={handleDelete}
                 />
               </div>

@@ -7,18 +7,24 @@ import {
 } from "../../auth-and-profile/auth-and-profile";
 import { generateDateStringIdFormat } from "../../../helper/Parser";
 import { PopupModal } from "../../../core/Modal";
+import React from "react";
 
 export const NewsCard = ({
   item,
+  idToDelete,
   showDeleteConfirmation,
   setShowDeleteConfirmation,
+  setIdToDelete,
   handleDelete,
 }: {
   item: INewsByIdRetDto;
+  idToDelete: number;
   showDeleteConfirmation: boolean;
   setShowDeleteConfirmation: React.Dispatch<React.SetStateAction<boolean>>;
+  setIdToDelete: React.Dispatch<React.SetStateAction<number>>;
   handleDelete: (newsId: number, ownerId: number) => void;
 }) => {
+
   return (
     <div key={item.news.id}>
       <div className="card p-1 my-2">
@@ -54,7 +60,10 @@ export const NewsCard = ({
                           </Link>
                           <Button
                             variant="danger"
-                            onClick={() => setShowDeleteConfirmation(true)}
+                            onClick={() => {
+                              setShowDeleteConfirmation(true)
+                              setIdToDelete(item.news.id)
+                            }}
                           >
                             Delete
                           </Button>
@@ -73,8 +82,9 @@ export const NewsCard = ({
         </div>
       </div>
       <PopupModal
-        show={showDeleteConfirmation}
+        show={showDeleteConfirmation && idToDelete === item.news.id}
         title="Konfirmasi Hapus Berita"
+        key={item.news.id}
         body="Apakah anda yakin ingin menghapus berita ini?"
         handleClose={() => setShowDeleteConfirmation(false)}
         handleAffirmative={() => {
