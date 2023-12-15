@@ -12,6 +12,7 @@ import { Select } from "../core/core";
 import { UserRepository } from "../feature/user/user";
 import { IActivityReportQuery } from "../feature/activity/model/ActivityRequest";
 import { getAllLembagaByKategori } from "../helper/Parser";
+import moment from "moment-timezone";
 
 const ALL_LEMBAGA = "Semua Lembaga";
 const ALL_KATEGORI = "Semua Kategori";
@@ -60,8 +61,8 @@ const Activity = () => {
         return {
           id: `${activity.id}`,
           title: activity.namaKegiatan,
-          start: activity.jadwalMulai.replace("Z", ""),
-          end: activity.jadwalSelesai.replace("Z", ""),
+          start: moment(activity.jadwalMulai).tz("Asia/Jakarta").format().replace("Z", ""),
+          end: moment(activity.jadwalSelesai).tz("Asia/Jakarta").format().replace("Z", ""),
           editable: activity.isEditable,
           startEditable: activity.isEditable,
         };
@@ -101,8 +102,8 @@ const Activity = () => {
         return {
           id: `${activity.id}`,
           title: activity.namaKegiatan,
-          start: activity.jadwalMulai.replace("Z", ""),
-          end: activity.jadwalSelesai.replace("Z", ""),
+          start: moment(activity.jadwalMulai).tz("Asia/Jakarta").format().replace("Z", ""),
+          end: moment(activity.jadwalSelesai).tz("Asia/Jakarta").format().replace("Z", ""),
           editable: activity.isEditable,
           startEditable: activity.isEditable,
         };

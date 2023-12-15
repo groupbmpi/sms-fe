@@ -10,7 +10,7 @@ import {
 } from "../feature/activity/activity";
 import { IActivityReportQuery } from "../feature/activity/model/ActivityRequest";
 import { IActivitiesResponseData } from "../feature/activity/model/ActivityResponse";
-import moment from "moment";
+import moment from "moment-timezone";
 import { PopupModal } from "../core/Modal";
 import { toast } from "react-toastify";
 
@@ -41,14 +41,12 @@ const ActivityDetail = () => {
     }).then((res: IActivitiesResponseData) => {
       const activity: IActivityReportDTO = res.data[0];
 
-      activity.jadwalMulai = moment
-        .parseZone(activity.jadwalMulai)
-        .local()
+      activity.jadwalMulai = moment(activity.jadwalMulai)
+        .tz("Asia/Jakarta")
         .format()
         .slice(0, -6);
-      activity.jadwalSelesai = moment
-        .parseZone(activity.jadwalSelesai)
-        .local()
+      activity.jadwalSelesai = moment(activity.jadwalSelesai)
+        .tz("Asia/Jakarta")
         .format()
         .slice(0, -6);
 
@@ -134,14 +132,12 @@ const ActivityDetail = () => {
       }).then((res: IActivitiesResponseData) => {
         const activity: IActivityReportDTO = res.data[0];
 
-        activity.jadwalMulai = moment
-          .parseZone(activity.jadwalMulai)
-          .local()
+        activity.jadwalMulai = moment(activity.jadwalMulai)
+          .tz("Asia/Jakarta")
           .format()
           .slice(0, -6);
-        activity.jadwalSelesai = moment
-          .parseZone(activity.jadwalSelesai)
-          .local()
+        activity.jadwalSelesai = moment(activity.jadwalSelesai)
+          .tz("Asia/Jakarta")
           .format()
           .slice(0, -6);
 
@@ -171,14 +167,12 @@ const ActivityDetail = () => {
     }).then((res: IActivitiesResponseData) => {
       const activity: IActivityReportDTO = res.data[0];
 
-      activity.jadwalMulai = moment
-        .parseZone(activity.jadwalMulai)
-        .local()
+      activity.jadwalMulai = moment(activity.jadwalMulai)
+        .tz("Asia/Jakarta")
         .format()
         .slice(0, -6);
-      activity.jadwalSelesai = moment
-        .parseZone(activity.jadwalSelesai)
-        .local()
+      activity.jadwalSelesai = moment(activity.jadwalSelesai)
+        .tz("Asia/Jakarta")
         .format()
         .slice(0, -6);
 

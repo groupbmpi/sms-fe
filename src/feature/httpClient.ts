@@ -1,7 +1,5 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from "axios";
-// import { useAuth } from "./auth-and-profile/auth-and-profile";
 import Cookies from "universal-cookie";
-import { toast } from "react-toastify";
 
 declare module 'axios' {
     interface AxiosResponse<T> extends Promise<T> {}
