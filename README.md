@@ -1,30 +1,66 @@
-# React + TypeScript + Vite
+# Project Name
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is based on company-capstone for Bangkit Program Batch 2 2023
 
-Currently, two official plugins are available:
+## Table of Contents
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [Introduction](#introduction)
+- [Features](#features)
+- [Directory Structure](#directory-structure)
+- [Run in your local](#run-locally)
 
-## Expanding the ESLint configuration
+## Introduction
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+This repository houses the frontend of web-based platform dedicated to fostering collaboration and communication among BCF and its numerous partners working towards expediting the TB elimination process.
 
-- Configure the top-level `parserOptions` property like this:
+## Features
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+- Authentication (Login and Register)
+- Activity Progress
+- News
+- Report
+- Chat (Discussion Forum)
+- Institution
+- Profile
+
+## Directory Structure
+
+```
+├── public
+├── src
+│   ├── assets: for image and any static file
+│   ├── core: reusable components like input form, dropdown, etc.
+│   ├── feature
+│       ├── components: reusable components, but only related to particular feature
+│       ├── model: model that being used in particular feature
+│       ├── repository: unify access to API
+│   ├── helper: any general function, such as generate array
+│   ├── layout: components that being used across pages, like navigation bar
+│   ├── page: represent any pages in the web-pages
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Run locally
+
+Follow this guide to run the project on your local machine.
+
+1. Clone this repository
+
+```bash
+git clone https://github.com/groupbmpi/sms-fe.git
+```
+
+2. Install the dependencies
+
+```bash
+npm install
+```
+
+3. Run the project using vite development server
+
+```bash
+npm run dev
+```
+
+## Acess the Deployed Project
+
+[https://sms-project-405815.et.r.appspot.com/activity](https://sms-project-405815.et.r.appspot.com/activity)
