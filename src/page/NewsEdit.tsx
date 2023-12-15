@@ -17,7 +17,9 @@ import { Loading } from "../core/Loading";
 const NewsEdit = () => {
   const navigate = useNavigate();
 
-  const { id } = useParams(); // TODO use this id to fetch news detail
+  const { id } = useParams();
+
+  const [ newsOwnerId, setNewsOwnerId ] = useState<number>(-1);
 
   const [formValue, setFormValue] = useState<NewsForm>({
     title: "",
@@ -30,7 +32,6 @@ const NewsEdit = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // TODO fetch news by id, and setNews with the data
     setIsLoading(true);
 
     const newsArgDto: INewsIdArgDto = {
@@ -43,20 +44,27 @@ const NewsEdit = () => {
         const data = response.data;
 
         const newsDto: INewsByIdRetDto = {
-          id: data.id,
-          title: data.title,
-          detail: data.detail,
-          photoLink: data.photoLink,
-          createdAt: new Date(data.createdAt),
-          updatedAt: new Date(data.updatedAt),
+          owner: { 
+            ...data.owner 
+          },
+          news: {
+            ...data.news,
+            publicationLink: data.news.publicationLink 
+              ? data.news.publicationLink 
+              : "",
+            createdAt: new Date(data.news.createdAt),
+            updatedAt: new Date(data.news.updatedAt),
+          }
         };
 
+        setNewsOwnerId(newsDto.owner.id);
+
         setFormValue({
-          title: newsDto.title,
-          detail: newsDto.detail,
-          photoLink: newsDto.photoLink,
-          publicationLink: "",
-          date: newsDto.updatedAt,
+          title: newsDto.news.title,
+          detail: newsDto.news.detail,
+          photoLink: newsDto.news.photoLink,
+          publicationLink: newsDto.news.publicationLink,
+          date: newsDto.news.updatedAt,
         });
       })
       .finally(() => {
@@ -71,11 +79,17 @@ const NewsEdit = () => {
 
     setFormValue({
       ...formValue,
-      [id]: value,
+      [id]: id === 'date'
+        ? new Date(value)
+        : value,
     });
   };
 
   const handleUpdate = () => {
+    if (newsOwnerId === -1) {
+      return;
+    }
+
     setIsLoading(true);
 
     const newsArgDto: IUpdateNewsArgDto = {
@@ -84,14 +98,15 @@ const NewsEdit = () => {
         title: formValue.title,
         detail: formValue.detail,
         photoLink: formValue.photoLink,
+        updatedAt: formValue.date,
+        publicationLink: formValue.publicationLink,
+        creatorId: newsOwnerId,
       },
     };
 
     NewsRepo.getInstance()
       .updateNews(newsArgDto)
       .then(function () {
-        alert("Berhasil mengedit berita");
-
         navigate("/news");
       });
   };

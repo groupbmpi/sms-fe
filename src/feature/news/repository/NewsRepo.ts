@@ -1,7 +1,7 @@
 import { generateQueryString } from "../../../helper/Parser";
 import { HttpClient } from "../../httpClient";
 import { ResponseType } from "../../response";
-import { ICreateNewsArgDto, IFormAllNewsResponseData, IFormNewsByIdResponseData, INewsIdArgDto, INewsOptionsArgDto, IUpdateNewsArgDto } from "../model/News";
+import { ICreateNewsArgDto, IFormAllNewsResponseData, IFormNewsByIdResponseData, IFormNewsOptimumDatesResponseData, INewsIdArgDto, INewsOptionsArgDto, IUpdateNewsArgDto } from "../model/News";
 
 export class NewsRepo extends HttpClient {
     private static repoInstance? : NewsRepo;
@@ -11,7 +11,7 @@ export class NewsRepo extends HttpClient {
     }
 
     public static getInstance() {
-        if (!this.repoInstance) {
+        if (! this.repoInstance) {
             this.repoInstance = new NewsRepo();
         }
     
@@ -30,6 +30,12 @@ export class NewsRepo extends HttpClient {
         return data;
     }
 
+    public getNewsOptimumDates = async (): Promise<ResponseType<IFormNewsOptimumDatesResponseData>> => {
+        const data = await this.instance.get<ResponseType<IFormNewsOptimumDatesResponseData>>(`/optimum-dates`);
+
+        return data;
+    };
+
     public createNews = async (dto: ICreateNewsArgDto): Promise<ResponseType<null>> => {
         const data = await this.instance.post<ResponseType<null>>(`/`, dto);
 
@@ -42,8 +48,8 @@ export class NewsRepo extends HttpClient {
         return data;
     }
 
-    public deleteNews = async (dto: INewsIdArgDto): Promise<ResponseType<null>> => {
-        const data = await this.instance.delete<ResponseType<null>>(`/${dto.id}`);
+    public deleteNews = async (newsIdDto: INewsIdArgDto, newsOptionsDto: INewsOptionsArgDto): Promise<ResponseType<null>> => {
+        const data = await this.instance.delete<ResponseType<null>>(`/${newsIdDto.id}${generateQueryString(newsOptionsDto)}`);
 
         return data;
     }

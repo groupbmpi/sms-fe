@@ -7,6 +7,7 @@ import {
   NewsRepo,
 } from "../feature/news/news";
 import { useNavigate } from "react-router-dom";
+import { Loading } from "../core/Loading";
 
 const NewsPost = () => {
   const navigate = useNavigate();
@@ -23,12 +24,16 @@ const NewsPost = () => {
 
   const handleFormChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
+
     const id = target.id;
+
     const value = target.value;
 
     setFormValue({
       ...formValue,
-      [id]: value,
+      [id]: id === 'date'
+        ? new Date(value)
+        : value
     });
   };
 
@@ -36,17 +41,17 @@ const NewsPost = () => {
     setIsLoading(true);
 
     const newsArgDto: ICreateNewsArgDto = {
+      creatorId: 1,
       title: formValue.title,
       detail: formValue.detail,
       photoLink: formValue.photoLink,
-      creatorId: 1,
+      publicationLink: formValue.publicationLink,
+      createdAt: formValue.date,
     };
 
     NewsRepo.getInstance()
       .createNews(newsArgDto)
       .then(function () {
-        alert("Berhasil menambahkan berita");
-
         navigate("/news");
       })
       .finally(function () {

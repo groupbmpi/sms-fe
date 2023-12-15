@@ -5,7 +5,7 @@ export const isDomainBCF = (email: string): boolean => {
     return parsedDomain === BCFDomain;
 }
 
-export const maxPageByRecords = (totalRecords: number, recordsPerPage: number): number => {
+export const maxPagesByRecords = (totalRecords: number, recordsPerPage: number): number => {
     if (totalRecords <= 0 || recordsPerPage <= 0) {
         return 1;
     }

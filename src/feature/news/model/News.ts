@@ -1,5 +1,6 @@
 export interface INewsOptionsArgDto {
-    institutionId?: string,
+    institutionCategory?: string,
+    institution?: string,
     creatorId?: number,
     page?: number,
     limit?: number,
@@ -8,23 +9,27 @@ export interface INewsOptionsArgDto {
 }
 
 export interface INewsIdArgDto {
-    id: number
+    id: number,
 }
 
 export interface ICreateNewsArgDto {
+    creatorId: number,
     title: string,
     detail: string,
     photoLink: string,
-    creatorId: number,
+    publicationLink?: string,
+    createdAt?: Date,
 }
 
 export interface IUpdateNewsArgDto {
     id: number,
     data: {
+        creatorId?: number,
         title?: string,
         detail?: string,
         photoLink?: string,
-        creatorId?: number,
+        publicationLink?: string,
+        updatedAt?: Date,
     },
 }
 
@@ -34,12 +39,31 @@ export interface IFormAllNewsResponseData {
 }
 
 export interface IFormNewsByIdResponseData {
-    id: number,
-    title: string, 
-    detail: string, 
-    photoLink: string,
-    createdAt: string,
-    updatedAt: string,
+    owner: {
+        id: number,
+        name: string,
+    },
+    news: {
+        id: number,
+        title: string, 
+        detail: string, 
+        photoLink: string,
+        publicationLink: string | null,
+        createdAt: string,
+        updatedAt: string,
+        canModify: boolean,
+    },
+}
+
+export interface IFormNewsOptimumDatesResponseData {
+    minDates: {
+        createdAt: string,
+        updatedAt: string,
+    },
+    maxDates: {
+        createdAt: string,
+        updatedAt: string,
+    },
 }
 
 export interface NewsForm {
@@ -47,16 +71,7 @@ export interface NewsForm {
     detail: string,
     date: Date,
     photoLink: string,
-    publicationLink: string,
-}
-
-export interface INewsByIdRetDto {
-    id: number,
-    title: string, 
-    detail: string, 
-    photoLink: string,
-    createdAt: Date,
-    updatedAt: Date,
+    publicationLink?: string,
 }
 
 export interface IAllNewsRetDto {
@@ -65,10 +80,29 @@ export interface IAllNewsRetDto {
 }
 
 export interface INewsByIdRetDto {
-    id: number,
-    title: string, 
-    detail: string, 
-    photoLink: string,
-    createdAt: Date,
-    updatedAt: Date,
+    owner: {
+        id: number,
+        name: string,
+    },
+    news: {
+        id: number,
+        title: string, 
+        detail: string, 
+        photoLink: string,
+        publicationLink: string,
+        createdAt: Date,
+        updatedAt: Date,
+        canModify: boolean,
+    },
+}
+
+export interface INewsOptimumDatesRetDto {
+    minDates: {
+        createdAt: Date,
+        updatedAt: Date,
+    },
+    maxDates: {
+        createdAt: Date,
+        updatedAt: Date,
+    },
 }

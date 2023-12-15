@@ -7,21 +7,28 @@ import { generateDateStringIdFormat, getNumberFromString } from "../helper/Parse
 import { ResponseType } from "../feature/response";
 
 const NewsDetail = () => {
-  const { id } = useParams(); // TODO use this id to fetch news detail
+  const { id } = useParams();
 
   const [news, setNews] = useState<INewsByIdRetDto>({
-    id: 0,
-    title: '',
-    detail: '',
-    photoLink: '',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  }); // TODO make news type in NewsModel
+    owner: {
+      id: 0,
+      name: '',
+    },
+    news: {
+      id: 0,
+      title: '',
+      detail: '',
+      photoLink: '',
+      publicationLink: '',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      canModify: false,
+    }
+  });
 
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // TODO fetch news by id, and setNews with the data
     setIsLoading(true);
 
     const newsArgDto: INewsIdArgDto = {
@@ -33,12 +40,17 @@ const NewsDetail = () => {
         const data = response.data;
 
         const newsDto: INewsByIdRetDto = {
-          id: data.id,
-          title: data.title,
-          detail: data.detail,
-          photoLink: data.photoLink,
-          createdAt: new Date(data.createdAt),
-          updatedAt: new Date(data.updatedAt),
+          owner: {
+            ...data.owner,
+          },
+          news: {
+            ...data.news,
+            publicationLink: data.news.publicationLink 
+              ? data.news.publicationLink 
+              : "",
+            createdAt: new Date(data.news.createdAt),
+            updatedAt: new Date(data.news.updatedAt),
+          },
         };
 
         setNews(newsDto);
@@ -55,16 +67,15 @@ const NewsDetail = () => {
       ) : (
         <>
           <img
-            // src={news.photoLink}
-            src="https://picsum.photos/200/300"
+            src={news.news.photoLink}
             alt="News"
             className="img-fluid mx-auto d-block"
           />
-          <h3 className="my-2">{news.title}</h3>
+          <h3 className="my-2">{news.news.title}</h3>
           <div className="text-body-tertiary fst-italic">
-            {generateDateStringIdFormat(news.updatedAt)} - {'John Doe'}
+            {generateDateStringIdFormat(news.news.updatedAt)} - {news.owner.name}
           </div>
-          <p>{news.detail}</p>
+          <p>{news.news.detail}</p>
         </>
       )}
     </Container>

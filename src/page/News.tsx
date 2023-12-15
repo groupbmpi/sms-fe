@@ -11,6 +11,7 @@ import {
   IAllNewsRetDto,
   IFormAllNewsResponseData,
   INewsIdArgDto,
+  INewsOptimumDatesRetDto,
   INewsOptionsArgDto,
 } from "../feature/news/model/News";
 import {
@@ -20,16 +21,13 @@ import {
   getEndDateByMonthYear,
   getNumberFromString,
   getStartDateByMonthYear,
-  maxPageByRecords,
+  maxPagesByRecords,
 } from "../helper/Parser";
 import { ResponseType } from "../feature/response";
 import { NewsRepo } from "../feature/news/repository/NewsRepo";
 import { Loading } from "../core/Loading";
 import { PopupModal } from "../core/Modal";
 import { UserRepository } from "../feature/user/user";
-
-const ALL_LEMBAGA = "Semua Lembaga";
-const ALL_KATEGORI = "Semua Kategori";
 
 const News = () => {
   const [searchParams] = useSearchParams();
@@ -45,9 +43,11 @@ const News = () => {
   const [allFilter, setAllFilter] = useState<{
     daftarLembaga: string[];
     daftarKategori: string[];
+    yearRange: number[];
   }>({
     daftarLembaga: [],
     daftarKategori: [],
+    yearRange: generateArray(1900, 2100).map((item) => item),
   });
 
   const [filter, setFilter] = useState<{
@@ -59,64 +59,51 @@ const News = () => {
   }>({
     "year-news-filter": undefined,
     "month-news-filter": undefined,
-    "kategori-inst-news-filter": undefined,
-    "institution-news-filter": undefined,
+    "kategori-inst-news-filter": "",
+    "institution-news-filter": "",
     "creator-id-news-filter": undefined,
   });
 
   const maxRecordsPerPage = 10;
-  const maxPage = maxPageByRecords(news.totalRecords, maxRecordsPerPage); // TODO remove this hardcoded maxPage
+  const maxPages = maxPagesByRecords(news.totalRecords, maxRecordsPerPage);
 
   const currentPage = searchParams.get("page");
   const currentPageNum = currentPage ? parseInt(currentPage) : 1;
 
   const listOfPage = generateArray(
     Math.max(1, currentPageNum - 2),
-    Math.min(currentPageNum + 2, maxPage)
+    Math.min(currentPageNum + 2, maxPages)
   );
-
-  const handleFormChange = (e: React.ChangeEvent) => {
-    const target = e.target as HTMLInputElement;
-
-    const { id, value } = target;
-
-    setFilter({
-      ...filter,
-      [id]:
-        id === "year-news-filter" || id === "month-news-filter"
-          ? getNumberFromString(value)
-          : value,
-    });
-  };
 
   useEffect(() => {
     setIsLoading(true);
 
-    const newsArgDto: INewsOptionsArgDto = {
-      institutionId: filter["institution-news-filter"],
+    let newsArgDto: INewsOptionsArgDto = {
+      institutionCategory: filter["kategori-inst-news-filter"],
+      institution: filter["institution-news-filter"],
       creatorId: filter["creator-id-news-filter"],
-      startDateAt:
-        filter["month-news-filter"] !== undefined ||
-        filter["year-news-filter"] !== undefined
-          ? generateDateQueryStringFormat(
-              getStartDateByMonthYear(
-                filter["month-news-filter"],
-                filter["year-news-filter"]
-              )
-            )
-          : undefined,
-      endDateAt:
-        filter["month-news-filter"] !== undefined ||
-        filter["year-news-filter"] !== undefined
-          ? generateDateQueryStringFormat(
-              getEndDateByMonthYear(
-                filter["month-news-filter"],
-                filter["year-news-filter"]
-              )
-            )
-          : undefined,
       limit: maxRecordsPerPage,
       page: currentPageNum,
+      startDateAt: generateDateQueryStringFormat(
+        getStartDateByMonthYear(
+          filter["month-news-filter"]
+            ? filter["month-news-filter"]
+            : 1,
+          filter["year-news-filter"]
+            ? filter["year-news-filter"]
+            : allFilter.yearRange[0],
+        )
+      ),
+      endDateAt: generateDateQueryStringFormat(
+        getEndDateByMonthYear(
+          filter["month-news-filter"]
+            ? filter["month-news-filter"]
+            : 12,
+          filter["year-news-filter"]
+            ? filter["year-news-filter"]
+            : allFilter.yearRange[allFilter.yearRange.length - 1],
+        )
+      )
     };
 
     NewsRepo.getInstance()
@@ -127,9 +114,18 @@ const News = () => {
         const newsDto: IAllNewsRetDto = {
           news: data.news.map(function (item) {
             return {
-              ...item,
-              createdAt: new Date(item.createdAt),
-              updatedAt: new Date(item.updatedAt),
+              owner: {
+                ...item.owner
+              },
+              news: {
+                ...item.news,
+                publicationLink: item.news.publicationLink 
+                  ? item.news.publicationLink 
+                  : "",
+                createdAt: new Date(item.news.createdAt),
+                updatedAt: new Date(item.news.updatedAt),
+
+              },
             };
           }),
           totalRecords: data.totalRecords,
@@ -143,77 +139,109 @@ const News = () => {
   }, [filter, searchParams]);
 
   useEffect(() => {
+    NewsRepo.getInstance()
+      .getNewsOptimumDates()
+      .then((response) => {
+        const data = response.data;
+
+        const newsDto: INewsOptimumDatesRetDto = {
+          minDates: {
+            createdAt: new Date(data.minDates.createdAt),
+            updatedAt: new Date(data.minDates.updatedAt)
+          },
+          maxDates: {
+            createdAt: new Date(data.maxDates.createdAt),
+            updatedAt: new Date(data.maxDates.updatedAt)
+          }
+        };
+
+        setAllFilter((prevAllFilter) => ({
+          ...prevAllFilter,
+          yearRange: generateArray(
+            newsDto.minDates.updatedAt.getFullYear(),
+            newsDto.maxDates.updatedAt.getFullYear(),
+          )
+        }));
+      });
+
     UserRepository.getInstance()
       .getAllCategories()
       .then((res) => {
         let allLembaga: string[] = [];
-        allLembaga.push(ALL_LEMBAGA);
 
         res.data.lembaga.forEach((item) => {
           allLembaga = [...allLembaga, ...item.lembaga];
         });
 
-        setAllFilter({
-          daftarKategori: [ALL_KATEGORI, ...res.data.kategori],
+        setAllFilter((prevAllFilter) => ({
+          ...prevAllFilter,
+          daftarKategori: [...res.data.kategori],
           daftarLembaga: allLembaga,
-        });
-
-        setFilter({
-          ...filter,
-          "kategori-inst-news-filter": ALL_KATEGORI,
-          "institution-news-filter": ALL_LEMBAGA,
-        });
+        }));
       });
   }, []);
 
   useEffect(() => {
-  }, [filter]);
+    if (filter["kategori-inst-news-filter"] === "") {
+      return;
+    } 
 
-  useEffect(() => {
-    if (filter["kategori-inst-news-filter"] === ALL_KATEGORI) {
-    } else {
-      UserRepository.getInstance()
-        .getAllCategories()
-        .then((res) => {
-          const lembagaByCategory = getAllLembagaByKategori(
-            filter["kategori-inst-news-filter"]!,
-            res.data.lembaga
-          );
+    UserRepository.getInstance()
+      .getAllCategories()
+      .then((res) => {
+        const lembagaByCategory = getAllLembagaByKategori(
+          filter["kategori-inst-news-filter"]!,
+          res.data.lembaga
+        );
 
-          setAllFilter({
-            ...allFilter,
-            daftarLembaga: [ALL_LEMBAGA, ...lembagaByCategory],
-          });
+        setAllFilter({
+          ...allFilter,
+          daftarLembaga: [...lembagaByCategory],
         });
-    }
+      });
   }, [filter["kategori-inst-news-filter"]]);
 
-  const handleDelete = (newsId: number) => {
+  const handleFormChange = (e: React.ChangeEvent) => {
+    const target = e.target as HTMLInputElement;
+
+    const { id, value } = target;
+
+    setFilter({
+      ...filter,
+      [id]: id === "year-news-filter" || id === "month-news-filter"
+        ? getNumberFromString(value)
+        : value,
+    });
+  };
+
+  const handleDelete = (newsId: number, creatorId: number) => {
     setIsLoading(true);
 
-    const newsArgDto: INewsIdArgDto = {
+    const newsIdArgDto: INewsIdArgDto = {
       id: newsId,
     };
 
-    NewsRepo.getInstance()
-      .deleteNews(newsArgDto)
-      .then(function () {
-        const updatedNews = news.news.filter(
-          (item) => item.id !== newsArgDto.id
-        );
+    const newsOptionsArgDto: INewsOptionsArgDto = {
+      creatorId,
+    }
 
-        const updatedTotalRecords = news.totalRecords - 1;
+    // NewsRepo.getInstance()
+    //   .deleteNews(newsIdArgDto, newsOptionsArgDto)
+    //   .then(function () {
+    //     const updatedNews = news.news.filter(
+    //       (item) => item.news.id !== newsIdArgDto.id
+    //     );
 
-        setNews({
-          news: updatedNews,
-          totalRecords: updatedTotalRecords,
-        });
+    //     const updatedTotalRecords = news.totalRecords - 1;
 
-        alert("Berhasil menghapus berita");
-      })
-      .finally(function () {
-        setIsLoading(false);
-      });
+    //     setNews({
+    //       news: updatedNews,
+    //       totalRecords: updatedTotalRecords,
+    //     });
+    //   })
+    //   .finally(function () {
+    //     setIsLoading(false);
+    //   });
   };
 
   return (
@@ -228,9 +256,9 @@ const News = () => {
             onChange={handleFormChange}
           >
             <option value="">Semua Tahun</option>
-            {generateArray(0, 5).map((item: number) => (
-              <option value={`${new Date().getFullYear() - item}`} key={item}>
-                {new Date().getFullYear() - item}
+            {allFilter.yearRange.map((item: number) => (
+              <option value={`${item}`} key={item}>
+                { item }
               </option>
             ))}
           </select>
@@ -260,6 +288,7 @@ const News = () => {
             aria-label="kategori-inst-news-filter"
             onChange={handleFormChange}
           >
+            <option value="">Semua Kategori</option>
             {allFilter.daftarKategori.map((item) => (
               <option value={item} key={item}>
                 {item}
@@ -272,6 +301,7 @@ const News = () => {
             aria-label="institution-news-filter"
             onChange={handleFormChange}
           >
+            <option value="">Semua Lembaga</option>
             {allFilter.daftarLembaga.map((item) => (
               <option value={item} key={item}>
                 {item}
@@ -295,13 +325,13 @@ const News = () => {
       ) : (
         <>
           {news.news.map((item) => (
-            <div key={item.id}>
+            <div key={item.news.id}>
               <div className="card p-1 my-2">
                 <div className="d-flex flex-row">
                   <img
-                    src={item.photoLink}
+                    src={item.news.photoLink}
                     className="card-img-top"
-                    alt={`image-news-${item.id}`}
+                    alt={`image-news-${item.news.id}`}
                     style={{
                       width: "250px",
                       height: "200px",
@@ -309,34 +339,38 @@ const News = () => {
                     }}
                   />
                   <div className="card-body d-flex flex-column justify-content-around">
-                    <h5 className="card-title">{item.title}</h5>
+                    <h5 className="card-title">{item.news.title}</h5>
                     <div className="text-body-tertiary fst-italic">
-                      {generateDateStringIdFormat(item.updatedAt)} -{" "}
-                      {"John Doe"}
+                      {generateDateStringIdFormat(item.news.updatedAt)} - { item.owner.name }
                     </div>
-                    <p className="card-text">{item.detail.substring(0, 100)}</p>
+                    <p className="card-text">{item.news.detail.substring(0, 100)}</p>
                     <div className="d-flex flex-justify-start gap-1">
-                      <Link to={`/news/${item.id}`}>
+                      <Link to={`/news/${item.news.id}`}>
                         <Button variant="primary">Baca Selengkapnya</Button>
                       </Link>
                       <ProtectedRoleComponent
-                        roleAllowed={[Role.ADMIN, Role.SUPERADMIN]}
+                        roleAllowed={[Role.ADMIN, Role.SUPERADMIN, Role.MITRA]}
                         component={
                           <div className="d-flex gap-1">
-                            <Link to={`/news/${item.id}/edit`}>
-                              <Button variant="secondary">Edit</Button>
-                            </Link>
-                            <Button
-                              variant="danger"
-                              onClick={() => setShowDeleteConfirmation(true)}
-                            >
-                              Delete
-                            </Button>
+                            {  item.news.canModify === true
+                              ? <>
+                                <Link to={`/news/${item.news.id}/edit`}>
+                                  <Button variant="secondary">Edit</Button>
+                                </Link>
+                                <Button
+                                  variant="danger"
+                                  onClick={() => setShowDeleteConfirmation(true)}
+                                >
+                                  Delete
+                                </Button>
+                              </>
+                              : <>
+                              </>
+                            }
                           </div>
                         }
                       />
-                      {/* TODO Change link to based on publicationLink field */}
-                      <Link to={item.photoLink}>
+                      <Link target="_blank" to={ item.news.publicationLink }>
                         <Button variant="warning">Lihat Sumber Berita</Button>
                       </Link>
                     </div>
@@ -350,7 +384,7 @@ const News = () => {
                 handleClose={() => setShowDeleteConfirmation(false)}
                 handleAffirmative={() => {
                   setShowDeleteConfirmation(false);
-                  handleDelete(item.id);
+                  handleDelete(item.news.id, item.owner.id);
                 }}
                 handleDismiss={() => setShowDeleteConfirmation(false)}
                 affirmativeText="Hapus"
@@ -382,7 +416,7 @@ const News = () => {
 
           <li
             className={`page-item ${
-              currentPageNum === maxPage ? "disabled" : null
+              currentPageNum === maxPages ? "disabled" : null
             }`}
           >
             <Link to={`/news?page=${currentPageNum + 1}`} className="page-link">

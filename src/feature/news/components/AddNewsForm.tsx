@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Input, InputType } from "../../../core/core";
 import { NewsForm } from "../news";
-import { useEffect } from "react";
+import { generateDateQueryStringFormat } from "../../../helper/Parser";
 
 export const AddNewsForm = ({
   formValue,
@@ -14,8 +14,6 @@ export const AddNewsForm = ({
   handleSubmit: () => void;
   affirmativeText?: string;
 }) => {
-  useEffect(() => {}, [formValue]);
-
   return (
     <form className="px-5">
       <Input
@@ -36,7 +34,7 @@ export const AddNewsForm = ({
         type={InputType.date}
         id="date"
         placeholder=""
-        value={formValue.date?.toString()}
+        value={`${generateDateQueryStringFormat(formValue.date)}`}
         onChange={handleFormChange}
       />
       <Input
@@ -55,9 +53,9 @@ export const AddNewsForm = ({
       />
       <div className="d-flex align-items-center justify-content-center gap-2">
         <button
-          type="submit"
+          type="button"
           className="btn btn-primary"
-          onSubmit={handleSubmit}
+          onClick={handleSubmit}
         >
           {affirmativeText}
         </button>
