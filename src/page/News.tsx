@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { Link, useSearchParams } from "react-router-dom";
 
 import { generateArray } from "../helper/Iterable";
@@ -16,7 +16,6 @@ import {
 } from "../feature/news/model/News";
 import {
   generateDateQueryStringFormat,
-  generateDateStringIdFormat,
   getAllLembagaByKategori,
   getEndDateByMonthYear,
   getNumberFromString,
@@ -26,8 +25,9 @@ import {
 import { ResponseType } from "../feature/response";
 import { NewsRepo } from "../feature/news/repository/NewsRepo";
 import { Loading } from "../core/Loading";
-import { PopupModal } from "../core/Modal";
 import { UserRepository } from "../feature/user/user";
+import { NewsCard } from "../feature/news/news";
+import { toast } from "react-toastify";
 
 const News = () => {
   const [searchParams] = useSearchParams();
@@ -64,7 +64,7 @@ const News = () => {
     "creator-id-news-filter": undefined,
   });
 
-  const maxRecordsPerPage = 10;
+  const maxRecordsPerPage = 9;
   const maxPages = maxPagesByRecords(news.totalRecords, maxRecordsPerPage);
 
   const currentPage = searchParams.get("page");
@@ -90,8 +90,6 @@ const News = () => {
             ? filter["month-news-filter"]
             : 1,
           filter["year-news-filter"]
-            ? filter["year-news-filter"]
-            : allFilter.yearRange[0],
         )
       ),
       endDateAt: generateDateQueryStringFormat(
@@ -100,8 +98,6 @@ const News = () => {
             ? filter["month-news-filter"]
             : 12,
           filter["year-news-filter"]
-            ? filter["year-news-filter"]
-            : allFilter.yearRange[allFilter.yearRange.length - 1],
         )
       )
     };
@@ -225,23 +221,28 @@ const News = () => {
       creatorId,
     }
 
-    // NewsRepo.getInstance()
-    //   .deleteNews(newsIdArgDto, newsOptionsArgDto)
-    //   .then(function () {
-    //     const updatedNews = news.news.filter(
-    //       (item) => item.news.id !== newsIdArgDto.id
-    //     );
+    NewsRepo.getInstance()
+      .deleteNews(newsIdArgDto, newsOptionsArgDto)
+      .then(function () {
+        const updatedNews = news.news.filter(
+          (item) => item.news.id !== newsIdArgDto.id
+        );
 
-    //     const updatedTotalRecords = news.totalRecords - 1;
+        const updatedTotalRecords = news.totalRecords - 1;
 
-    //     setNews({
-    //       news: updatedNews,
-    //       totalRecords: updatedTotalRecords,
-    //     });
-    //   })
-    //   .finally(function () {
-    //     setIsLoading(false);
-    //   });
+        setNews({
+          news: updatedNews,
+          totalRecords: updatedTotalRecords,
+        });
+
+        toast.success("Berhasil menghapus berita");
+      })
+      .catch((err) => {
+        toast.error(err.response.data.meta.message);
+      })
+      .finally(function () {
+        setIsLoading(false);
+      });
   };
 
   return (
@@ -323,75 +324,20 @@ const News = () => {
       {isLoading ? (
         <Loading />
       ) : (
-        <>
-          {news.news.map((item) => (
-            <div key={item.news.id}>
-              <div className="card p-1 my-2">
-                <div className="d-flex flex-row">
-                  <img
-                    src={item.news.photoLink}
-                    className="card-img-top"
-                    alt={`image-news-${item.news.id}`}
-                    style={{
-                      width: "250px",
-                      height: "200px",
-                      borderRadius: "10px",
-                    }}
-                  />
-                  <div className="card-body d-flex flex-column justify-content-around">
-                    <h5 className="card-title">{item.news.title}</h5>
-                    <div className="text-body-tertiary fst-italic">
-                      {generateDateStringIdFormat(item.news.updatedAt)} - { item.owner.name }
-                    </div>
-                    <p className="card-text">{item.news.detail.substring(0, 100)}</p>
-                    <div className="d-flex flex-justify-start gap-1">
-                      <Link to={`/news/${item.news.id}`}>
-                        <Button variant="primary">Baca Selengkapnya</Button>
-                      </Link>
-                      <ProtectedRoleComponent
-                        roleAllowed={[Role.ADMIN, Role.SUPERADMIN, Role.MITRA]}
-                        component={
-                          <div className="d-flex gap-1">
-                            {  item.news.canModify === true
-                              ? <>
-                                <Link to={`/news/${item.news.id}/edit`}>
-                                  <Button variant="secondary">Edit</Button>
-                                </Link>
-                                <Button
-                                  variant="danger"
-                                  onClick={() => setShowDeleteConfirmation(true)}
-                                >
-                                  Delete
-                                </Button>
-                              </>
-                              : <>
-                              </>
-                            }
-                          </div>
-                        }
-                      />
-                      <Link target="_blank" to={ item.news.publicationLink }>
-                        <Button variant="warning">Lihat Sumber Berita</Button>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
+        <div className="container">
+          <div className="row">
+            {news.news.map((item) => (
+              <div className="col-md-4" key={item.news.id}>
+                <NewsCard
+                  item={item}
+                  showDeleteConfirmation={showDeleteConfirmation}
+                  setShowDeleteConfirmation={setShowDeleteConfirmation}
+                  handleDelete={handleDelete}
+                />
               </div>
-              <PopupModal
-                show={showDeleteConfirmation}
-                title="Konfirmasi Hapus Berita"
-                body="Apakah anda yakin ingin menghapus berita ini?"
-                handleClose={() => setShowDeleteConfirmation(false)}
-                handleAffirmative={() => {
-                  setShowDeleteConfirmation(false);
-                  handleDelete(item.news.id, item.owner.id);
-                }}
-                handleDismiss={() => setShowDeleteConfirmation(false)}
-                affirmativeText="Hapus"
-              />
-            </div>
-          ))}
-        </>
+            ))}
+          </div>
+        </div>
       )}
 
       <nav aria-label="news-pagination">

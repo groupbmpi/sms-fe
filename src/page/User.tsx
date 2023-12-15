@@ -46,7 +46,6 @@ const User = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    console.log('filter',filter)
     UserRepository.getInstance()
       .getAllUsers(currentPageNum,getKeyFilterStatus(filter.status))
       .then((res) => {
@@ -57,14 +56,6 @@ const User = () => {
         setIsLoading(false);
       });
   }, [filter,currentPageNum]);
-
-  useEffect(() => {
-    // TODO fetch users with filter and do setUsers
-  }, [filter]);
-
-  useEffect(() => {
-    // TODO fetch users with searchParams and do setUsers
-  }, [searchParams]);
 
   const handleAccept = (id: number) => {
     UserRepository.getInstance()

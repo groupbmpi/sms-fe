@@ -79,7 +79,7 @@ export const ProfileForm = ({
       />
       {isEditMode ? (
         <div className="d-flex align-items-center justify-content-center">
-          <Button type="submit" onClick={handleSubmitUpdate}>
+          <Button type="button" onClick={handleSubmitUpdate}>
             Simpan
           </Button>
         </div>

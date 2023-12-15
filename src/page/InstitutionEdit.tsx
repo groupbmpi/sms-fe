@@ -1,21 +1,30 @@
 import { Container } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import { AddLembagaForm } from "../feature/lembaga/lembaga";
+import { AddLembagaForm, LembagaRepository } from "../feature/lembaga/lembaga";
 import { useNavigate, useParams } from "react-router-dom";
+import { ILembagaDTO } from "../feature/lembaga/model/lembaga";
+import { toast } from "react-toastify";
 
 const InstitutionEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [formValue, setFormValue] = useState<any>({
-    id: parseInt(id!),
+  const [formValue, setFormValue] = useState<ILembagaDTO>({
     nama: "",
     kategori: "",
   });
 
   useEffect(() => {
-    // TODO fetch lembaga by id and setFormValue (nama dan kategori based on fetched data)
-  }, []);
+    LembagaRepository.getInstance()
+      .getAllLembaga({ id: parseInt(id!) })
+      .then((res) => {
+        setFormValue(res.data[0]);
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+        navigate("/institution");
+      });
+  }, [id, navigate]);
 
   const handleFormChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
@@ -25,7 +34,21 @@ const InstitutionEdit = () => {
 
   const handleSubmit = (e: React.MouseEvent) => {
     e.preventDefault();
-    // TODO edit lembaga based of formvalue
+    LembagaRepository.getInstance()
+      .updateLembaga(
+        {
+          nama: formValue.nama,
+          kategori: formValue.kategori,
+        },
+        parseInt(id!)
+      )
+      .then(() => {
+        toast.success("Berhasil mengubah lembaga");
+        navigate("/institution");
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+      });
   };
 
   const handleCancel = () => {

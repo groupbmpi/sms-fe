@@ -1,7 +1,8 @@
 import { Container } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import { AddLembagaForm } from "../feature/lembaga/lembaga";
+import { AddLembagaForm, LembagaRepository } from "../feature/lembaga/lembaga";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const InstitutionPost = () => {
   const navigate = useNavigate();
@@ -24,7 +25,15 @@ const InstitutionPost = () => {
 
   const handleSubmit = (e: React.MouseEvent) => {
     e.preventDefault();
-    // TODO add lembaga based of formvalue
+    LembagaRepository.getInstance()
+      .createLembaga(formValue)
+      .then(() => {
+        toast.success("Berhasil menambah lembaga");
+        navigate("/institution");
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+      });
   };
 
   const handleCancel = () => {

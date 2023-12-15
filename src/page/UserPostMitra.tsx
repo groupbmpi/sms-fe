@@ -8,6 +8,7 @@ import {
 import { UserRepository } from "../feature/user/repository/UserRepo";
 import { IFormUserRegister } from "../feature/user/model/User";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const UserPostMitra = () => {
   const [formValue, setFormValue] = useState<RegisterForm>(new RegisterForm());
@@ -42,7 +43,10 @@ const UserPostMitra = () => {
     UserRepository.getInstance()
       .registerUserAutoAccepted(registerFormValue)
       .then(() => {
+        toast.success("Berhasil menambah mitra");
         navigate("/user");
+      }).catch((err) => {
+        toast.error(err.response.data.meta.message);
       });
   };
 

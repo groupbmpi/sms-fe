@@ -33,7 +33,7 @@ export const AddNewsForm = ({
       <Input
         type={InputType.date}
         id="date"
-        placeholder=""
+        placeholder="Tanggal berita"
         value={`${generateDateQueryStringFormat(formValue.date)}`}
         onChange={handleFormChange}
       />

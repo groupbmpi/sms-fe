@@ -1,23 +1,37 @@
 import { Container } from "react-bootstrap";
 import { useState } from "react";
-import { ActivityForm, ActivityRepository, AddActivityForm, IActivityReportDTO } from "../feature/activity/activity";
+import {
+  ActivityForm,
+  ActivityRepository,
+  AddActivityForm,
+  IActivityReportDTO,
+} from "../feature/activity/activity";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 // import { Response } from "../feature/response";
 const ActivityPost = () => {
   const [formValue, setFormValue] = useState<ActivityForm>(new ActivityForm());
   const activityRepository = ActivityRepository.getInstance();
   const navigate = useNavigate();
 
-  const handleSubmit = async (event: React.MouseEvent<HTMLElement>) => {
+  const handleSubmit = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
-    
-    formValue.setActivityForm(formValue)
+
+    formValue.setActivityForm(formValue);
 
     formValue.startDate = new Date(formValue.startDate).toUTCString();
     formValue.endDate = new Date(formValue.startDate).toUTCString();
 
-    const body : IActivityReportDTO = formValue.toDto()
-    await activityRepository.createActivityReport(body);
+    const body: IActivityReportDTO = formValue.toDto();
+    activityRepository
+      .createActivityReport(body)
+      .then(() => {
+        toast.success("Berhasil menambah kegiatan");
+        navigate("/activity");
+      })
+      .catch((err) => {
+        toast.error(err.response.data.meta.message);
+      });
   };
 
   const handleAddSuccessIndicator = () => {
@@ -34,17 +48,16 @@ const ActivityPost = () => {
   };
 
   const handleDeleteSuccessIndicator = () => {
-      const newSuccessIndicator = formValue.successIndicator;
-      
-      newSuccessIndicator.pop();
+    const newSuccessIndicator = formValue.successIndicator;
 
+    newSuccessIndicator.pop();
 
-      setFormValue({
-        ...formValue,
-        successIndicator: newSuccessIndicator,
-      });
+    setFormValue({
+      ...formValue,
+      successIndicator: newSuccessIndicator,
+    });
 
-      formValue.setActivityForm(formValue);
+    formValue.setActivityForm(formValue);
   };
 
   const handleFormChange = (e: React.ChangeEvent) => {
@@ -72,8 +85,8 @@ const ActivityPost = () => {
   };
 
   const handleCancel = () => {
-    navigate("/activity")
-  }
+    navigate("/activity");
+  };
 
   return (
     <Container className="my-2">

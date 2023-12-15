@@ -265,7 +265,6 @@ export const AddActivityForm = ({
         value={formValue.additionalInfo}
         onChange={handleFormChange}
         disabled={!onEditMode}
-        required
       />
       {onEditMode && (
         <div className="d-flex align-items-center justify-content-center gap-2">

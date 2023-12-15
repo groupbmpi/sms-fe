@@ -7,12 +7,10 @@ import {
   NewsRepo,
 } from "../feature/news/news";
 import { useNavigate } from "react-router-dom";
-import { Loading } from "../core/Loading";
+import { toast } from "react-toastify";
 
 const NewsPost = () => {
   const navigate = useNavigate();
-
-  const [isLoading, setIsLoading] = useState(true);
 
   const [formValue, setFormValue] = useState<NewsForm>({
     title: "",
@@ -38,8 +36,6 @@ const NewsPost = () => {
   };
 
   const handleSubmit = () => {
-    setIsLoading(true);
-
     const newsArgDto: ICreateNewsArgDto = {
       creatorId: 1,
       title: formValue.title,
@@ -52,10 +48,11 @@ const NewsPost = () => {
     NewsRepo.getInstance()
       .createNews(newsArgDto)
       .then(function () {
+        toast.success("Berhasil menambah berita");
         navigate("/news");
       })
-      .finally(function () {
-        setIsLoading(false);
+      .catch((err) => {
+        toast.error(err.response.data.meta.message);
       });
   };
 

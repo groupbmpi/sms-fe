@@ -13,7 +13,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [isLoadComplete, setIsLoadComplete] = useState<boolean>(false);
 
-  // TODO: uncomment this code when backend is ready
   useEffect(() => {
     if (!user) {
       UserRepository.getInstance()

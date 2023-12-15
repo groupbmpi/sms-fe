@@ -37,13 +37,14 @@ const UserPostAdmin = () => {
       UserRepository.getInstance()
         .registerAdmin(newAdmin)
         .then(() => {
-          // TODO add notif that admin has been added
           setFormValue("");
           toast.success("Admin berhasil ditambahkan");
           navigate("/user");
+        })
+        .catch((err) => {
+          toast.error(err.response.data.meta.message)
         });
     } else {
-      // TODO add notif that email is not BCF domain
       toast.error("Email harus berdomain BCF (@bcf.or.id)");
     }
   };

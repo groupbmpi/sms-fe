@@ -12,15 +12,6 @@ const ReportList = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    ReportRepository.getInstance()
-      .getAllReport()
-      .then((res) => {
-        setReports(res.data);
-        setMaxPage(res.countPages);
-      });
-  }, []);
-
-  useEffect(() => {
     setIsLoading(true);
     ReportRepository.getInstance()
       .getAllReport("", parseInt(searchParams.get("page") || "1"))

@@ -13,6 +13,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getNumberFromString } from "../helper/Parser";
 import { ResponseType } from "../feature/response";
 import { Loading } from "../core/Loading";
+import { toast } from "react-toastify";
 
 const NewsEdit = () => {
   const navigate = useNavigate();
@@ -107,6 +108,7 @@ const NewsEdit = () => {
     NewsRepo.getInstance()
       .updateNews(newsArgDto)
       .then(function () {
+        toast.success("Berhasil mengedit berita");
         navigate("/news");
       });
   };

@@ -6,4 +6,5 @@ export interface IActivityReportQuery {
     page?: number,
     limit?: number,
     lembaga?: string,
+    kategori? : string,
 }

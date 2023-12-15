@@ -5,6 +5,8 @@ import { ProfileForm } from "../feature/auth-and-profile/auth-and-profile";
 import { UserRepository } from "../feature/user/user";
 import { IUserData } from "../feature/user/model/User";
 import profilePhoto from "../assets/images/profile-icon.png";
+import { toast } from "react-toastify";
+import { AxiosError } from "axios";
 
 const initialProfileValue = {
   name: "John Doe",
@@ -83,18 +85,29 @@ const Profile = () => {
   };
 
   const handleSubmitUpdate = async () => {
-    const newProfile: IUserData = await userRepo.updateProfile({
-      namaLengkap: formValue.name,
-      noHandphone: formValue.phoneNumber,
-      avatar: formValue.avatar ? formValue.linkFoto : "",
-    });
-    setFormValue((prev) => ({
-      ...prev,
-      name: newProfile.namaLengkap,
-      phoneNumber: newProfile.noHandphone,
-      linkFoto: newProfile.linkFoto,
-    }));
-    setIsEditMode(!isEditMode);
+    try {
+      const newProfile: IUserData = await userRepo.updateProfile({
+        namaLengkap: formValue.name,
+        noHandphone: formValue.phoneNumber,
+        avatar: formValue.avatar ? formValue.linkFoto : "",
+      });
+      setTimeout(() => {
+        setFormValue((prev) => ({
+          ...prev,
+          name: newProfile.namaLengkap,
+          phoneNumber: newProfile.noHandphone,
+          linkFoto: newProfile.linkFoto,
+        }));
+      }, 1000);
+      setIsEditMode(!isEditMode);
+      toast.success("Berhasil mengubah profile");
+    } catch (error) {
+      if(error instanceof AxiosError){
+        toast.error(error.response?.data.meta.message);
+      } else {
+        toast.error("Gagal mengubah profile");
+      }
+    }
   };
 
   return (
@@ -121,6 +134,9 @@ const Profile = () => {
           width={150}
           height={150}
           draggable={false}
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = profilePhoto;
+          }}
         />
       </div>
       <ProfileForm

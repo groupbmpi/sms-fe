@@ -76,145 +76,129 @@ export const AddMitraForm = ({
     if (typeof newLembaga !== "undefined") {
       if (isUsedOthersLembaga) {
         setLembaga([...newLembaga[0].lembaga, "Lainnya"]);
+        setFormValue({
+          ...formValue,
+          institution: newLembaga[0].lembaga[0] || "Lainnya",
+          isValid: formValue.isValid,
+        });
       } else {
-        setLembaga(newLembaga[0].lembaga);
+        setLembaga([...newLembaga[0].lembaga, "Lainnya"]);
+        setFormValue({
+          ...formValue,
+          institution: newLembaga[0].lembaga[0] || "Lainnya",
+          isValid: formValue.isValid,
+        });
       }
     }
   }, [categories.lembaga, formValue.category]);
 
   return (
     <form className="">
-      <div className="d-flex justify-content-center align-items-center">
-        <Input
-          type={InputType.text}
-          placeholder="Nama lengkap"
-          id="fullName"
-          value={formValue.fullName}
-          onChange={handleFormChange}
-          required
-        />
-      </div>
-      <div className="d-flex justify-content-center align-items-center">
-        <Select
-          id="category"
-          label="Kategori"
-          values={
-            new Map(
-              categories.kategori?.map((category) => [category, category])
-            )
-          }
-          value={formValue.category}
-          onChange={handleFormChange}
-          required
-        />
-      </div>
-      <div className="d-flex justify-content-center align-items-center">
-        <Select
-          id="institution"
-          label="Institusi"
-          onChange={handleFormChange}
-          value={formValue.institution}
-          values={new Map(lembaga?.map((lembaga) => [lembaga, lembaga]) || [])}
-        />
-      </div>
-      <div className="d-flex justify-content-center align-items-center">
-        <Select
-          id="province"
-          label="Provinsi"
-          values={
-            new Map(
-              categories.daerah?.map((category) => [
-                category.provinsi,
-                category.provinsi,
-              ]) || []
-            )
-          }
-          value={formValue.province}
-          onChange={handleFormChange}
-          required
-        />
-      </div>
+      <Input
+        type={InputType.text}
+        placeholder="Nama lengkap"
+        id="fullName"
+        value={formValue.fullName}
+        onChange={handleFormChange}
+        required
+      />
+      <Select
+        id="category"
+        label="Kategori"
+        values={
+          new Map(categories.kategori?.map((category) => [category, category]))
+        }
+        value={formValue.category}
+        onChange={handleFormChange}
+        required
+      />
+      <Select
+        id="institution"
+        label="Institusi"
+        onChange={handleFormChange}
+        value={formValue.institution}
+        values={new Map(lembaga?.map((lembaga) => [lembaga, lembaga]) || [])}
+      />
+      <Select
+        id="province"
+        label="Provinsi"
+        values={
+          new Map(
+            categories.daerah?.map((category) => [
+              category.provinsi,
+              category.provinsi,
+            ]) || []
+          )
+        }
+        value={formValue.province}
+        onChange={handleFormChange}
+        required
+      />
       {formValue.institution === "Lainnya" && (
-        <div className="d-flex justify-content-center align-items-center">
-          <Input
-            type={InputType.text}
-            placeholder="Nama institusi"
-            id="institutionName"
-            value={formValue.institutionName}
-            onChange={handleFormChange}
-            required
-          />
-        </div>
+        <Input
+          type={InputType.text}
+          placeholder="Nama institusi"
+          id="institutionName"
+          value={formValue.institutionName}
+          onChange={handleFormChange}
+          required
+        />
       )}
-      <div className="d-flex justify-content-center align-items-center">
-        <Select
-          id="city"
-          label="Kota"
-          onChange={handleFormChange}
-          value={formValue.city}
-          values={new Map(city.map((kota) => [kota, kota]) || [])}
-        />
-      </div>
-      <div className="d-flex justify-content-center align-items-center">
-        <Input
-          type={InputType.text}
-          placeholder="Kecamatan"
-          id="subDistrict"
-          value={formValue.subDistrict}
-          onChange={handleFormChange}
-          required
-        />
-      </div>
-      <div className="d-flex justify-content-center align-items-center">
-        <Input
-          type={InputType.text}
-          placeholder="Kelurahan/desa"
-          id="village"
-          value={formValue.village}
-          onChange={handleFormChange}
-          required
-        />
-      </div>
-      <div className="d-flex justify-content-center align-items-center">
-        <Input
-          type={InputType.textarea}
-          placeholder="Nama jalan"
-          id="streetName"
-          value={formValue.streetName}
-          onChange={handleFormChange}
-          required
-        />
-      </div>
-      <div className="d-flex justify-content-center align-items-center">
-        <Input
-          type={InputType.text}
-          placeholder="Kode pos"
-          id="postalCode"
-          value={formValue.postalCode}
-          onChange={handleFormChange}
-          required
-        />
-      </div>
-      <div className="d-flex justify-content-center align-items-center">
-        <Input
-          type={InputType.email}
-          placeholder="Email"
-          id="email"
-          value={formValue.email}
-          onChange={handleFormChange}
-          required
-        />
-      </div>
-      <div className="d-flex justify-content-center align-items-center">
-        <Input
-          type={InputType.tel}
-          placeholder="Nomor telepon"
-          id="phoneNumber"
-          value={formValue.phoneNumber}
-          onChange={handleFormChange}
-          required
-        />
-      </div>
+      <Select
+        id="city"
+        label="Kota"
+        onChange={handleFormChange}
+        value={formValue.city}
+        values={new Map(city.map((kota) => [kota, kota]) || [])}
+      />
+      <Input
+        type={InputType.text}
+        placeholder="Kecamatan"
+        id="subDistrict"
+        value={formValue.subDistrict}
+        onChange={handleFormChange}
+        required
+      />
+      <Input
+        type={InputType.text}
+        placeholder="Kelurahan/desa"
+        id="village"
+        value={formValue.village}
+        onChange={handleFormChange}
+        required
+      />
+      <Input
+        type={InputType.textarea}
+        placeholder="Nama jalan"
+        id="streetName"
+        value={formValue.streetName}
+        onChange={handleFormChange}
+        required
+      />
+      <Input
+        type={InputType.text}
+        placeholder="Kode pos"
+        id="postalCode"
+        value={formValue.postalCode}
+        onChange={handleFormChange}
+        required
+      />
+      <Input
+        type={InputType.email}
+        placeholder="Email"
+        id="email"
+        value={formValue.email}
+        onChange={handleFormChange}
+        required
+      />
+      <Input
+        type={InputType.tel}
+        placeholder="Nomor telepon"
+        id="phoneNumber"
+        value={formValue.phoneNumber}
+        onChange={handleFormChange}
+        required
+      />
       <div className="d-flex justify-content-center align-items-center mb-2">
         <button
           type="button"
